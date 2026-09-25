@@ -41,7 +41,9 @@ export default function Jeu() {
   const [{ config, save }] = useState(() => makeConfig(params));
   const run = useRun(config, save);
   const p = usePalette();
-  const { wide, insets, height } = useLayout();
+  const { wide: wideScreen, tablet, insets, height, width } = useLayout();
+  // Side-by-side layout only in landscape; an iPad held upright uses the phone layout, bigger.
+  const wide = wideScreen && width > height;
 
   if (!config.ids.length) return <Redirect href="/" />;
 
@@ -60,7 +62,7 @@ export default function Jeu() {
 
   const pause = () => run.setPaused(true);
   const big = height > 800;
-  const slotSize = wide ? 76 : big ? 62 : 50;
+  const slotSize = wide || tablet ? 76 : big ? 62 : 50;
 
   const body = wide ? (
     <View style={{ flex: 1, flexDirection: 'row', gap: 40, paddingHorizontal: 40, paddingTop: 16, paddingBottom: insets.bottom + 24 }}>
@@ -79,12 +81,12 @@ export default function Jeu() {
       </View>
     </View>
   ) : (
-    <View style={{ flex: 1, paddingHorizontal: 16, paddingTop: 8, paddingBottom: Math.max(insets.bottom, 10), gap: 14, width: '100%', maxWidth: 600, alignSelf: 'center' }}>
+    <View style={{ flex: 1, paddingHorizontal: 16, paddingTop: 8, paddingBottom: Math.max(insets.bottom, 10), gap: 14, width: '100%', maxWidth: tablet ? 680 : 600, alignSelf: 'center' }}>
       <Hud run={run} onPause={pause} />
       <ObjectiveCard run={run} big={big} />
       <Slots run={run} size={slotSize} />
       <View style={{ flex: 1 }}>
-        <Grid run={run} cols={4} />
+        <Grid run={run} cols={tablet ? 5 : 4} />
         <CorrectCard run={run} />
       </View>
       <PowerUps run={run} big={big} />

@@ -39,7 +39,7 @@ export default function Categories() {
           </Txt>
         )}
         <Section>{t('adventure')}</Section>
-        <View style={{ paddingHorizontal: 16, gap: 8, flexDirection: tablet ? 'row' : 'column' }}>
+        <View style={{ paddingHorizontal: 16, gap: 8 }}>
           {DIFFICULTIES.map((d) => {
             const n = levelsOfDifficulty(d).length;
             return (
@@ -49,7 +49,7 @@ export default function Categories() {
                 tint={diffColors[d].tint}
                 border={diffColors[d].border}
                 label={`${t('adventure')} ${t(`diff_${d}`)}`}
-                style={{ flex: tablet ? 1 : undefined, minHeight: 66, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                style={{ minHeight: 66, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
                 <Badge tint={p.surface} size={44}>
                   <Emoji size={24}>{DIFF_ICON[d]}</Emoji>
                 </Badge>
