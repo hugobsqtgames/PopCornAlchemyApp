@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Victoire finale</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;background:#FFC628;color:#1B1530;font-family:'Rubik',system-ui,sans-serif}
+a{color:#1B1530}a:hover{color:#1B1530}
+.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+.emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
+.btn{display:flex;align-items:center;justify-content:center;gap:12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;box-shadow:4px 4px 0 #1B1530;font-family:'Press Start 2P',monospace;color:#1B1530;text-decoration:none}
+.card{box-sizing:border-box;background:#FFFFFF;border:3px solid #1B1530;border-radius:18px;box-shadow:4px 4px 0 #1B1530}
+.cf{position:absolute;width:12px;height:12px;border:2px solid #1B1530;box-sizing:border-box}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFC628; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center;">
+  <div class="cf" style="left: 30px; top: 70px; background: #FF3D7F; transform: rotate(20deg);"></div>
+  <div class="cf" style="left: 90px; top: 130px; background: #19C6DB; transform: rotate(-15deg);"></div>
+  <div class="cf" style="left: 320px; top: 80px; background: #2BCB6E; transform: rotate(35deg);"></div>
+  <div class="cf" style="left: 270px; top: 160px; background: #FFFFFF; transform: rotate(10deg);"></div>
+  <div class="cf" style="left: 50px; top: 230px; background: #FFFFFF; transform: rotate(45deg);"></div>
+  <div class="cf" style="left: 340px; top: 250px; background: #FF3D7F; transform: rotate(-30deg);"></div>
+  <div class="cf" style="left: 180px; top: 60px; background: #19C6DB; transform: rotate(60deg);"></div>
+
+  <div style="margin-top: 110px; width: 140px; height: 140px; box-sizing: border-box; border: 4px solid #1B1530; border-radius: 999px; background: #FFF4DC; box-shadow: 6px 6px 0 #1B1530; display: flex; align-items: center; justify-content: center;">
+    <span class="emoji" style="font-size: 72px;">👑</span>
+  </div>
+  <h1 class="px" style="margin: 30px 0 0; font-size: 22px; color: #FFFFFF; text-shadow: 3px 3px 0 #1B1530, -1px -1px 0 #1B1530; text-align: center; line-height: 1.5;">VICTOIRE<br>FINALE !</h1>
+  <p style="margin: 12px 30px 0; text-align: center; font-size: 16px; font-weight: 700; line-height: 1.4;">Les 200 niveaux sont à toi. Tu es Maître de l'Alchimie Pop-Corn.</p>
+
+  <div class="card" style="margin-top: 22px; width: 358px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+    <span style="font-size: 12px; font-weight: 800; letter-spacing: 0.1em; color: #5A5270;">SCORE FINAL</span>
+    <span class="px" style="font-size: 24px; color: #D81B60;">312 450</span>
+    <div style="display: flex; gap: 8px; margin-top: 4px;">
+      <span style="border: 2px solid #1B1530; border-radius: 999px; padding: 5px 10px; font-weight: 800; font-size: 14px; background: #FFF4DC;">+500 <span class="emoji">💰</span></span>
+      <span style="border: 2px solid #1B1530; border-radius: 999px; padding: 5px 10px; font-weight: 800; font-size: 14px; background: #FFF4DC;"><span class="emoji">🏅</span> Trophée « Légende »</span>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 16px; right: 16px; bottom: 44px; display: flex; flex-direction: column; gap: 12px;">
+    <a class="btn" href="Defier.dc.html" style="height: 60px; background: #19C6DB; font-size: 12px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5"></path><path d="M5 13v7h14v-7"></path></svg>
+      PARTAGER MA VICTOIRE
+    </a>
+    <div style="display: flex; gap: 12px;">
+      <a class="btn" href="Categories.dc.html" style="flex: 1; height: 52px; background: #2BCB6E; font-size: 11px;">REJOUER</a>
+      <a class="btn" href="Main.dc.html" style="flex: 1; height: 52px; background: #FFFFFF; font-size: 11px;">ACCUEIL</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

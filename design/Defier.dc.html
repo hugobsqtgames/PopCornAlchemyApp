@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Défier un ami</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;background:#2BCB6E;color:#1B1530;font-family:'Rubik',system-ui,sans-serif}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:#1B1530}a:hover{color:#1B1530}
+.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+.emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
+.btn{display:flex;align-items:center;justify-content:center;gap:12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;box-shadow:4px 4px 0 #1B1530;font-family:'Press Start 2P',monospace;color:#1B1530;text-decoration:none}
+.ibtn{display:flex;align-items:center;justify-content:center;width:44px;height:44px;box-sizing:border-box;border:3px solid #1B1530;border-radius:14px;background:#FFFFFF;box-shadow:3px 3px 0 #1B1530;color:#1B1530;text-decoration:none}
+.opt{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;padding:12px 0;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;background:#FFFFFF;box-shadow:3px 3px 0 #1B1530;font-size:13px;font-weight:800}
+.rcv{display:flex;align-items:center;gap:12px;padding:12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;background:#FFFFFF}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #2BCB6E; position: relative; overflow: hidden; display: flex; flex-direction: column;">
+  <div style="padding: 56px 16px 0; display: flex; align-items: center; gap: 14px;">
+    <a class="ibtn" href="Main.dc.html" aria-label="Retour">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <h1 class="px" style="margin: 0; font-size: 16px;">DÉFIER UN AMI</h1>
+  </div>
+
+  <div style="margin: 24px 16px 0; box-sizing: border-box; border: 3px solid #1B1530; border-radius: 20px; background: #FFF4DC; box-shadow: 6px 6px 0 #1B1530; overflow: hidden;">
+    <div style="padding: 14px 16px; background: #1B1530; display: flex; align-items: center; gap: 10px;">
+      <span class="emoji" style="font-size: 24px;">🍿</span>
+      <span class="px" style="font-size: 10px; color: #FFC628; line-height: 1.6;">ALCHIMISTE TE DÉFIE !</span>
+    </div>
+    <div style="padding: 18px 16px; display: flex; flex-direction: column; align-items: center; gap: 12px; border-bottom: 3px dashed #1B1530;">
+      <span style="font-size: 12px; font-weight: 800; letter-spacing: 0.1em; color: #5A5270;">5 NIVEAUX · MODE CLASSIQUE</span>
+      <div class="emoji" style="display: flex; gap: 8px; font-size: 30px;">🧇 🚲 🔦 👾 ❓</div>
+      <span style="font-size: 14px; font-weight: 600; text-align: center;">Devine les mêmes références que moi</span>
+    </div>
+    <div style="padding: 14px 16px; display: flex; align-items: center; justify-content: space-between;">
+      <span style="font-size: 13px; font-weight: 800; color: #5A5270;">SCORE À BATTRE</span>
+      <span class="px" style="font-size: 16px; color: #C2185B;">12 450</span>
+    </div>
+  </div>
+
+  <button class="btn" style="margin: 24px 16px 0; height: 62px; background: #FFC628; font-size: 13px;">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5"></path><path d="M5 13v7h14v-7"></path></svg>
+    ENVOYER LE DÉFI
+  </button>
+  <button style="margin: 14px 16px 0; height: 44px; font-size: 15px; font-weight: 800; text-decoration: underline;">Copier le lien</button>
+
+  <div style="margin: 14px 16px 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.12em;">DÉFIS REÇUS</div>
+  <div style="margin: 0 16px; display: flex; flex-direction: column; gap: 10px;">
+    <div class="rcv">
+      <span class="emoji" style="width: 40px; height: 40px; flex-shrink: 0; box-sizing: border-box; border: 2px solid #1B1530; border-radius: 999px; background: #FFD6E4; display: flex; align-items: center; justify-content: center; font-size: 20px;">🦊</span>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 15px; font-weight: 800;">Léa</span>
+        <span style="font-size: 12px; font-weight: 600; color: #5A5270;">5 niveaux · 18 300 pts</span>
+      </div>
+      <a class="btn" href="Jeu.dc.html" style="height: 40px; padding: 0 14px; background: #2BCB6E; font-size: 10px; box-shadow: 2px 2px 0 #1B1530;">JOUER</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

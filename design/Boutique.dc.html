@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Boutique, pièces</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;background:#FFF4DC;color:#1B1530;font-family:'Rubik',system-ui,sans-serif}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:#1B1530}a:hover{color:#1B1530}
+.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+.emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
+.btn{display:flex;align-items:center;justify-content:center;gap:12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;box-shadow:4px 4px 0 #1B1530;font-family:'Press Start 2P',monospace;color:#1B1530;text-decoration:none}
+.card{box-sizing:border-box;background:#FFFFFF;border:3px solid #1B1530;border-radius:18px;box-shadow:4px 4px 0 #1B1530}
+.chip{display:inline-flex;align-items:center;gap:6px;box-sizing:border-box;height:38px;padding:0 12px;border:2px solid #1B1530;border-radius:999px;background:#FFFFFF;font-weight:800;font-size:14px;box-shadow:2px 2px 0 #1B1530}
+.seg{display:flex;align-items:center;justify-content:center;flex:1;height:36px;border-radius:10px;font-size:13px;font-weight:800;color:#1B1530;text-decoration:none}
+.pack{display:flex;flex-direction:column;align-items:center;gap:8px;height:152px;padding:14px 10px 12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:18px;background:#FFFFFF;box-shadow:4px 4px 0 #1B1530;position:relative}
+.price{display:flex;align-items:center;justify-content:center;width:100%;height:34px;box-sizing:border-box;border:2px solid #1B1530;border-radius:10px;background:#2BCB6E;font-size:15px;font-weight:800;margin-top:auto}
+.flag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:3px 9px;border:2px solid #1B1530;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:0.06em}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;font-size:11px;font-weight:700;color:#5A5270;text-decoration:none;padding-top:10px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFF4DC; position: relative; overflow: hidden; display: flex; flex-direction: column;">
+  <div style="padding: 60px 16px 0; display: flex; align-items: center; justify-content: space-between;">
+    <h1 class="px" style="margin: 0; font-size: 18px;">BOUTIQUE</h1>
+    <div class="chip"><span class="emoji">💰</span>1 240</div>
+  </div>
+
+  <nav style="margin: 16px 16px 0; padding: 3px; display: flex; gap: 2px; box-sizing: border-box; border: 3px solid #1B1530; border-radius: 14px; background: #FFFFFF;" aria-label="Rayons">
+    <a class="seg" href="Boutique.dc.html" style="background: #FFC628; border: 2px solid #1B1530;">Pièces</a>
+    <a class="seg" href="Boutique.dc.html">Bonus</a>
+    <a class="seg" href="BoutiqueThemes.dc.html">Thèmes</a>
+    <a class="seg" href="BoutiqueThemes.dc.html">Styles</a>
+    <a class="seg" href="BoutiqueThemes.dc.html">Avatars</a>
+  </nav>
+
+  <div class="card" style="margin: 16px 16px 0; padding: 12px 14px; background: #1B1530; box-shadow: 4px 4px 0 #FFC628; display: flex; align-items: center; gap: 12px;">
+    <span class="emoji" style="font-size: 30px;">📺</span>
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+      <span class="px" style="font-size: 10px; color: #FFC628;">PIÈCES GRATUITES</span>
+      <span style="font-size: 13px; font-weight: 600; color: #E9E4F7;">Une courte pub = +25 <span class="emoji">💰</span> · 3/5 aujourd'hui</span>
+    </div>
+    <button class="btn" style="height: 40px; padding: 0 12px; background: #FFC628; font-size: 10px; box-shadow: 2px 2px 0 #FFFFFF; border-color: #FFFFFF;">VOIR</button>
+  </div>
+
+  <div style="margin: 24px 16px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 12px;">
+    <button class="pack">
+      <span class="emoji" style="font-size: 36px;">🍿</span>
+      <span class="px" style="font-size: 13px;">500</span>
+      <span style="font-size: 12px; font-weight: 700; color: #5A5270;">Poignée</span>
+      <span class="price">0,99 €</span>
+    </button>
+    <button class="pack">
+      <span class="emoji" style="font-size: 36px;">🥡</span>
+      <span class="px" style="font-size: 13px;">1 200</span>
+      <span style="font-size: 12px; font-weight: 700; color: #5A5270;">Cornet · +20 %</span>
+      <span class="price">1,99 €</span>
+    </button>
+    <button class="pack" style="background: #FFF1C4;">
+      <span class="flag" style="background: #19C6DB;">POPULAIRE</span>
+      <span class="emoji" style="font-size: 36px;">🪣</span>
+      <span class="px" style="font-size: 13px;">3 500</span>
+      <span style="font-size: 12px; font-weight: 700; color: #5A5270;">Seau XL · +40 %</span>
+      <span class="price">4,99 €</span>
+    </button>
+    <button class="pack" style="background: #FFE0EB;">
+      <span class="flag" style="background: #FF3D7F;">MEILLEURE OFFRE</span>
+      <span class="emoji" style="font-size: 36px;">🎬</span>
+      <span class="px" style="font-size: 13px;">8 000</span>
+      <span style="font-size: 12px; font-weight: 700; color: #5A5270;">Cinéma · +60 %</span>
+      <span class="price">9,99 €</span>
+    </button>
+  </div>
+
+  <button class="card" style="margin: 18px 16px 0; padding: 12px 14px; background: #19C6DB; display: flex; align-items: center; gap: 12px; text-align: left;">
+    <span class="emoji" style="font-size: 30px;">🚫</span>
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+      <span class="px" style="font-size: 10px;">PACK SANS PUB</span>
+      <span style="font-size: 13px; font-weight: 700;">Plus aucune pub imposée + 1 000 <span class="emoji">💰</span></span>
+    </div>
+    <span style="height: 36px; padding: 0 10px; display: flex; align-items: center; box-sizing: border-box; border: 2px solid #1B1530; border-radius: 10px; background: #FFFFFF; font-weight: 800; font-size: 15px;">3,99 €</span>
+  </button>
+
+  <nav style="position: absolute; left: 0; right: 0; bottom: 0; height: 86px; box-sizing: border-box; background: #FFFFFF; border-top: 3px solid #1B1530; display: flex; padding: 0 8px 26px;" aria-label="Navigation principale">
+    <a class="tab" href="Main.dc.html">
+      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg></span>
+      Jouer
+    </a>
+    <a class="tab" href="Boutique.dc.html" style="color: #1B1530;">
+      <span style="width: 56px; height: 30px; border-radius: 999px; background: #FFC628; border: 2px solid #1B1530; display: flex; align-items: center; justify-content: center; box-sizing: border-box;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg></span>
+      Boutique
+    </a>
+    <a class="tab" href="Trophees.dc.html">
+      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"></path><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4"></path><path d="M12 13v4M8 20h8M10 17h4"></path></svg></span>
+      Trophées
+    </a>
+    <a class="tab" href="Profil.dc.html">
+      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
+      Profil
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

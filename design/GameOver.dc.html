@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Game over</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;background:#1B1530;color:#FFFFFF;font-family:'Rubik',system-ui,sans-serif}
+a{color:#1B1530}a:hover{color:#1B1530}
+.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+.emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
+.btn{display:flex;align-items:center;justify-content:center;gap:12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;box-shadow:4px 4px 0 #000000;font-family:'Press Start 2P',monospace;color:#1B1530;text-decoration:none}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #1B1530; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center;">
+  <span class="emoji" style="margin-top: 96px; font-size: 64px;">💔</span>
+  <h1 class="px" style="margin: 24px 0 0; font-size: 30px; color: #FF3D7F; text-shadow: 4px 4px 0 #000000;">GAME OVER</h1>
+  <p style="margin: 14px 0 0; font-size: 15px; font-weight: 600; color: #DCD5F0;">Ton alchimie a échoué… au niveau 34</p>
+
+  <div style="margin-top: 26px; width: 358px; box-sizing: border-box; padding: 16px; border: 3px solid #FFFFFF; border-radius: 18px; background: #2E2650; display: flex; justify-content: space-around;">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+      <span style="font-size: 12px; font-weight: 700; color: #CFC7E6; letter-spacing: 0.1em;">SCORE</span>
+      <span class="px" style="font-size: 16px; color: #FFC628;">28 940</span>
+    </div>
+    <div style="width: 2px; background: #4A4170;"></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+      <span style="font-size: 12px; font-weight: 700; color: #CFC7E6; letter-spacing: 0.1em;">RECORD</span>
+      <span class="px" style="font-size: 16px; color: #FFFFFF;">45 200</span>
+    </div>
+  </div>
+  <p style="margin: 12px 0 0; font-size: 12px; font-weight: 600; color: #B9B0D6;">Score envoyé au classement Game Center</p>
+
+  <div style="margin-top: 26px; width: 358px; box-sizing: border-box; padding: 16px; border: 3px dashed #FFC628; border-radius: 20px; display: flex; flex-direction: column; gap: 12px;">
+    <span class="px" style="font-size: 11px; color: #FFC628; text-align: center;">CONTINUER ? 5</span>
+    <a class="btn" href="Jeu.dc.html" style="height: 58px; background: #FFC628; font-size: 11px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="M10 9l5 3-5 3z" fill="currentColor"></path></svg>
+      VOIR UNE PUB · +1 VIE
+    </a>
+    <a class="btn" href="Jeu.dc.html" style="height: 50px; background: #FFFFFF; font-size: 11px;">+1 VIE · 150 <span class="emoji" style="font-size: 16px;">💰</span></a>
+  </div>
+
+  <div style="position: absolute; left: 16px; right: 16px; bottom: 44px; display: flex; gap: 12px;">
+    <a class="btn" href="Categories.dc.html" style="flex: 1; height: 56px; background: #2BCB6E; font-size: 12px;">REJOUER</a>
+    <a class="btn" href="Main.dc.html" style="flex: 1; height: 56px; background: #19C6DB; font-size: 12px;">ACCUEIL</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
