@@ -1,6 +1,6 @@
 import { LEVELS } from './levels';
 import { mulberry32, shuffle } from './random';
-import type { Category, Level, Mode, RunConfig } from './types';
+import type { Category, Difficulty, Level, Mode, RunConfig } from './types';
 
 export const TIER_SIZE = 20;
 export const GRID_SIZE = 20;
@@ -33,15 +33,23 @@ export const REWARDS = {
 export const CATEGORIES: { id: Category; icon: string }[] = [
   { id: 'movie', icon: '🎬' },
   { id: 'series', icon: '📺' },
+  { id: 'food', icon: '🍕' },
+  { id: 'nature', icon: '🌿' },
+  { id: 'geo', icon: '🌍' },
+  { id: 'place', icon: '🗺️' },
+  { id: 'sport', icon: '⚽' },
+  { id: 'job', icon: '👷' },
+  { id: 'tale', icon: '🧚' },
+  { id: 'home', icon: '🏠' },
+  { id: 'party', icon: '🎉' },
+  { id: 'brand', icon: '🏷️' },
   { id: 'game', icon: '🎮' },
   { id: 'music', icon: '🎵' },
-  { id: 'geo', icon: '🌍' },
-  { id: 'brand', icon: '🏷️' },
-  { id: 'nature', icon: '🌿' },
-  { id: 'youtube', icon: '🎥' },
   { id: 'anime', icon: '🏮' },
-  { id: 'food', icon: '🍕' },
+  { id: 'youtube', icon: '🎥' },
 ];
+
+export const DIFFICULTIES: Difficulty[] = [1, 2, 3];
 
 const LEVEL_BY_ID = new Map(LEVELS.map((l) => [l.id, l]));
 
@@ -51,6 +59,17 @@ export function levelById(id: number): Level | undefined {
 
 export function levelsOfCategory(cat: Category): Level[] {
   return LEVELS.filter((l) => l.cat === cat);
+}
+
+export function levelsOfDifficulty(d: Difficulty): Level[] {
+  return LEVELS.filter((l) => l.d === d);
+}
+
+/** Shuffles inside each group of `size` levels, so the order still goes from easy to hard. */
+function curve(levels: Level[], size: number, rng: () => number): number[] {
+  const ids: number[] = [];
+  for (let i = 0; i < levels.length; i += size) ids.push(...shuffle(levels.slice(i, i + size), rng).map((l) => l.id));
+  return ids;
 }
 
 /** Decoys shown next to the solution; any that are part of the solution are skipped. */
@@ -81,32 +100,45 @@ export function isCorrect(picked: string[], solution: string[]): boolean {
 /** Level ids for a new run, in play order. */
 export function buildRun(
   mode: Exclude<Mode, 'daily' | 'challenge'>,
-  category?: Category,
+  options: { category?: Category; difficulty?: Difficulty } = {},
   rng: () => number = Math.random
 ): RunConfig {
+  const { category, difficulty } = options;
   if (mode === 'category' && category) {
-    return { mode, category, ids: shuffle(levelsOfCategory(category), rng).map((l) => l.id) };
+    // Easy levels of the category first, then medium, then hard.
+    const ids = DIFFICULTIES.flatMap((d) => shuffle(levelsOfCategory(category).filter((l) => l.d === d), rng).map((l) => l.id));
+    return { mode, category, ids };
   }
   if (mode === 'chrono') {
-    return { mode, ids: shuffle(LEVELS, rng).map((l) => l.id) };
+    // Against the clock: easy and medium levels only.
+    return { mode, ids: shuffle(LEVELS.filter((l) => l.d < 3), rng).map((l) => l.id) };
   }
-  // Classic and hardcore keep the difficulty curve: shuffle inside each tier only.
-  const ids: number[] = [];
-  for (let i = 0; i < LEVELS.length; i += TIER_SIZE) {
-    ids.push(...shuffle(LEVELS.slice(i, i + TIER_SIZE), rng).map((l) => l.id));
+  if (mode === 'classic' && difficulty) {
+    return { mode, difficulty, ids: curve(levelsOfDifficulty(difficulty), TIER_SIZE, rng) };
   }
-  return { mode, ids };
+  // Hardcore (and old classic runs) go through every level, from easy to hard, tier by tier.
+  return { mode, ids: curve(LEVELS, TIER_SIZE, rng) };
 }
 
-/** The same 10 levels for everybody on a given day. */
+/** The same 10 levels for everybody on a given day: 4 easy, 4 medium, 2 hard. */
 export function buildDaily(seed: number): RunConfig {
-  return { mode: 'daily', ids: shuffle(LEVELS, mulberry32(seed)).slice(0, DAILY_LENGTH).map((l) => l.id) };
+  const rng = mulberry32(seed);
+  const pick = (d: Difficulty, n: number) => shuffle(levelsOfDifficulty(d), rng).slice(0, n).map((l) => l.id);
+  return { mode: 'daily', ids: [...pick(1, 4), ...pick(2, 4), ...pick(3, DAILY_LENGTH - 8)] };
 }
 
 export function startLives(mode: Mode): number {
   if (mode === 'hardcore') return 1;
   if (mode === 'chrono') return 0;
   return LIVES;
+}
+
+/**
+ * Runs that can be left and resumed from the home screen. Chrono (the clock would restart),
+ * the daily challenge and friend challenges always start over.
+ */
+export function canSave(mode: Mode): boolean {
+  return mode === 'classic' || mode === 'category' || mode === 'hardcore';
 }
 
 /** Runs split into tiers of 20 get a break screen and fresh lives between tiers. */

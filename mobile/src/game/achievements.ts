@@ -33,7 +33,10 @@ export const EMPTY_STATS: Stats = {
   bestTier: 0,
   victories: 0,
   bestHardcore: 0,
-  cat: { movie: 0, series: 0, game: 0, music: 0, geo: 0, brand: 0, nature: 0, youtube: 0, anime: 0, food: 0 },
+  cat: {
+    movie: 0, series: 0, game: 0, music: 0, geo: 0, brand: 0, nature: 0, youtube: 0, anime: 0, food: 0,
+    sport: 0, job: 0, tale: 0, home: 0, party: 0, place: 0,
+  },
 };
 
 export interface AchievementContext {
@@ -102,6 +105,13 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'brand_expert', icon: '🏷️', x: 7, y: 4, parent: 'nature_expert', group: 'collection', done: cat('brand') },
   { id: 'yt_expert', icon: '🎥', x: 8, y: 4, parent: 'brand_expert', group: 'collection', done: cat('youtube') },
   { id: 'anime_expert', icon: '🏮', x: 9, y: 4, parent: 'yt_expert', group: 'collection', done: cat('anime') },
+  { id: 'food_expert', icon: '🍕', x: 1, y: 5, parent: 'movie_buff', group: 'collection', done: cat('food') },
+  { id: 'sport_expert', icon: '⚽', x: 2, y: 5, parent: 'food_expert', group: 'collection', done: cat('sport') },
+  { id: 'job_expert', icon: '👷', x: 3, y: 5, parent: 'sport_expert', group: 'collection', done: cat('job') },
+  { id: 'tale_expert', icon: '🧚', x: 4, y: 5, parent: 'job_expert', group: 'collection', done: cat('tale') },
+  { id: 'home_expert', icon: '🏠', x: 5, y: 5, parent: 'tale_expert', group: 'collection', done: cat('home') },
+  { id: 'party_expert', icon: '🎉', x: 6, y: 5, parent: 'home_expert', group: 'collection', done: cat('party') },
+  { id: 'place_expert', icon: '🗺️', x: 7, y: 5, parent: 'party_expert', group: 'collection', done: cat('place') },
 ];
 
 /** Ids of achievements reached now that were not unlocked before. */

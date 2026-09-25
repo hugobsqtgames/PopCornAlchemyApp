@@ -10,11 +10,21 @@ export type Category =
   | 'nature'
   | 'youtube'
   | 'anime'
-  | 'food';
+  | 'food'
+  | 'sport'
+  | 'job'
+  | 'tale'
+  | 'home'
+  | 'party'
+  | 'place';
+
+/** 1 easy, 2 medium, 3 hard. */
+export type Difficulty = 1 | 2 | 3;
 
 export interface Level {
   id: number;
   cat: Category;
+  d: Difficulty;
   /** Emojis to combine; order does not matter, duplicates do. */
   sol: string[];
   name: Record<Lang, string>;
@@ -26,6 +36,8 @@ export type Mode = 'classic' | 'category' | 'chrono' | 'hardcore' | 'daily' | 'c
 export interface RunConfig {
   mode: Mode;
   category?: Category;
+  /** Classic adventure only; runs saved before 1.1 have none. */
+  difficulty?: Difficulty;
   /** Level ids in play order. */
   ids: number[];
   /** Score to beat, for challenges. */

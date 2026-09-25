@@ -77,28 +77,24 @@ export default function Home() {
     </View>
   );
 
-  const play = (
-    <View style={{ gap: 6 }}>
-      {s.save ? (
-        <Btn
-          label={t('continue')}
-          sub={t('run_info', { mode: t(`mode_${s.save.mode}`), n: s.save.index + 1 })}
-          icon={<PlayIcon color={p.onAction} />}
-          height={big || wide ? 76 : 64}
-          size={19}
-          onPress={() => router.push({ pathname: '/jeu', params: { resume: '1' } })}
-        />
-      ) : (
-        <Btn label={t('play')} icon={<PlayIcon color={p.onAction} />} height={big || wide ? 76 : 64} size={19} onPress={() => router.push('/categories')} />
-      )}
-      {s.save && (
-        <Tap onPress={() => router.push('/categories')} tint="transparent" border="transparent" style={{ alignSelf: 'center', paddingHorizontal: 14, paddingVertical: 8 }}>
-          <Txt size={14} weight="bold" color={p.muted}>
-            {t('new_game')}
-          </Txt>
-        </Tap>
-      )}
+  const save = s.save;
+  const saveMode = save
+    ? [t(`mode_${save.mode}`), save.mode === 'classic' && save.difficulty ? t(`diff_${save.difficulty}`) : ''].filter(Boolean).join(' · ')
+    : '';
+  const play = save ? (
+    <View style={{ gap: 8 }}>
+      <Btn
+        label={t('continue')}
+        sub={t('run_info', { mode: saveMode, n: save.index + 1 })}
+        icon={<PlayIcon color={p.onAction} />}
+        height={big || wide ? 76 : 64}
+        size={19}
+        onPress={() => router.push({ pathname: '/jeu', params: { resume: '1' } })}
+      />
+      <Btn variant="soft" label={t('new_game')} icon={<Emoji size={16}>✨</Emoji>} height={big || wide ? 52 : 46} size={15} onPress={() => router.push('/categories')} />
     </View>
+  ) : (
+    <Btn label={t('play')} icon={<PlayIcon color={p.onAction} />} height={big || wide ? 76 : 64} size={19} onPress={() => router.push('/categories')} />
   );
 
   const dailyDone = s.dailyLast === today;

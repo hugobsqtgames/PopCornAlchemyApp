@@ -14,7 +14,7 @@ Maquettes : dossier `design/` (à ouvrir dans le canvas de design partagé).
 | Argent | Pubs (AdMob, vidéos récompensées) + achats intégrés (pièces, pack sans pub) |
 | Classement | Game Center (classements + succès) |
 | Logo | Nouvelle icône : fiole d'alchimie remplie de pop-corn |
-| Niveaux | Nettoyés et complétés : 10 paliers × 20 niveaux = 200 niveaux |
+| Niveaux | 400 niveaux en 16 catégories, classés Facile (191) · Moyen (139) · Difficile (70) ; une aventure par difficulté, paliers de 20 |
 | Langues | Français, anglais, espagnol (100 % des textes traduits) |
 | Gardé | Roue de la chance, liens TikTok/Instagram/YouTube, défier un ami, arbre de trophées |
 | Supprimé | Compteur de vues + mot de passe, faux classement, serveur Express, dépendance Gemini |

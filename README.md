@@ -18,5 +18,6 @@ npm run typecheck   # vérification TypeScript
 npx expo lint       # lint
 ```
 
-Les 200 niveaux sont générés par `mobile/scripts/build-levels.js` à partir de la version web
-(`node scripts/build-levels.js` depuis `mobile/`).
+Les 400 niveaux sont générés par `mobile/scripts/build-levels.js` à partir de la version web
+et de `mobile/scripts/levels-more.js` (`node scripts/build-levels.js` depuis `mobile/`).
+Chaque niveau a une difficulté (1 facile, 2 moyen, 3 difficile) : une aventure par difficulté.

@@ -8,19 +8,23 @@ import {
   buildDaily,
   buildGrid,
   buildRun,
+  CATEGORIES,
   coinsFor,
+  DIFFICULTIES,
   GRID_SIZE,
   isCorrect,
   levelById,
+  levelsOfCategory,
+  levelsOfDifficulty,
   pointsFor,
   TIER_SIZE,
 } from '../rules';
 import { pickSlice, SLICE_DEG, spinRotation, WHEEL } from '../wheel';
 
 describe('levels', () => {
-  it('has 200 levels with unique ids and names in 3 languages', () => {
-    expect(LEVELS).toHaveLength(200);
-    expect(new Set(LEVELS.map((l) => l.id)).size).toBe(200);
+  it('has 400 levels with unique ids and names in 3 languages', () => {
+    expect(LEVELS).toHaveLength(400);
+    expect(new Set(LEVELS.map((l) => l.id)).size).toBe(400);
     for (const l of LEVELS) {
       expect(l.name.fr && l.name.en && l.name.es).toBeTruthy();
       expect(l.sol.length).toBeGreaterThanOrEqual(2);
@@ -28,10 +32,22 @@ describe('levels', () => {
     }
   });
 
-  it('gets harder: solutions never shrink along the list', () => {
+  it('gets harder: easy, medium then hard, and longer solutions later inside each', () => {
     for (let i = 1; i < LEVELS.length; i++) {
-      expect(LEVELS[i].sol.length).toBeGreaterThanOrEqual(LEVELS[i - 1].sol.length);
+      const [a, b] = [LEVELS[i - 1], LEVELS[i]];
+      expect(b.d).toBeGreaterThanOrEqual(a.d);
+      if (a.d === b.d) expect(b.sol.length).toBeGreaterThanOrEqual(a.sol.length);
     }
+  });
+
+  it('has enough levels in every difficulty and category', () => {
+    for (const d of DIFFICULTIES) expect(levelsOfDifficulty(d).length).toBeGreaterThanOrEqual(60);
+    for (const c of CATEGORIES) expect(levelsOfCategory(c.id).length).toBeGreaterThanOrEqual(18);
+  });
+
+  it('never asks for the same answer twice', () => {
+    const answers = LEVELS.map((l) => [...l.sol].sort().join(''));
+    expect(new Set(answers).size).toBe(LEVELS.length);
   });
 });
 
@@ -59,19 +75,31 @@ describe('grid', () => {
 });
 
 describe('runs', () => {
-  it('classic keeps every level inside its tier', () => {
-    const run = buildRun('classic', undefined, mulberry32(1));
-    expect(run.ids).toHaveLength(200);
-    run.ids.forEach((id, i) => {
-      const tier = Math.floor(LEVELS.findIndex((l) => l.id === id) / TIER_SIZE);
-      expect(tier).toBe(Math.floor(i / TIER_SIZE));
-    });
+  it('each adventure has only its difficulty and keeps every level inside its tier', () => {
+    for (const d of DIFFICULTIES) {
+      const pool = levelsOfDifficulty(d);
+      const run = buildRun('classic', { difficulty: d }, mulberry32(d));
+      expect(run.difficulty).toBe(d);
+      expect(run.ids).toHaveLength(pool.length);
+      run.ids.forEach((id, i) => {
+        const tier = Math.floor(pool.findIndex((l) => l.id === id) / TIER_SIZE);
+        expect(tier).toBe(Math.floor(i / TIER_SIZE));
+      });
+    }
   });
 
-  it('category runs only contain that category', () => {
-    const run = buildRun('category', 'anime');
-    expect(run.ids.length).toBeGreaterThan(0);
-    expect(run.ids.every((id) => levelById(id)?.cat === 'anime')).toBe(true);
+  it('hardcore goes through all levels, chrono skips the hard ones', () => {
+    expect(buildRun('hardcore').ids).toHaveLength(LEVELS.length);
+    const chrono = buildRun('chrono').ids.map((id) => levelById(id)!);
+    expect(chrono.every((l) => l.d < 3)).toBe(true);
+  });
+
+  it('category runs only contain that category, easy levels first', () => {
+    const run = buildRun('category', { category: 'anime' });
+    const levels = run.ids.map((id) => levelById(id)!);
+    expect(levels.length).toBe(levelsOfCategory('anime').length);
+    expect(levels.every((l) => l.cat === 'anime')).toBe(true);
+    levels.slice(1).forEach((l, i) => expect(l.d).toBeGreaterThanOrEqual(levels[i].d));
   });
 
   it('daily is the same for everybody on the same day and differs the next day', () => {

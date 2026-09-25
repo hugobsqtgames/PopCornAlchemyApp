@@ -56,8 +56,35 @@ export default function Trophees() {
           ]}
         />
       </View>
+      <View style={{ paddingHorizontal: 16, paddingTop: 12 }}>
+        <Card style={{ padding: 12, minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          {sel && selText ? (
+            <>
+              <View style={{ width: 48, height: 48, borderRadius: 14, backgroundColor: p.goldTint, alignItems: 'center', justifyContent: 'center' }}>
+                <Emoji size={24}>{sel.icon}</Emoji>
+              </View>
+              <View style={{ flex: 1, gap: 2 }}>
+                <Txt size={16} weight="heavy">
+                  {selText.title}
+                </Txt>
+                <Txt size={14} color={p.muted}>
+                  {selText.desc}
+                </Txt>
+              </View>
+              <Txt size={12} weight="bold" color={unlocked.includes(sel.id) ? p.green : p.muted}>
+                {unlocked.includes(sel.id) ? t('unlocked') : `🔒 ${t('locked')}`}
+              </Txt>
+            </>
+          ) : (
+            <Txt size={14} color={p.muted} style={{ flex: 1 }} center>
+              {t('tap_trophy')}
+            </Txt>
+          )}
+        </Card>
+      </View>
 
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+      {/* The details sit above the tree: at the bottom, the iPhone tab bar would cover them. */}
+      <ScrollView style={{ flex: 1 }} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
           <View style={{ width: W, height: H }}>
             <Svg width={W} height={H} style={{ position: 'absolute' }}>
@@ -121,32 +148,6 @@ export default function Trophees() {
         </ScrollView>
       </ScrollView>
 
-      <View style={{ paddingHorizontal: 16, paddingBottom: 12 }}>
-        <Card style={{ padding: 12, minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-          {sel && selText ? (
-            <>
-              <View style={{ width: 48, height: 48, borderRadius: 14, backgroundColor: p.goldTint, alignItems: 'center', justifyContent: 'center' }}>
-                <Emoji size={24}>{sel.icon}</Emoji>
-              </View>
-              <View style={{ flex: 1, gap: 2 }}>
-                <Txt size={16} weight="heavy">
-                  {selText.title}
-                </Txt>
-                <Txt size={14} color={p.muted}>
-                  {selText.desc}
-                </Txt>
-              </View>
-              <Txt size={12} weight="bold" color={unlocked.includes(sel.id) ? p.green : p.muted}>
-                {unlocked.includes(sel.id) ? t('unlocked') : `🔒 ${t('locked')}`}
-              </Txt>
-            </>
-          ) : (
-            <Txt size={14} color={p.muted} style={{ flex: 1 }} center>
-              {t('tap_trophy')}
-            </Txt>
-          )}
-        </Card>
-      </View>
     </View>
   );
 }

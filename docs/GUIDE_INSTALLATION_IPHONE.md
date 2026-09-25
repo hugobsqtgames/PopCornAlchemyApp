@@ -78,7 +78,7 @@ Expo Go ne peut pas charger les vrais services d'Apple et de Google. En attendan
 - **Les achats** (packs de pièces, pack sans pub) affichent un message : ils arrivent avec la version App Store.
 - **Game Center** : le bouton *Classement* montre tes records sur l'appareil.
 
-Tout le reste est réel : les 200 niveaux, les modes, le défi du jour, la roue, la boutique en pièces,
+Tout le reste est réel : les 400 niveaux, les modes, le défi du jour, la roue, la boutique en pièces,
 les trophées, les 3 langues, le mode sombre, l'iPad, les sons et les vibrations.
 
 ## Mettre à jour après une modification

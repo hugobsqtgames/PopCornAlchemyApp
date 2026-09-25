@@ -7,12 +7,12 @@ import { PauseSheet } from '@/components/game/pause';
 import { OverView, TierView, WinView } from '@/components/game/results';
 import { dayKey, daySeed } from '@/game/dates';
 import { buildDaily, buildRun, levelById } from '@/game/rules';
-import type { Category, Mode, RunConfig, RunSave } from '@/game/types';
+import type { Category, Difficulty, Mode, RunConfig, RunSave } from '@/game/types';
 import { useLayout, usePalette } from '@/hooks/use-app';
 import { useRun } from '@/hooks/use-run';
 import { useProfile } from '@/store/profile';
 
-type Params = { mode?: Mode; cat?: Category; resume?: string; ids?: string; target?: string; name?: string };
+type Params = { mode?: Mode; cat?: Category; diff?: string; resume?: string; ids?: string; target?: string; name?: string };
 
 function makeConfig(params: Params): { config: RunConfig; save?: RunSave } {
   const save = useProfile.getState().save;
@@ -25,12 +25,14 @@ function makeConfig(params: Params): { config: RunConfig; save?: RunSave } {
       return { config: { mode: 'challenge', ids, target: Number(params.target ?? 0), challenger: params.name } };
     }
     case 'category':
-      return { config: buildRun('category', params.cat) };
+      return { config: buildRun('category', { category: params.cat }) };
     case 'chrono':
     case 'hardcore':
       return { config: buildRun(params.mode) };
-    default:
-      return { config: buildRun('classic') };
+    default: {
+      const d = Number(params.diff);
+      return { config: buildRun('classic', { difficulty: d === 2 || d === 3 ? d : (1 as Difficulty) }) };
+    }
   }
 }
 
@@ -49,7 +51,7 @@ export default function Jeu() {
       params:
         config.mode === 'challenge'
           ? { mode: 'challenge', ids: config.ids.join(','), target: String(config.target ?? 0), name: config.challenger ?? '' }
-          : { mode: config.mode, cat: config.category ?? '', fresh: String(Date.now()) },
+          : { mode: config.mode, cat: config.category ?? '', diff: String(config.difficulty ?? 1), fresh: String(Date.now()) },
     });
 
   if (run.phase === 'tier') return <TierView run={run} />;

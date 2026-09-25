@@ -5,6 +5,7 @@ import { styleBonus } from '@/game/catalog';
 import {
   bonusTimeMs,
   buildGrid,
+  canSave,
   CHALLENGE_LENGTH,
   CHRONO_BONUS_SECONDS,
   CHRONO_PENALTY_SECONDS,
@@ -120,7 +121,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     levelStart.current = Date.now();
     if (index > 0) play('whoosh');
     runBonus(1);
-    profile.getState().set({ save: { ...config, index, lives, score, combo, continued } });
+    if (canSave(config.mode)) profile.getState().set({ save: { ...config, index, lives, score, combo, continued } });
     // Saving only on level change on purpose: lives/score are saved with the next level.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [level]);
@@ -166,7 +167,8 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       }
       const recent = clearedNow.slice(-CHALLENGE_LENGTH);
       s.set({
-        save: null,
+        // A daily or friend challenge never touches the saved adventure.
+        ...(canSave(mode) && { save: null }),
         lastRun: recent.length ? { ids: recent.map((c) => c.id), score: recent.reduce((a, c) => a + c.points, 0) } : s.lastRun,
       });
       setResult({ newRecord, rewarded, chest, coins });
@@ -369,7 +371,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     setLives(1);
     setResult(null);
     setPicked([]);
-    profile.getState().set({ save: { ...config, index, lives: 1, score, combo: 0, continued: true } });
+    if (canSave(config.mode)) profile.getState().set({ save: { ...config, index, lives: 1, score, combo: 0, continued: true } });
     setPhase('play');
     runBonus(1);
     return true;

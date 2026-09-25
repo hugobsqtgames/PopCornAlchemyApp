@@ -1,13 +1,15 @@
 import { router, useIsFocused } from 'expo-router';
+import { useState } from 'react';
 import { Modal, Pressable, Switch, View } from 'react-native';
 
 import type { Run } from '@/hooks/use-run';
+import { canSave } from '@/game/rules';
 import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
 import { play } from '@/services/feedback';
 import { useProfile } from '@/store/profile';
 
 import { ChevronIcon, PlayIcon } from '../icons';
-import { Btn, Emoji, Px, Txt } from '../ui';
+import { Btn, Emoji, Px, Tap, Txt } from '../ui';
 
 export function PauseSheet({ run }: { run: Run }) {
   const p = usePalette();
@@ -19,7 +21,19 @@ export function PauseSheet({ run }: { run: Run }) {
   const set = useProfile((s) => s.set);
   // Hidden while another screen (rules, challenge) is on top, shown again on return.
   const focused = useIsFocused();
-  const resume = () => run.setPaused(false);
+  // Giving up asks for a second tap instead of a system alert.
+  const [confirmAbandon, setConfirmAbandon] = useState(false);
+  const saved = canSave(run.config.mode);
+  const resume = () => {
+    setConfirmAbandon(false);
+    run.setPaused(false);
+  };
+  const abandon = () => {
+    if (!confirmAbandon) return setConfirmAbandon(true);
+    setConfirmAbandon(false);
+    set({ save: null });
+    router.dismissTo('/');
+  };
   const toggle = (key: 'sound' | 'music' | 'haptics', v: boolean) => {
     set({ [key]: v });
     play('toggle');
@@ -68,7 +82,22 @@ export function PauseSheet({ run }: { run: Run }) {
             {row('📖', t('rules'), <ChevronIcon color={p.line2} />, () => router.push('/tutoriel'))}
             {row('⚔️', t('challenge_friend'), <ChevronIcon color={p.line2} />, () => router.push('/defier'))}
           </View>
-          <Btn variant="soft" label={t('quit')} height={50} size={14} onPress={() => router.dismissTo('/')} />
+          <Btn variant="soft" label={saved ? t('quit') : t('quit_plain')} height={50} size={14} onPress={() => router.dismissTo('/')} />
+          {saved && !confirmAbandon && (
+            <Tap onPress={abandon} tint="transparent" border="transparent" label={t('abandon')} style={{ alignSelf: 'center', paddingHorizontal: 14, paddingVertical: 6 }}>
+              <Txt size={14} weight="bold" color={p.action}>
+                {t('abandon')}
+              </Txt>
+            </Tap>
+          )}
+          {saved && confirmAbandon && (
+            <View style={{ gap: 8 }}>
+              <Txt size={13} weight="semibold" color={p.muted} center>
+                {t('abandon_text')}
+              </Txt>
+              <Btn label={t('abandon_yes')} height={46} size={14} onPress={abandon} />
+            </View>
+          )}
         </View>
       </View>
     </Modal>
