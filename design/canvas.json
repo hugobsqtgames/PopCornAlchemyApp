@@ -8,39 +8,47 @@
     "Icone.dc.html": {"x": 0, "y": 0, "w": 844, "h": 844, "title": "Icône de l'app"},
     "Systeme.dc.html": {"x": 924, "y": 0, "w": 1400, "h": 844, "title": "Charte graphique"},
 
-    "Langue.dc.html": {"x": 0, "y": 1300, "w": 390, "h": 844, "title": "1 · Choix de la langue", "is_interactive": true},
-    "Tutoriel.dc.html": {"x": 470, "y": 1300, "w": 390, "h": 844, "title": "2 · Tutoriel", "is_interactive": true},
-    "Main.dc.html": {"x": 940, "y": 1300, "w": 390, "h": 844, "title": "3 · Accueil", "is_interactive": true},
-    "DefiDuJour.dc.html": {"x": 1410, "y": 1300, "w": 390, "h": 844, "title": "Défi du jour", "is_interactive": true},
-    "Parametres.dc.html": {"x": 1880, "y": 1300, "w": 390, "h": 1000, "title": "Réglages", "is_interactive": true},
+    "Langue.dc.html": {"x": 0, "y": 1224, "w": 375, "h": 667, "title": "1 · Langue", "is_interactive": true},
+    "Tutoriel.dc.html": {"x": 455, "y": 1224, "w": 375, "h": 667, "title": "2 · Tutoriel", "is_interactive": true},
+    "Main.dc.html": {"x": 910, "y": 1224, "w": 375, "h": 667, "title": "3 · Accueil", "is_interactive": true},
+    "DefiDuJour.dc.html": {"x": 1365, "y": 1224, "w": 375, "h": 667, "title": "Défi du jour", "is_interactive": true},
+    "Parametres.dc.html": {"x": 1820, "y": 1224, "w": 375, "h": 900, "title": "Réglages", "is_interactive": true},
 
-    "Categories.dc.html": {"x": 0, "y": 2600, "w": 390, "h": 844, "title": "Catégories", "is_interactive": true},
-    "Modes.dc.html": {"x": 470, "y": 2600, "w": 390, "h": 844, "title": "Modes de jeu", "is_interactive": true},
-    "Jeu.dc.html": {"x": 940, "y": 2600, "w": 390, "h": 844, "title": "Jeu", "is_interactive": true},
-    "JeuFever.dc.html": {"x": 1410, "y": 2600, "w": 390, "h": 844, "title": "Jeu · bonne réponse + FEVER", "is_interactive": true},
-    "Pause.dc.html": {"x": 1880, "y": 2600, "w": 390, "h": 844, "title": "Pause", "is_interactive": true},
-    "Palier.dc.html": {"x": 2350, "y": 2600, "w": 390, "h": 844, "title": "Palier terminé", "is_interactive": true},
-    "GameOver.dc.html": {"x": 2820, "y": 2600, "w": 390, "h": 844, "title": "Game over", "is_interactive": true},
-    "Victoire.dc.html": {"x": 3290, "y": 2600, "w": 390, "h": 844, "title": "Victoire finale", "is_interactive": true},
+    "Categories.dc.html": {"x": 0, "y": 2271, "w": 375, "h": 667, "title": "Catégories", "is_interactive": true},
+    "Modes.dc.html": {"x": 455, "y": 2271, "w": 375, "h": 667, "title": "Modes de jeu", "is_interactive": true},
+    "Jeu.dc.html": {"x": 910, "y": 2271, "w": 375, "h": 667, "title": "Jeu", "is_interactive": true},
+    "JeuFever.dc.html": {"x": 1365, "y": 2271, "w": 375, "h": 667, "title": "Jeu · bonne réponse + Fever", "is_interactive": true},
+    "Pause.dc.html": {"x": 1820, "y": 2271, "w": 375, "h": 667, "title": "Pause", "is_interactive": true},
+    "Palier.dc.html": {"x": 2275, "y": 2271, "w": 375, "h": 667, "title": "Palier terminé", "is_interactive": true},
+    "GameOver.dc.html": {"x": 2730, "y": 2271, "w": 375, "h": 667, "title": "Game over", "is_interactive": true},
+    "Victoire.dc.html": {"x": 3185, "y": 2271, "w": 375, "h": 667, "title": "Victoire finale", "is_interactive": true},
 
-    "Boutique.dc.html": {"x": 0, "y": 3900, "w": 390, "h": 844, "title": "Boutique · Pièces", "is_interactive": true},
-    "BoutiqueThemes.dc.html": {"x": 470, "y": 3900, "w": 390, "h": 844, "title": "Boutique · Thèmes", "is_interactive": true},
-    "Roue.dc.html": {"x": 940, "y": 3900, "w": 390, "h": 844, "title": "Roue de la chance", "is_interactive": true},
-    "Trophees.dc.html": {"x": 1410, "y": 3900, "w": 390, "h": 844, "title": "Trophées", "is_interactive": true},
-    "Profil.dc.html": {"x": 1880, "y": 3900, "w": 390, "h": 844, "title": "Profil & stats", "is_interactive": true},
-    "Defier.dc.html": {"x": 2350, "y": 3900, "w": 390, "h": 844, "title": "Défier un ami", "is_interactive": true}
+    "Boutique.dc.html": {"x": 0, "y": 3318, "w": 375, "h": 667, "title": "Boutique · pièces", "is_interactive": true},
+    "BoutiqueThemes.dc.html": {"x": 455, "y": 3318, "w": 375, "h": 667, "title": "Boutique · thèmes", "is_interactive": true},
+    "Roue.dc.html": {"x": 910, "y": 3318, "w": 375, "h": 667, "title": "Roue de la chance", "is_interactive": true},
+    "Trophees.dc.html": {"x": 1365, "y": 3318, "w": 375, "h": 667, "title": "Trophées", "is_interactive": true},
+    "Profil.dc.html": {"x": 1820, "y": 3318, "w": 375, "h": 667, "title": "Profil & classement", "is_interactive": true},
+    "Defier.dc.html": {"x": 2275, "y": 3318, "w": 375, "h": 667, "title": "Défier un ami", "is_interactive": true},
+
+    "MainMax.dc.html": {"x": 0, "y": 4365, "w": 430, "h": 932, "title": "Accueil · iPhone Pro Max"},
+    "JeuMax.dc.html": {"x": 510, "y": 4365, "w": 430, "h": 932, "title": "Jeu · iPhone Pro Max"},
+    "JeuSombre.dc.html": {"x": 1020, "y": 4365, "w": 375, "h": 667, "title": "Jeu · mode sombre iOS"},
+    "MainIpad.dc.html": {"x": 1475, "y": 4365, "w": 1180, "h": 820, "title": "Accueil · iPad"},
+    "JeuIpad.dc.html": {"x": 2735, "y": 4365, "w": 1180, "h": 820, "title": "Jeu · iPad"}
   },
   "order": [
     "Icone.dc.html", "Systeme.dc.html",
     "Langue.dc.html", "Tutoriel.dc.html", "Main.dc.html", "DefiDuJour.dc.html", "Parametres.dc.html",
     "Categories.dc.html", "Modes.dc.html", "Jeu.dc.html", "JeuFever.dc.html", "Pause.dc.html", "Palier.dc.html", "GameOver.dc.html", "Victoire.dc.html",
-    "Boutique.dc.html", "BoutiqueThemes.dc.html", "Roue.dc.html", "Trophees.dc.html", "Profil.dc.html", "Defier.dc.html"
+    "Boutique.dc.html", "BoutiqueThemes.dc.html", "Roue.dc.html", "Trophees.dc.html", "Profil.dc.html", "Defier.dc.html",
+    "MainMax.dc.html", "JeuMax.dc.html", "JeuSombre.dc.html", "MainIpad.dc.html", "JeuIpad.dc.html"
   ],
   "notes": {
     "t0": {"x": 0, "y": -260, "text": "Identité visuelle", "kind": "title1", "maxW": 2324},
-    "t1": {"x": 0, "y": 1040, "text": "Premier lancement & accueil", "kind": "title1", "maxW": 2270},
-    "t2": {"x": 0, "y": 2340, "text": "Une partie", "kind": "title1", "maxW": 3680},
-    "t3": {"x": 0, "y": 3640, "text": "Progression, boutique & social", "kind": "title1", "maxW": 2740}
+    "t1": {"x": 0, "y": 974, "text": "Premier lancement & accueil (iPhone SE, le plus petit écran)", "kind": "title1", "maxW": 2195},
+    "t2": {"x": 0, "y": 2021, "text": "Une partie", "kind": "title1", "maxW": 3560},
+    "t3": {"x": 0, "y": 3068, "text": "Progression, boutique & social", "kind": "title1", "maxW": 2650},
+    "t4": {"x": 0, "y": 4115, "text": "Grands iPhone, mode sombre & iPad", "kind": "title1", "maxW": 3915}
   },
   "designSystems": []
 }

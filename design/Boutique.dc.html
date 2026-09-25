@@ -10,103 +10,70 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
 <style>
-body{margin:0;background:#FFF4DC;color:#1B1530;font-family:'Rubik',system-ui,sans-serif}
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
-a{color:#1B1530}a:hover{color:#1B1530}
-.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
 .emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
-.btn{display:flex;align-items:center;justify-content:center;gap:12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;box-shadow:4px 4px 0 #1B1530;font-family:'Press Start 2P',monospace;color:#1B1530;text-decoration:none}
-.card{box-sizing:border-box;background:#FFFFFF;border:3px solid #1B1530;border-radius:18px;box-shadow:4px 4px 0 #1B1530}
-.chip{display:inline-flex;align-items:center;gap:6px;box-sizing:border-box;height:38px;padding:0 12px;border:2px solid #1B1530;border-radius:999px;background:#FFFFFF;font-weight:800;font-size:14px;box-shadow:2px 2px 0 #1B1530}
-.seg{display:flex;align-items:center;justify-content:center;flex:1;height:36px;border-radius:10px;font-size:13px;font-weight:800;color:#1B1530;text-decoration:none}
-.pack{display:flex;flex-direction:column;align-items:center;gap:8px;height:152px;padding:14px 10px 12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:18px;background:#FFFFFF;box-shadow:4px 4px 0 #1B1530;position:relative}
-.price{display:flex;align-items:center;justify-content:center;width:100%;height:34px;box-sizing:border-box;border:2px solid #1B1530;border-radius:10px;background:#2BCB6E;font-size:15px;font-weight:800;margin-top:auto}
-.flag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:3px 9px;border:2px solid #1B1530;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:0.06em}
-.tab{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;font-size:11px;font-weight:700;color:#5A5270;text-decoration:none;padding-top:10px}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:20px;box-sizing:border-box}
+.pill{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:999px;background:var(--surface);border:1.5px solid var(--line);font-weight:700;font-size:14px;box-sizing:border-box}
+.seg{display:flex;align-items:center;justify-content:center;flex:1;height:32px;border-radius:10px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none}
+.seg-on{background:var(--surface);color:var(--ink);font-weight:700;box-shadow:0 1px 3px rgba(31,27,45,0.15)}
+.pack{display:flex;flex-direction:column;align-items:center;gap:5px;height:124px;padding:12px 10px 10px;border-radius:20px;background:var(--surface);border:1.5px solid var(--line);box-sizing:border-box;position:relative}
+.price{display:flex;align-items:center;justify-content:center;width:100%;height:32px;margin-top:auto;border-radius:10px;background:var(--red);color:#FFFFFF;font-size:15px;font-weight:800}
+.flag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:0.05em}
+.tabbar{display:flex;box-sizing:border-box;background:var(--surface);border-top:1.5px solid var(--line);flex-shrink:0}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:50px;font-size:10px;font-weight:600;color:var(--muted);text-decoration:none}
+.on{color:var(--red)}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFF4DC; position: relative; overflow: hidden; display: flex; flex-direction: column;">
-  <div style="padding: 60px 16px 0; display: flex; align-items: center; justify-content: space-between;">
-    <h1 class="px" style="margin: 0; font-size: 18px;">BOUTIQUE</h1>
-    <div class="chip"><span class="emoji">💰</span>1 240</div>
+<div class="scr t-light" style="width: 375px; height: 667px; padding-top: 20px;">
+  <div style="padding: 8px 16px 0; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;">
+    <h1 style="margin: 0; font-size: 24px; font-weight: 800;">Boutique</h1>
+    <span class="pill"><span class="emoji">💰</span>1 240</span>
   </div>
-
-  <nav style="margin: 16px 16px 0; padding: 3px; display: flex; gap: 2px; box-sizing: border-box; border: 3px solid #1B1530; border-radius: 14px; background: #FFFFFF;" aria-label="Rayons">
-    <a class="seg" href="Boutique.dc.html" style="background: #FFC628; border: 2px solid #1B1530;">Pièces</a>
+  <nav style="margin: 12px 16px 0; padding: 3px; display: flex; gap: 2px; border-radius: 13px; background: var(--sunk);" aria-label="Rayons">
+    <a class="seg seg-on" href="Boutique.dc.html">Pièces</a>
     <a class="seg" href="Boutique.dc.html">Bonus</a>
     <a class="seg" href="BoutiqueThemes.dc.html">Thèmes</a>
     <a class="seg" href="BoutiqueThemes.dc.html">Styles</a>
     <a class="seg" href="BoutiqueThemes.dc.html">Avatars</a>
   </nav>
 
-  <div class="card" style="margin: 16px 16px 0; padding: 12px 14px; background: #1B1530; box-shadow: 4px 4px 0 #FFC628; display: flex; align-items: center; gap: 12px;">
-    <span class="emoji" style="font-size: 30px;">📺</span>
-    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
-      <span class="px" style="font-size: 10px; color: #FFC628;">PIÈCES GRATUITES</span>
-      <span style="font-size: 13px; font-weight: 600; color: #E9E4F7;">Une courte pub = +25 <span class="emoji">💰</span> · 3/5 aujourd'hui</span>
-    </div>
-    <button class="btn" style="height: 40px; padding: 0 12px; background: #FFC628; font-size: 10px; box-shadow: 2px 2px 0 #FFFFFF; border-color: #FFFFFF;">VOIR</button>
-  </div>
-
-  <div style="margin: 24px 16px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 12px;">
-    <button class="pack">
-      <span class="emoji" style="font-size: 36px;">🍿</span>
-      <span class="px" style="font-size: 13px;">500</span>
-      <span style="font-size: 12px; font-weight: 700; color: #5A5270;">Poignée</span>
-      <span class="price">0,99 €</span>
-    </button>
-    <button class="pack">
-      <span class="emoji" style="font-size: 36px;">🥡</span>
-      <span class="px" style="font-size: 13px;">1 200</span>
-      <span style="font-size: 12px; font-weight: 700; color: #5A5270;">Cornet · +20 %</span>
-      <span class="price">1,99 €</span>
-    </button>
-    <button class="pack" style="background: #FFF1C4;">
-      <span class="flag" style="background: #19C6DB;">POPULAIRE</span>
-      <span class="emoji" style="font-size: 36px;">🪣</span>
-      <span class="px" style="font-size: 13px;">3 500</span>
-      <span style="font-size: 12px; font-weight: 700; color: #5A5270;">Seau XL · +40 %</span>
-      <span class="price">4,99 €</span>
-    </button>
-    <button class="pack" style="background: #FFE0EB;">
-      <span class="flag" style="background: #FF3D7F;">MEILLEURE OFFRE</span>
-      <span class="emoji" style="font-size: 36px;">🎬</span>
-      <span class="px" style="font-size: 13px;">8 000</span>
-      <span style="font-size: 12px; font-weight: 700; color: #5A5270;">Cinéma · +60 %</span>
-      <span class="price">9,99 €</span>
+  <div style="padding: 12px 16px 0;">
+    <button class="card" style="width: 100%; height: 60px; padding: 0 12px; display: flex; align-items: center; gap: 12px; text-align: left; background: var(--gold-t); border-color: var(--gold-t);">
+      <span class="emoji" style="font-size: 26px;">📺</span>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 15px; font-weight: 800;">+25 pièces gratuites</span><span style="font-size: 12px; font-weight: 600; color: var(--muted);">Une courte pub · encore 3 aujourd'hui</span></div>
+      <span style="height: 32px; padding: 0 12px; display: flex; align-items: center; border-radius: 10px; background: var(--gold); font-size: 13px; font-weight: 800;">VOIR</span>
     </button>
   </div>
 
-  <button class="card" style="margin: 18px 16px 0; padding: 12px 14px; background: #19C6DB; display: flex; align-items: center; gap: 12px; text-align: left;">
-    <span class="emoji" style="font-size: 30px;">🚫</span>
-    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
-      <span class="px" style="font-size: 10px;">PACK SANS PUB</span>
-      <span style="font-size: 13px; font-weight: 700;">Plus aucune pub imposée + 1 000 <span class="emoji">💰</span></span>
-    </div>
-    <span style="height: 36px; padding: 0 10px; display: flex; align-items: center; box-sizing: border-box; border: 2px solid #1B1530; border-radius: 10px; background: #FFFFFF; font-weight: 800; font-size: 15px;">3,99 €</span>
-  </button>
+  <div style="padding: 20px 16px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 10px;">
+    <button class="pack"><span class="emoji" style="font-size: 30px;">🍿</span><span style="font-size: 17px; font-weight: 800;">500</span><span style="font-size: 12px; font-weight: 600; color: var(--muted);">Poignée</span><span class="price">0,99 €</span></button>
+    <button class="pack"><span class="emoji" style="font-size: 30px;">🥡</span><span style="font-size: 17px; font-weight: 800;">1 200</span><span style="font-size: 12px; font-weight: 600; color: var(--muted);">Cornet · +20 %</span><span class="price">1,99 €</span></button>
+    <button class="pack" style="border: 2px solid var(--gold);"><span class="flag" style="background: var(--gold); color: #1F1B2D;">POPULAIRE</span><span class="emoji" style="font-size: 30px;">🪣</span><span style="font-size: 17px; font-weight: 800;">3 500</span><span style="font-size: 12px; font-weight: 600; color: var(--muted);">Seau XL · +40 %</span><span class="price">4,99 €</span></button>
+    <button class="pack" style="border: 2px solid var(--red);"><span class="flag" style="background: var(--red); color: #FFFFFF;">MEILLEURE OFFRE</span><span class="emoji" style="font-size: 30px;">🎬</span><span style="font-size: 17px; font-weight: 800;">8 000</span><span style="font-size: 12px; font-weight: 600; color: var(--muted);">Cinéma · +60 %</span><span class="price">9,99 €</span></button>
+  </div>
 
-  <nav style="position: absolute; left: 0; right: 0; bottom: 0; height: 86px; box-sizing: border-box; background: #FFFFFF; border-top: 3px solid #1B1530; display: flex; padding: 0 8px 26px;" aria-label="Navigation principale">
-    <a class="tab" href="Main.dc.html">
-      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg></span>
-      Jouer
-    </a>
-    <a class="tab" href="Boutique.dc.html" style="color: #1B1530;">
-      <span style="width: 56px; height: 30px; border-radius: 999px; background: #FFC628; border: 2px solid #1B1530; display: flex; align-items: center; justify-content: center; box-sizing: border-box;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg></span>
-      Boutique
-    </a>
-    <a class="tab" href="Trophees.dc.html">
-      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"></path><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4"></path><path d="M12 13v4M8 20h8M10 17h4"></path></svg></span>
-      Trophées
-    </a>
-    <a class="tab" href="Profil.dc.html">
-      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
-      Profil
-    </a>
+  <div style="padding: 12px 16px 0;">
+    <button class="card" style="width: 100%; height: 58px; padding: 0 12px; display: flex; align-items: center; gap: 12px; text-align: left;">
+      <span class="emoji" style="font-size: 24px;">🚫</span>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 15px; font-weight: 800;">Pack sans pub</span><span style="font-size: 12px; font-weight: 600; color: var(--muted);">Plus aucune pub imposée + 1 000 <span class="emoji">💰</span></span></div>
+      <span style="font-size: 15px; font-weight: 800;">3,99 €</span>
+    </button>
+  </div>
+
+  <div style="flex: 1;"></div>
+  <nav class="tabbar" aria-label="Navigation principale">
+    <a class="tab" href="Main.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>Jouer</a>
+    <a class="tab on" href="Boutique.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2" fill="none"></path></svg>Boutique</a>
+    <a class="tab" href="Trophees.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"></path><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4"></path><path d="M12 13v4M8 20h8M10 17h4"></path></svg>Trophées</a>
+    <a class="tab" href="Profil.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>Profil</a>
   </nav>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":375,"height":667}}'>
 class Component extends DCLogic {
   renderVals() { return {}; }
 }

@@ -10,72 +10,68 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
 <style>
-body{margin:0;background:#FFF4DC;color:#1B1530;font-family:'Rubik',system-ui,sans-serif}
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
-a{color:#1B1530}a:hover{color:#1B1530}
-.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
 .emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
-.ibtn{display:flex;align-items:center;justify-content:center;width:44px;height:44px;box-sizing:border-box;border:3px solid #1B1530;border-radius:14px;background:#FFFFFF;box-shadow:3px 3px 0 #1B1530;color:#1B1530;text-decoration:none}
-.sec{margin:22px 16px 8px;font-size:12px;font-weight:800;letter-spacing:0.12em;color:#5A5270}
-.grp{margin:0 16px;box-sizing:border-box;border:3px solid #1B1530;border-radius:18px;background:#FFFFFF;box-shadow:4px 4px 0 #1B1530;overflow:hidden}
-.row{display:flex;align-items:center;gap:12px;width:100%;height:50px;padding:0 14px;box-sizing:border-box;font-size:16px;font-weight:600;text-align:left;text-decoration:none;color:#1B1530}
-.sep{border-top:2px solid #EFE6D0}
-.val{font-size:14px;font-weight:600;color:#5A5270}
-.tog{width:52px;height:30px;box-sizing:border-box;border:2px solid #1B1530;border-radius:999px;position:relative;flex-shrink:0}
-.knob{position:absolute;top:2px;width:22px;height:22px;box-sizing:border-box;border:2px solid #1B1530;border-radius:999px;background:#FFFFFF}
-.soc{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;padding:12px 0;font-size:13px;font-weight:700;text-decoration:none;color:#1B1530}
-.si{display:flex;align-items:center;justify-content:center;width:48px;height:48px;box-sizing:border-box;border:3px solid #1B1530;border-radius:14px;box-shadow:2px 2px 0 #1B1530}
+.ib{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:44px;height:44px;border-radius:14px;background:var(--surface);border:1.5px solid var(--line);color:var(--ink);box-sizing:border-box;text-decoration:none}
+.sec{margin:18px 20px 8px;font-size:12px;font-weight:700;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase}
+.grp{margin:0 16px;border-radius:18px;background:var(--surface);border:1.5px solid var(--line);overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;width:100%;height:48px;padding:0 14px;box-sizing:border-box;font-size:16px;font-weight:500;text-align:left;text-decoration:none;color:var(--ink)}
+.sep{border-top:1px solid var(--line)}
+.val{font-size:15px;color:var(--muted)}
+.tog{width:50px;height:30px;border-radius:999px;position:relative;flex-shrink:0}
+.knob{position:absolute;top:3px;width:24px;height:24px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.25)}
+.soc{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;padding:12px 0;font-size:13px;font-weight:600;text-decoration:none;color:var(--ink)}
+.si{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:14px}
+.chev{color:var(--line2)}
 </style>
 </helmet>
-<div style="width: 390px; height: 1000px; box-sizing: border-box; background: #FFF4DC; position: relative; overflow: hidden; display: flex; flex-direction: column;">
-  <div style="padding: 56px 16px 0; display: flex; align-items: center; gap: 14px;">
-    <a class="ibtn" href="Main.dc.html" aria-label="Retour">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
-    </a>
-    <h1 class="px" style="margin: 0; font-size: 17px;">RÉGLAGES</h1>
+<div class="scr t-light" style="width: 375px; height: 900px; padding-top: 20px;">
+  <div style="padding: 8px 16px 0; display: flex; align-items: center; gap: 12px;">
+    <a class="ib" href="Main.dc.html" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+    <h1 style="margin: 0; font-size: 20px; font-weight: 800;">Réglages</h1>
   </div>
 
-  <div class="sec">JEU</div>
+  <div class="sec">Jeu</div>
   <div class="grp">
-    <div class="row"><span class="emoji">🔊</span><span style="flex: 1;">Effets sonores</span><button class="tog" role="switch" aria-checked="true" aria-label="Effets sonores" style="background: #2BCB6E;"><span class="knob" style="right: 2px;"></span></button></div>
-    <div class="row sep"><span class="emoji">🎵</span><span style="flex: 1;">Musique</span><button class="tog" role="switch" aria-checked="false" aria-label="Musique" style="background: #E4DACA;"><span class="knob" style="left: 2px;"></span></button></div>
-    <div class="row sep"><span class="emoji">📳</span><span style="flex: 1;">Vibrations</span><button class="tog" role="switch" aria-checked="true" aria-label="Vibrations" style="background: #2BCB6E;"><span class="knob" style="right: 2px;"></span></button></div>
-    <a class="row sep" href="Langue.dc.html"><span class="emoji">🌐</span><span style="flex: 1;">Langue</span><span class="val">Français</span>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
+    <div class="row"><span class="emoji">🔊</span><span style="flex: 1;">Effets sonores</span><button class="tog" role="switch" aria-checked="true" aria-label="Effets sonores" style="background: var(--green);"><span class="knob" style="right: 3px;"></span></button></div>
+    <div class="row sep"><span class="emoji">📳</span><span style="flex: 1;">Vibrations</span><button class="tog" role="switch" aria-checked="true" aria-label="Vibrations" style="background: var(--green);"><span class="knob" style="right: 3px;"></span></button></div>
+    <div class="row sep"><span class="emoji">🎵</span><span style="flex: 1;">Musique</span><button class="tog" role="switch" aria-checked="false" aria-label="Musique" style="background: var(--line2);"><span class="knob" style="left: 3px;"></span></button></div>
+    <a class="row sep" href="Langue.dc.html"><span class="emoji">🌐</span><span style="flex: 1;">Langue</span><span class="val">Français</span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
   </div>
 
-  <div class="sec">COMPTE &amp; ACHATS</div>
+  <div class="sec">Compte &amp; achats</div>
   <div class="grp">
-    <div class="row"><span class="emoji">🎮</span><span style="flex: 1;">Game Center</span><span class="val" style="color: #1E8F4E; font-weight: 800;">Connecté</span></div>
-    <button class="row sep"><span class="emoji">🚫</span><span style="flex: 1;">Supprimer les pubs</span><span class="val" style="font-weight: 800; color: #1B1530;">3,99 €</span></button>
+    <div class="row"><span class="emoji">🎮</span><span style="flex: 1;">Game Center</span><span class="val" style="color: var(--green); font-weight: 700;">Connecté</span></div>
+    <button class="row sep"><span class="emoji">🚫</span><span style="flex: 1;">Supprimer les pubs</span><span style="font-size: 15px; font-weight: 700;">3,99 €</span></button>
     <button class="row sep"><span class="emoji">🔄</span><span style="flex: 1;">Restaurer mes achats</span></button>
   </div>
 
-  <div class="sec">SUIS HUGO_BSQT</div>
+  <div class="sec">Suis Hugo_BSQT</div>
   <div class="grp" style="display: flex;">
-    <a class="soc" href="https://www.tiktok.com/@hugo_bsqt">
-      <span class="si" style="background: #FFD6E4;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B1530" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v11a4 4 0 1 1-4-4"></path><path d="M14 3c0 3 2 5 5 5"></path></svg></span>TikTok</a>
-    <a class="soc" href="https://www.instagram.com/hugo_bsqt/">
-      <span class="si" style="background: #FFEFC2;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B1530" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><path d="M17.5 6.5h0"></path></svg></span>Instagram</a>
-    <a class="soc" href="https://www.youtube.com/channel/UCUAfM0_WdPb1o-gRWAP8xWg">
-      <span class="si" style="background: #CDF3F8;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B1530" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"></rect><path d="M10 9l5 3-5 3z"></path></svg></span>YouTube</a>
+    <a class="soc" href="https://www.tiktok.com/@hugo_bsqt"><span class="si" style="background: var(--red-t);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v11a4 4 0 1 1-4-4"></path><path d="M14 3c0 3 2 5 5 5"></path></svg></span>TikTok</a>
+    <a class="soc" href="https://www.instagram.com/hugo_bsqt/"><span class="si" style="background: var(--gold-t);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle></svg></span>Instagram</a>
+    <a class="soc" href="https://www.youtube.com/channel/UCUAfM0_WdPb1o-gRWAP8xWg"><span class="si" style="background: var(--blue-t);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"></rect><path d="M10 9l5 3-5 3z"></path></svg></span>YouTube</a>
   </div>
 
-  <div class="sec">AIDE &amp; INFOS</div>
+  <div style="position: absolute; left: 0; right: 0; top: 667px; border-top: 2px dashed var(--red);">
+    <span style="position: absolute; right: 12px; top: 6px; font-size: 11px; font-weight: 700; color: var(--red);">bas de l'écran iPhone SE ↓ on fait défiler</span>
+  </div>
+
+  <div class="sec" style="margin-top: 26px;">Aide &amp; infos</div>
   <div class="grp">
-    <a class="row" href="Tutoriel.dc.html"><span class="emoji">📖</span><span style="flex: 1;">Revoir le tutoriel</span>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
-    <a class="row sep" href="#"><span class="emoji">🔒</span><span style="flex: 1;">Confidentialité</span>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
-    <a class="row sep" href="#"><span class="emoji">📄</span><span style="flex: 1;">Conditions &amp; mentions légales</span>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
+    <a class="row" href="Tutoriel.dc.html"><span class="emoji">📖</span><span style="flex: 1;">Revoir le tutoriel</span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
+    <a class="row sep" href="#"><span class="emoji">🔒</span><span style="flex: 1;">Confidentialité</span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
+    <a class="row sep" href="#"><span class="emoji">📄</span><span style="flex: 1;">Conditions &amp; mentions légales</span><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
   </div>
-
-  <button style="margin: 22px 16px 0; height: 50px; box-sizing: border-box; border: 3px solid #C2185B; border-radius: 16px; color: #C2185B; font-size: 15px; font-weight: 800;">Réinitialiser ma progression</button>
-  <p style="margin: 14px 0 0; text-align: center; font-size: 12px; font-weight: 600; color: #5A5270;">Version 1.0.0 · © 2026 Hugo_BSQT</p>
+  <button style="margin: 20px 16px 0; height: 48px; border-radius: 16px; border: 1.5px solid var(--line); background: var(--surface); color: var(--red); font-size: 16px; font-weight: 600;">Réinitialiser ma progression</button>
+  <p style="margin: 14px 0 0; text-align: center; font-size: 12px; font-weight: 500; color: var(--muted);">Version 1.0.0 · © 2026 Hugo_BSQT</p>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1000}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":375,"height":900}}'>
 class Component extends DCLogic {
   renderVals() { return {}; }
 }

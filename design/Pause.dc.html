@@ -10,48 +10,42 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
 <style>
-body{margin:0;background:#FFF4DC;color:#1B1530;font-family:'Rubik',system-ui,sans-serif}
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
-a{color:#1B1530}a:hover{color:#1B1530}
-.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
+.px{font-family:'Press Start 2P',monospace;line-height:1.25}
 .emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
-.btn{display:flex;align-items:center;justify-content:center;gap:12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;box-shadow:4px 4px 0 #1B1530;font-family:'Press Start 2P',monospace;color:#1B1530;text-decoration:none}
-.card{box-sizing:border-box;background:#FFFFFF;border:3px solid #1B1530;border-radius:18px;box-shadow:4px 4px 0 #1B1530}
-.row{display:flex;align-items:center;gap:12px;height:52px;padding:0 14px;box-sizing:border-box;border:2px solid #1B1530;border-radius:14px;background:#FFFFFF;font-weight:700;font-size:16px}
-.tog{width:52px;height:30px;box-sizing:border-box;border:2px solid #1B1530;border-radius:999px;background:#2BCB6E;position:relative}
-.knob{position:absolute;top:2px;width:22px;height:22px;box-sizing:border-box;border:2px solid #1B1530;border-radius:999px;background:#FFFFFF}
+.b{display:flex;align-items:center;justify-content:center;gap:10px;box-sizing:border-box;border-radius:16px;font-weight:800;font-size:16px;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none}
+.b-red{background:var(--red);color:#FFFFFF;box-shadow:0 4px 0 var(--red-d)}
+.b-soft{background:var(--surface);color:var(--ink);border:2px solid var(--line2);box-shadow:0 3px 0 var(--line2)}
+.grp{border-radius:18px;background:var(--surface);border:1.5px solid var(--line);overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;width:100%;height:48px;padding:0 14px;box-sizing:border-box;font-size:16px;font-weight:500;text-align:left;text-decoration:none;color:var(--ink)}
+.sep{border-top:1px solid var(--line)}
+.tog{width:50px;height:30px;border-radius:999px;position:relative;flex-shrink:0}
+.knob{position:absolute;top:3px;width:24px;height:24px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.25)}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; background: #3A3255; position: relative; overflow: hidden;">
-  <div style="position: absolute; left: 0; right: 0; top: 0; height: 330px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;">
-    <div style="width: 84px; height: 84px; box-sizing: border-box; border: 3px solid #FFFFFF; border-radius: 22px; background: #19C6DB; box-shadow: 4px 4px 0 #1B1530; display: flex; align-items: center; justify-content: center;">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1B1530" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M9 5v14M15 5v14"></path></svg>
-    </div>
-    <span class="px" style="font-size: 28px; color: #FFFFFF; text-shadow: 3px 3px 0 #1B1530;">PAUSE</span>
-    <span style="font-size: 14px; font-weight: 600; color: #DCD5F0;">Niveau 12 · Score 12 450 · Le chrono est arrêté</span>
+<div class="scr t-light" style="width: 375px; height: 667px; padding-top: 20px; background: #3B3647;">
+  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #FFFFFF;">
+    <span class="px" style="font-size: 22px;">PAUSE</span>
+    <span style="font-size: 14px; font-weight: 600; color: #D8D2E6;">Niveau 12 · 12 450 pts · chrono arrêté</span>
   </div>
-
-  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 530px; box-sizing: border-box; background: #FFF4DC; border-top: 3px solid #1B1530; border-radius: 28px 28px 0 0; padding: 12px 20px 40px; display: flex; flex-direction: column; gap: 12px;">
-    <div style="width: 44px; height: 5px; border-radius: 999px; background: #B8AFC9; align-self: center; margin-bottom: 6px;"></div>
-    <a class="btn" href="Jeu.dc.html" style="height: 64px; background: #2BCB6E; font-size: 16px;">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="#1B1530" stroke="#1B1530" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg>
-      REPRENDRE
-    </a>
-    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
-      <div class="row"><span class="emoji" style="font-size: 20px;">🔊</span><span style="flex: 1;">Sons</span><div class="tog"><div class="knob" style="right: 2px;"></div></div></div>
-      <div class="row"><span class="emoji" style="font-size: 20px;">📳</span><span style="flex: 1;">Vibrations</span><div class="tog"><div class="knob" style="right: 2px;"></div></div></div>
-      <a class="row" href="Tutoriel.dc.html" style="text-decoration: none; color: #1B1530;"><span class="emoji" style="font-size: 20px;">📖</span><span style="flex: 1;">Règles du jeu</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></a>
+  <div style="background: var(--bg); border-radius: 26px 26px 0 0; padding: 10px 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="width: 40px; height: 5px; border-radius: 999px; background: var(--line2); align-self: center; margin-bottom: 4px;"></div>
+    <a class="b b-red" href="Jeu.dc.html" style="height: 56px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg>Reprendre</a>
+    <div class="grp">
+      <div class="row"><span class="emoji">🔊</span><span style="flex: 1;">Effets sonores</span><button class="tog" role="switch" aria-checked="true" aria-label="Effets sonores" style="background: var(--green);"><span class="knob" style="right: 3px;"></span></button></div>
+      <div class="row sep"><span class="emoji">📳</span><span style="flex: 1;">Vibrations</span><button class="tog" role="switch" aria-checked="true" aria-label="Vibrations" style="background: var(--green);"><span class="knob" style="right: 3px;"></span></button></div>
+      <a class="row sep" href="Tutoriel.dc.html"><span class="emoji">📖</span><span style="flex: 1;">Règles du jeu</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--line2);"><path d="M9 5l7 7-7 7"></path></svg></a>
+      <a class="row sep" href="Defier.dc.html"><span class="emoji">⚔️</span><span style="flex: 1;">Défier un ami sur ce niveau</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--line2);"><path d="M9 5l7 7-7 7"></path></svg></a>
     </div>
-    <a class="btn" href="Defier.dc.html" style="height: 52px; background: #19C6DB; font-size: 11px; margin-top: 4px;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5"></path><path d="M5 13v7h14v-7"></path></svg>
-      DÉFIER UN AMI SUR CE NIVEAU
-    </a>
-    <a class="btn" href="Main.dc.html" style="height: 52px; background: #FFFFFF; font-size: 11px;">QUITTER (PARTIE SAUVEGARDÉE)</a>
+    <a class="b b-soft" href="Main.dc.html" style="height: 52px; font-size: 14px;">Quitter · partie sauvegardée</a>
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":375,"height":667}}'>
 class Component extends DCLogic {
   renderVals() { return {}; }
 }

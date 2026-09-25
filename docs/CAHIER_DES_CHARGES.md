@@ -9,7 +9,8 @@ Maquettes : dossier `design/` (à ouvrir dans le canvas de design partagé).
 |---|---|
 | Technologie | Expo (React Native) + EAS Build (compilation et envoi à Apple dans le cloud) |
 | Matériel | Mac + iPhone (test en direct via Expo Go puis TestFlight) |
-| Style | Rétro pixel modernisé |
+| Style | « Pop épuré » : fond papier, une couleur d'action, pixel réservé au logo (v2) |
+| Appareils | Tous les iPhone (SE → Pro Max) + iPad, mode sombre automatique |
 | Argent | Pubs (AdMob, vidéos récompensées) + achats intégrés (pièces, pack sans pub) |
 | Classement | Game Center (classements + succès) |
 | Logo | Nouvelle icône : fiole d'alchimie remplie de pop-corn |
@@ -18,13 +19,27 @@ Maquettes : dossier `design/` (à ouvrir dans le canvas de design partagé).
 | Gardé | Roue de la chance, liens TikTok/Instagram/YouTube, défier un ami, arbre de trophées |
 | Supprimé | Compteur de vues + mot de passe, faux classement, serveur Express, dépendance Gemini |
 
-## 2. Charte graphique
+## 2. Charte graphique (v2 « Pop épuré »)
 
-- Couleurs : Crème `#FFF4DC` (fond), Encre `#1B1530` (texte, bordures, ombres), Beurre `#FFC628`,
-  Rose `#FF3D7F`, Cyan `#19C6DB`, Vert `#2BCB6E`, Légende `#5A5270`.
-- Polices : Press Start 2P (titres, boutons, scores) + Rubik (texte courant).
-- Composants : bordure 3 px encre, ombre dure 4 px, coins 14–18 px, texte encre sur couleurs vives.
-- 6 thèmes déblocables qui ne changent que les couleurs : Classique, Nuit, Néon, Rétro Or, Cyberpunk, Cinéma.
+- Fond Papier `#FBF6EC`, cartes blanches, texte Encre `#1F1B2D`, légendes `#6E6882`, bordures `#ECE3D2`.
+- **Une seule couleur d'action** : Rouge pop-corn `#D93A3A` (texte blanc, contraste AA).
+- Beurre `#FFC93C` réservé aux gains (pièces, combo, récompenses). Vert `#1FA463` = réussite.
+- Teintes pastel très claires pour les fonds d'icônes, jamais en aplat plein écran.
+- Polices : Rubik (tout le texte et les scores) ; Press Start 2P uniquement pour le logo et les grands
+  moments (BRAVO!, GAME OVER, PAUSE, VICTOIRE).
+- Boutons « touche » : ombre pleine sous le bouton, qui s'enfonce à l'appui (+ vibration légère).
+- Mode sombre automatique (suit le réglage de l'iPhone), gratuit.
+- 6 thèmes à débloquer : Pop-corn, Menthe, Lavande, Minuit, Cinéma, Rétro 8-bit (le look flashy
+  du site d'origine, proposé en option pour les nostalgiques).
+
+## 2 bis. Écrans et tailles
+
+- Règle n°1 : chaque écran important tient sur un **iPhone SE (375 × 667) sans défiler**.
+  Seuls les Réglages défilent (la partie aide/légal est sous le pli).
+- Les grands iPhone reçoivent plus d'espace (tuiles plus grandes, logo affiché), jamais plus de contenu.
+- Un seul bouton principal par écran, en bas, à portée de pouce.
+- iPad : mise en page en 2 colonnes (accueil : logo + bouton / raccourcis ; jeu : objectif + actions /
+  grille 5 × 4), barre d'onglets flottante en haut comme dans iPadOS.
 
 ## 3. Écrans
 

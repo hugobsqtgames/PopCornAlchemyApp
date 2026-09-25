@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<title>Jeu, bonne réponse en mode Fever</title>
+<title>Jeu, bonne réponse en Fever</title>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -10,103 +10,74 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
 <style>
-body{margin:0;background:#FFF4DC;color:#1B1530;font-family:'Rubik',system-ui,sans-serif}
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
-a{color:#1B1530}a:hover{color:#1B1530}
-.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
+.px{font-family:'Press Start 2P',monospace;line-height:1.25}
 .emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
-.btn{display:flex;align-items:center;justify-content:center;gap:12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;box-shadow:4px 4px 0 #1B1530;font-family:'Press Start 2P',monospace;color:#1B1530;text-decoration:none}
-.card{box-sizing:border-box;background:#FFFFFF;border:3px solid #1B1530;border-radius:18px;box-shadow:4px 4px 0 #1B1530}
-.ibtn{display:flex;align-items:center;justify-content:center;width:44px;height:44px;box-sizing:border-box;border:3px solid #1B1530;border-radius:14px;background:#FFFFFF;box-shadow:3px 3px 0 #1B1530;color:#1B1530;text-decoration:none}
-.cap{font-size:12px;font-weight:700;color:#5A5270}
-.tile{display:flex;align-items:center;justify-content:center;height:56px;box-sizing:border-box;border:3px solid #1B1530;border-radius:14px;background:#FFFFFF;box-shadow:3px 3px 0 #1B1530;font-size:30px;opacity:0.35}
-.slot{display:flex;align-items:center;justify-content:center;width:62px;height:62px;box-sizing:border-box;border:3px solid #1B1530;border-radius:14px;background:#2BCB6E;box-shadow:3px 3px 0 #1B1530;font-size:32px}
-.bit{position:absolute;font-size:24px}
+.b{display:flex;align-items:center;justify-content:center;gap:10px;box-sizing:border-box;border-radius:16px;font-weight:800;font-size:16px;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:20px;box-sizing:border-box}
+.ib{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:44px;height:44px;border-radius:14px;background:var(--surface);border:1.5px solid var(--line);color:var(--ink);box-sizing:border-box;text-decoration:none}
+.cap{font-size:12px;font-weight:600;color:var(--muted)}
+.tile{display:flex;align-items:center;justify-content:center;border-radius:14px;background:var(--surface);border:2px solid var(--line);box-sizing:border-box;font-size:26px;opacity:0.3}
+.slot{display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:14px;box-sizing:border-box;background:var(--green-t);border:2px solid var(--green);font-size:26px}
+.bar{height:6px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.pw{display:flex;align-items:center;justify-content:center;flex:1;height:44px;border-radius:14px;background:var(--surface);border:1.5px solid var(--line);box-sizing:border-box;font-size:20px;opacity:0.4}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; background: #1B1530; position: relative; overflow: hidden; display: flex; flex-direction: column;">
-  <div style="position: absolute; inset: 0; box-sizing: border-box; border: 8px solid #FFC628; box-shadow: inset 0 0 0 4px #FF3D7F; pointer-events: none; z-index: 5;"></div>
+<div class="scr t-light" style="width: 375px; height: 667px; padding-top: 20px;">
+  <div style="padding: 8px 16px 0; display: flex; align-items: center; gap: 12px;">
+    <a class="ib" href="Pause.dc.html" aria-label="Pause"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1.5"></rect><rect x="14" y="4" width="4" height="16" rx="1.5"></rect></svg></a>
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 13px; font-weight: 700;">Niveau 12 <span style="color: var(--muted); font-weight: 600;">· Palier 1</span></span>
+      <div class="bar"><div style="width: 65%; height: 100%; background: var(--ink); border-radius: 999px;"></div></div>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+      <span style="font-size: 17px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1;">14 290</span>
+      <span class="cap" style="font-size: 11px; color: var(--green); font-weight: 700;">+1 840</span>
+    </div>
+  </div>
 
-  <div style="padding: 56px 16px 0; display: flex; align-items: center; gap: 12px;">
-    <a class="ibtn" href="Pause.dc.html" aria-label="Pause">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M9 5v14M15 5v14"></path></svg>
-    </a>
-    <div style="flex: 1; display: flex; flex-direction: column; gap: 7px;">
-      <div style="display: flex; justify-content: space-between; align-items: baseline;">
-        <span class="px" style="font-size: 10px; color: #FFFFFF;">NIVEAU 12</span>
-        <span style="font-size: 12px; font-weight: 700; color: #CFC7E6;">Palier 1 · 12/20</span>
+  <div style="padding: 14px 16px 0;">
+    <div class="card" style="padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; position: relative; border: 2px solid var(--gold); box-shadow: 0 0 0 4px var(--gold-t);">
+      <span style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); padding: 3px 10px; border-radius: 999px; background: var(--gold); color: #1F1B2D; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; white-space: nowrap;"><span class="emoji">🔥</span> FEVER ×5 · POINTS ×2</span>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 8px; background: var(--blue-t); font-size: 12px; font-weight: 700;"><span class="emoji">📺</span>Série</span>
+        <span class="emoji" style="font-size: 14px; letter-spacing: 1px;">❤️❤️❤️🤍</span>
       </div>
-      <div style="height: 12px; box-sizing: border-box; border: 2px solid #FFFFFF; border-radius: 999px; background: #2E2650; overflow: hidden;">
-        <div style="width: 60%; height: 100%; background: #19C6DB;"></div>
+      <span style="font-size: 22px; font-weight: 800; text-align: center; line-height: 1.15;">Stranger Things</span>
+      <div class="bar"><div style="width: 68%; height: 100%; background: var(--red); border-radius: 999px;"></div></div>
+    </div>
+  </div>
+
+  <div style="padding: 14px 16px 0; display: flex; justify-content: center; gap: 10px;">
+    <div class="slot emoji">🧇</div><div class="slot emoji">🚲</div><div class="slot emoji">🔦</div><div class="slot emoji">👾</div>
+  </div>
+
+  <div style="flex: 1; min-height: 0; padding: 14px 16px 3px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 7px; position: relative;">
+    <div class="tile emoji">🔥</div><div class="tile emoji">🧇</div><div class="tile emoji">💧</div><div class="tile emoji">🎸</div>
+    <div class="tile emoji">👽</div><div class="tile emoji">⚡</div><div class="tile emoji">🚲</div><div class="tile emoji">🍕</div>
+    <div class="tile emoji">🌈</div><div class="tile emoji">💀</div><div class="tile emoji">🍔</div><div class="tile emoji">🔦</div>
+    <div class="tile emoji">🚗</div><div class="tile emoji">👾</div><div class="tile emoji">🍦</div><div class="tile emoji">🚀</div>
+    <div class="tile emoji">💎</div><div class="tile emoji">👑</div><div class="tile emoji">🎩</div><div class="tile emoji">🎲</div>
+    <div style="position: absolute; left: 36px; right: 36px; top: 50%; transform: translateY(-50%); padding: 22px 12px; border-radius: 24px; background: var(--surface); border: 2px solid var(--green); box-shadow: 0 4px 0 var(--green); display: flex; flex-direction: column; align-items: center; gap: 14px;">
+      <span class="px" style="font-size: 26px; color: var(--green);">BRAVO!</span>
+      <div style="display: flex; gap: 8px;">
+        <span style="padding: 8px 14px; border-radius: 999px; background: var(--surface); border: 1.5px solid var(--line); font-size: 15px; font-weight: 800; box-shadow: 0 3px 0 var(--line);">+12 <span class="emoji">💰</span></span>
+        <span style="padding: 8px 14px; border-radius: 999px; background: var(--surface); border: 1.5px solid var(--line); font-size: 15px; font-weight: 800; box-shadow: 0 3px 0 var(--line);">⚡ 3,2 s</span>
       </div>
     </div>
-    <div class="emoji" style="font-size: 17px; display: flex; gap: 2px;" aria-label="3 vies sur 4">❤️❤️❤️🖤</div>
   </div>
 
-  <div style="margin: 14px 16px 0; display: flex; align-items: center; justify-content: space-between;">
-    <div style="display: flex; flex-direction: column; gap: 4px;">
-      <span style="font-size: 12px; font-weight: 700; color: #CFC7E6;">SCORE</span>
-      <span class="px" style="font-size: 14px; color: #FF6FA0;">14 290</span>
-    </div>
-    <span class="px" style="font-size: 11px; background: #FFC628; border: 2px solid #FFFFFF; border-radius: 999px; padding: 8px 14px; box-shadow: 0 0 0 3px #FF3D7F;">FEVER ×5</span>
-    <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-end;">
-      <span style="font-size: 12px; font-weight: 700; color: #CFC7E6;">RECORD</span>
-      <span class="px" style="font-size: 11px; color: #FFFFFF;">45 200</span>
-    </div>
+  <div style="padding: 12px 16px 10px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; gap: 10px;"><div class="pw emoji">💡</div><div class="pw emoji">🛡️</div><div class="pw emoji">⏭️</div><div class="pw emoji">✨</div></div>
+    <a class="b" href="Palier.dc.html" style="height: 54px; background: #15803D; color: #FFFFFF; box-shadow: 0 4px 0 #0F5F2D;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Niveau suivant</a>
   </div>
-
-  <div class="card" style="margin: 26px 16px 0; padding: 14px 16px 16px; background: #FFF4DC; box-shadow: 4px 4px 0 #FF3D7F; display: flex; flex-direction: column; align-items: center; gap: 12px;">
-    <span style="display: inline-flex; align-items: center; gap: 6px; background: #19C6DB; border: 2px solid #1B1530; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 800; letter-spacing: 0.08em;"><span class="emoji">📺</span>SÉRIE</span>
-    <span class="px" style="font-size: 19px; text-align: center; line-height: 1.4;">STRANGER THINGS</span>
-  </div>
-
-  <div style="margin: 16px 16px 0; display: flex; justify-content: center; gap: 12px;">
-    <div class="slot emoji">🧇</div>
-    <div class="slot emoji">🚲</div>
-    <div class="slot emoji">🔦</div>
-    <div class="slot emoji">👾</div>
-  </div>
-
-  <div style="position: absolute; left: 0; right: 0; top: 400px; display: flex; flex-direction: column; align-items: center; gap: 14px; z-index: 4;">
-    <span class="px" style="font-size: 34px; color: #2BCB6E; text-shadow: 4px 4px 0 #1B1530, -2px -2px 0 #FFFFFF;">BRAVO !</span>
-    <span class="px" style="font-size: 18px; color: #FFC628; text-shadow: 3px 3px 0 #1B1530;">+1 840 PTS</span>
-    <div style="display: flex; gap: 10px;">
-      <span style="background: #FFFFFF; border: 3px solid #1B1530; border-radius: 999px; padding: 8px 14px; font-weight: 800; font-size: 16px; box-shadow: 3px 3px 0 #FFC628;">+14 <span class="emoji">💰</span></span>
-      <span style="background: #FFFFFF; border: 3px solid #1B1530; border-radius: 999px; padding: 8px 14px; font-weight: 800; font-size: 16px; box-shadow: 3px 3px 0 #FFC628;">+10% style <span class="emoji">🍩</span></span>
-    </div>
-  </div>
-
-  <span class="bit emoji" style="left: 40px; top: 330px; transform: rotate(-20deg);">🍿</span>
-  <span class="bit emoji" style="left: 318px; top: 318px; transform: rotate(25deg);">🍿</span>
-  <span class="bit emoji" style="left: 84px; top: 380px; font-size: 18px;">✨</span>
-  <span class="bit emoji" style="left: 292px; top: 386px; font-size: 18px;">💥</span>
-  <span class="bit emoji" style="left: 22px; top: 500px; transform: rotate(40deg);">🍿</span>
-  <span class="bit emoji" style="left: 336px; top: 520px; font-size: 18px;">✨</span>
-  <span class="bit emoji" style="left: 170px; top: 310px; font-size: 18px;">🧪</span>
-
-  <div style="margin: 74px 16px 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px;">
-    <div class="tile emoji">🔥</div>
-    <div class="tile emoji">🧇</div>
-    <div class="tile emoji">💧</div>
-    <div class="tile emoji">🎸</div>
-    <div class="tile emoji">👽</div>
-    <div class="tile emoji">⚡</div>
-    <div class="tile emoji">🚲</div>
-    <div class="tile emoji">🍕</div>
-    <div class="tile emoji">🌈</div>
-    <div class="tile emoji">💀</div>
-    <div class="tile emoji">🍔</div>
-    <div class="tile emoji">🔦</div>
-    <div class="tile emoji">🚗</div>
-    <div class="tile emoji">👾</div>
-    <div class="tile emoji">🍦</div>
-    <div class="tile emoji">🚀</div>
-  </div>
-
-  <a class="btn" href="Palier.dc.html" style="position: absolute; left: 16px; right: 16px; bottom: 44px; height: 60px; background: #2BCB6E; font-size: 14px; transform: translate(2px, 2px); box-shadow: 2px 2px 0 #FFFFFF; z-index: 6;">🍩 FUSION RÉUSSIE</a>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":375,"height":667}}'>
 class Component extends DCLogic {
   renderVals() { return {}; }
 }

@@ -10,102 +10,82 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
 <style>
-body{margin:0;background:#1B1530;color:#FFFFFF;font-family:'Rubik',system-ui,sans-serif}
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
-a{color:#1B1530}a:hover{color:#1B1530}
-.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
 .emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
-.fc{display:inline-flex;align-items:center;height:34px;padding:0 12px;box-sizing:border-box;border:2px solid #6E6594;border-radius:999px;font-size:13px;font-weight:800;color:#DCD5F0;white-space:nowrap}
-.n{position:absolute;width:52px;height:52px;box-sizing:border-box;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px}
-.u{background:#2BCB6E;border:3px solid #FFFFFF;box-shadow:3px 3px 0 #000000}
-.l{background:#2E2650;border:3px solid #4A4170}
-.l span{opacity:0.35;filter:grayscale(1)}
-.tab{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;font-size:11px;font-weight:700;color:#5A5270;text-decoration:none;padding-top:10px}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:20px;box-sizing:border-box}
+.fc{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:999px;background:var(--surface);border:1.5px solid var(--line);font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;box-sizing:border-box}
+.n{position:absolute;width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;box-sizing:border-box}
+.u{background:var(--gold-t);border:2px solid var(--gold);box-shadow:0 3px 0 var(--gold-d)}
+.l{background:var(--sunk);border:2px dashed var(--line2)}
+.l span{opacity:0.3;filter:grayscale(1)}
+.tabbar{display:flex;box-sizing:border-box;background:var(--surface);border-top:1.5px solid var(--line);flex-shrink:0}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:50px;font-size:10px;font-weight:600;color:var(--muted);text-decoration:none}
+.on{color:var(--red)}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; background: #1B1530; position: relative; overflow: hidden;">
-  <div style="padding: 60px 16px 0; display: flex; align-items: center; justify-content: space-between;">
-    <h1 class="px" style="margin: 0; font-size: 18px; color: #FFC628;">TROPHÉES</h1>
-    <span style="font-size: 14px; font-weight: 800;">12 / 38</span>
+<div class="scr t-light" style="width: 375px; height: 667px; padding-top: 20px;">
+  <div style="padding: 8px 16px 0; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;">
+    <h1 style="margin: 0; font-size: 24px; font-weight: 800;">Trophées</h1>
+    <span style="font-size: 15px; font-weight: 700; color: var(--muted);">12 / 38</span>
   </div>
-  <div style="margin: 12px 16px 0; height: 12px; box-sizing: border-box; border: 2px solid #FFFFFF; border-radius: 999px; overflow: hidden; background: #2E2650;">
-    <div style="width: 32%; height: 100%; background: #2BCB6E;"></div>
-  </div>
-  <div style="margin: 14px 16px 0; display: flex; gap: 8px; overflow: hidden;">
-    <span class="fc" style="background: #FFC628; border-color: #FFC628; color: #1B1530;">Tous</span>
+  <div style="margin: 8px 16px 0; height: 6px; border-radius: 999px; background: var(--sunk); overflow: hidden;"><div style="width: 32%; height: 100%; border-radius: 999px; background: var(--gold);"></div></div>
+  <div style="padding: 12px 16px 0; display: flex; gap: 6px;">
+    <span class="fc" style="background: var(--ink); color: var(--bg); border-color: var(--ink);">Tous</span>
     <span class="fc">Progression</span>
     <span class="fc">Combos</span>
     <span class="fc">Collection</span>
   </div>
 
-  <div style="position: absolute; left: 0; top: 196px; width: 390px; height: 400px;">
-    <svg style="position: absolute; inset: 0;" width="390" height="400" viewBox="0 0 390 400" aria-hidden="true">
-      <g stroke-width="5" stroke-linecap="round">
-        <line x1="195" y1="200" x2="275" y2="200" stroke="#2BCB6E"></line>
-        <line x1="275" y1="200" x2="355" y2="200" stroke="#4A4170"></line>
-        <line x1="275" y1="200" x2="275" y2="120" stroke="#4A4170"></line>
-        <line x1="195" y1="200" x2="115" y2="200" stroke="#2BCB6E"></line>
-        <line x1="115" y1="200" x2="35" y2="200" stroke="#4A4170"></line>
-        <line x1="195" y1="200" x2="195" y2="120" stroke="#2BCB6E"></line>
-        <line x1="195" y1="120" x2="195" y2="40" stroke="#2BCB6E"></line>
-        <line x1="195" y1="40" x2="275" y2="40" stroke="#4A4170"></line>
-        <line x1="195" y1="120" x2="115" y2="120" stroke="#4A4170"></line>
-        <line x1="195" y1="200" x2="195" y2="280" stroke="#2BCB6E"></line>
-        <line x1="195" y1="280" x2="195" y2="360" stroke="#4A4170"></line>
-        <line x1="195" y1="280" x2="115" y2="280" stroke="#2BCB6E"></line>
-        <line x1="115" y1="280" x2="35" y2="280" stroke="#4A4170"></line>
-        <line x1="195" y1="280" x2="275" y2="280" stroke="#4A4170"></line>
-        <line x1="275" y1="280" x2="355" y2="280" stroke="#4A4170"></line>
+  <div style="position: relative; height: 340px; margin-top: 8px;">
+    <svg style="position: absolute; inset: 0;" width="375" height="340" viewBox="0 0 375 340" aria-hidden="true">
+      <g stroke-width="4" stroke-linecap="round" fill="none">
+        <path d="M187 170H259M187 170H115M187 170V100M187 100V30M187 170V240M187 240H115" stroke="#FFC93C"></path>
+        <path d="M259 170H331M259 170V100M115 170H43M187 30H259M187 100H115M187 240V310M115 240H43M187 240H259M259 240H331" stroke="#DDD2BD" stroke-dasharray="2 8"></path>
       </g>
     </svg>
-    <button class="n u emoji" style="left: 169px; top: 174px;" aria-label="Première fusion, débloqué">🧪</button>
-    <button class="n u emoji" style="left: 249px; top: 174px;" aria-label="10 niveaux, débloqué">🥉</button>
-    <button class="n l emoji" style="left: 329px; top: 174px;" aria-label="50 niveaux, verrouillé"><span>🥈</span></button>
-    <button class="n l emoji" style="left: 249px; top: 94px;" aria-label="5 paliers, verrouillé"><span>🏆</span></button>
-    <button class="n u emoji" style="left: 89px; top: 174px;" aria-label="Série de 3 jours, débloqué">📅</button>
-    <button class="n l emoji" style="left: 9px; top: 174px;" aria-label="Série de 7 jours, verrouillé"><span>🌟</span></button>
-    <button class="n u emoji" style="left: 169px; top: 94px; background: #FFC628; box-shadow: 0 0 0 4px #FF3D7F, 3px 3px 0 4px #000000;" aria-label="En feu, débloqué, sélectionné">🔥</button>
-    <button class="n u emoji" style="left: 169px; top: 14px;" aria-label="Combo 10, débloqué">⚡</button>
-    <button class="n l emoji" style="left: 249px; top: 14px;" aria-label="Combo 20, verrouillé"><span>💥</span></button>
-    <button class="n l emoji" style="left: 89px; top: 94px;" aria-label="50 indices, verrouillé"><span>💡</span></button>
-    <button class="n u emoji" style="left: 169px; top: 254px;" aria-label="Riche, débloqué">💰</button>
-    <button class="n l emoji" style="left: 169px; top: 334px;" aria-label="Millionnaire, verrouillé"><span>💎</span></button>
-    <button class="n u emoji" style="left: 89px; top: 254px;" aria-label="Chanceux, débloqué">🎡</button>
-    <button class="n l emoji" style="left: 9px; top: 254px;" aria-label="Bouclier, verrouillé"><span>🛡️</span></button>
-    <button class="n l emoji" style="left: 249px; top: 254px;" aria-label="Collectionneur, verrouillé"><span>👕</span></button>
-    <button class="n l emoji" style="left: 329px; top: 254px;" aria-label="Cinéphile, verrouillé"><span>🎬</span></button>
+    <button class="n u emoji" style="left: 163px; top: 146px;" aria-label="Première fusion, débloqué">🧪</button>
+    <button class="n u emoji" style="left: 235px; top: 146px;" aria-label="10 niveaux, débloqué">🥉</button>
+    <button class="n l emoji" style="left: 307px; top: 146px;" aria-label="50 niveaux, verrouillé"><span>🥈</span></button>
+    <button class="n l emoji" style="left: 235px; top: 76px;" aria-label="5 paliers, verrouillé"><span>🏆</span></button>
+    <button class="n u emoji" style="left: 91px; top: 146px;" aria-label="Série de 3 jours, débloqué">📅</button>
+    <button class="n l emoji" style="left: 19px; top: 146px;" aria-label="Série de 7 jours, verrouillé"><span>🌟</span></button>
+    <button class="n u emoji" style="left: 163px; top: 76px; box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px #D93A3A;" aria-label="En feu, débloqué, sélectionné">🔥</button>
+    <button class="n u emoji" style="left: 163px; top: 6px;" aria-label="Combo 10, débloqué">⚡</button>
+    <button class="n l emoji" style="left: 235px; top: 6px;" aria-label="Combo 20, verrouillé"><span>💥</span></button>
+    <button class="n l emoji" style="left: 91px; top: 76px;" aria-label="50 indices, verrouillé"><span>💡</span></button>
+    <button class="n u emoji" style="left: 163px; top: 216px;" aria-label="Riche, débloqué">💰</button>
+    <button class="n l emoji" style="left: 163px; top: 286px;" aria-label="Millionnaire, verrouillé"><span>💎</span></button>
+    <button class="n u emoji" style="left: 91px; top: 216px;" aria-label="Chanceux, débloqué">🎡</button>
+    <button class="n l emoji" style="left: 19px; top: 216px;" aria-label="Bouclier, verrouillé"><span>🛡️</span></button>
+    <button class="n l emoji" style="left: 235px; top: 216px;" aria-label="Collectionneur, verrouillé"><span>👕</span></button>
+    <button class="n l emoji" style="left: 307px; top: 216px;" aria-label="Cinéphile, verrouillé"><span>🎬</span></button>
   </div>
 
-  <div style="position: absolute; left: 16px; right: 16px; top: 600px; box-sizing: border-box; padding: 14px; border: 3px solid #1B1530; border-radius: 18px; background: #FFF4DC; box-shadow: 4px 4px 0 #FF3D7F; display: flex; align-items: center; gap: 14px; color: #1B1530;">
-    <span class="emoji" style="width: 56px; height: 56px; flex-shrink: 0; box-sizing: border-box; border: 3px solid #1B1530; border-radius: 14px; background: #FFC628; display: flex; align-items: center; justify-content: center; font-size: 30px;">🔥</span>
-    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
-      <span class="px" style="font-size: 12px;">EN FEU !</span>
-      <span style="font-size: 14px; font-weight: 600;">Atteins un combo ×5</span>
-      <span style="font-size: 12px; font-weight: 800; color: #1E8F4E;">Débloqué le 21/09 · +50 <span class="emoji">💰</span></span>
+  <div style="padding: 0 16px;">
+    <div class="card" style="padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
+      <span class="emoji" style="width: 48px; height: 48px; flex-shrink: 0; border-radius: 14px; background: var(--gold-t); display: flex; align-items: center; justify-content: center; font-size: 24px;">🔥</span>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 3px;">
+        <span style="font-size: 16px; font-weight: 800;">En feu !</span>
+        <span style="font-size: 14px; font-weight: 500; color: var(--muted);">Atteins un combo ×5</span>
+      </div>
+      <span style="font-size: 12px; font-weight: 700; color: var(--green);">Débloqué</span>
     </div>
   </div>
 
-  <nav style="position: absolute; left: 0; right: 0; bottom: 0; height: 86px; box-sizing: border-box; background: #FFFFFF; border-top: 3px solid #1B1530; display: flex; padding: 0 8px 26px;" aria-label="Navigation principale">
-    <a class="tab" href="Main.dc.html">
-      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg></span>
-      Jouer
-    </a>
-    <a class="tab" href="Boutique.dc.html">
-      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg></span>
-      Boutique
-    </a>
-    <a class="tab" href="Trophees.dc.html" style="color: #1B1530;">
-      <span style="width: 56px; height: 30px; border-radius: 999px; background: #FFC628; border: 2px solid #1B1530; display: flex; align-items: center; justify-content: center; box-sizing: border-box;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"></path><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4"></path><path d="M12 13v4M8 20h8M10 17h4"></path></svg></span>
-      Trophées
-    </a>
-    <a class="tab" href="Profil.dc.html">
-      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
-      Profil
-    </a>
+  <div style="flex: 1;"></div>
+  <nav class="tabbar" aria-label="Navigation principale">
+    <a class="tab" href="Main.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>Jouer</a>
+    <a class="tab" href="Boutique.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>Boutique</a>
+    <a class="tab on" href="Trophees.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"></path><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4" fill="none"></path><path d="M12 13v4M8 20h8M10 17h4"></path></svg>Trophées</a>
+    <a class="tab" href="Profil.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>Profil</a>
   </nav>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":375,"height":667}}'>
 class Component extends DCLogic {
   renderVals() { return {}; }
 }

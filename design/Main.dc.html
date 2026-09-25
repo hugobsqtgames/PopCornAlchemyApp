@@ -10,120 +10,106 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
 <style>
-body{margin:0;background:#FFF4DC;color:#1B1530;font-family:'Rubik',system-ui,sans-serif}
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
-a{color:#1B1530}a:hover{color:#1B1530}
-.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.t-dark{--bg:#15121E;--surface:#221E2E;--ink:#F5F0E6;--muted:#A9A2BC;--line:#302A40;--line2:#3D3652;--sunk:#1B1726;--red:#D93A3A;--red-d:#8E2222;--red-t:#3A2129;--gold:#FFC93C;--gold-d:#A87B0F;--gold-t:#3A3120;--green:#2BB673;--green-t:#1E3A2C;--blue-t:#1F2A3D;--lilac-t:#2A2440;--mint-t:#1C3531}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
+.px{font-family:'Press Start 2P',monospace;line-height:1.25}
 .emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
-.btn{display:flex;align-items:center;justify-content:center;gap:12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;box-shadow:4px 4px 0 #1B1530;font-family:'Press Start 2P',monospace;color:#1B1530;text-decoration:none}
-.card{box-sizing:border-box;background:#FFFFFF;border:3px solid #1B1530;border-radius:18px;box-shadow:4px 4px 0 #1B1530}
-.chip{display:inline-flex;align-items:center;gap:6px;box-sizing:border-box;height:38px;padding:0 12px;border:2px solid #1B1530;border-radius:999px;background:#FFFFFF;font-weight:800;font-size:14px;box-shadow:2px 2px 0 #1B1530;color:#1B1530;text-decoration:none}
-.ibtn{display:flex;align-items:center;justify-content:center;width:44px;height:44px;box-sizing:border-box;border:3px solid #1B1530;border-radius:14px;background:#FFFFFF;box-shadow:3px 3px 0 #1B1530;color:#1B1530;text-decoration:none}
-.cap{font-size:12px;font-weight:600;color:#5A5270}
-.tab{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;font-size:11px;font-weight:700;color:#5A5270;text-decoration:none;padding-top:10px}
+.b{display:flex;align-items:center;justify-content:center;gap:10px;box-sizing:border-box;border-radius:16px;font-weight:800;font-size:16px;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none}
+.b-red{background:var(--red);color:#FFFFFF;box-shadow:0 4px 0 var(--red-d)}
+.b-gold{background:var(--gold);color:#1F1B2D;box-shadow:0 4px 0 var(--gold-d)}
+.b-soft{background:var(--surface);color:var(--ink);border:2px solid var(--line2);box-shadow:0 3px 0 var(--line2)}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:20px;box-sizing:border-box}
+.pill{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:999px;background:var(--surface);border:1.5px solid var(--line);font-weight:700;font-size:14px;box-sizing:border-box;color:var(--ink);text-decoration:none}
+.ib{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:44px;height:44px;border-radius:14px;background:var(--surface);border:1.5px solid var(--line);color:var(--ink);box-sizing:border-box;text-decoration:none}
+.cap{font-size:12px;font-weight:600;color:var(--muted)}
+.badge{display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:12px}
+.tabbar{display:flex;box-sizing:border-box;background:var(--surface);border-top:1.5px solid var(--line);flex-shrink:0}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:50px;font-size:10px;font-weight:600;color:var(--muted);text-decoration:none}
+.on{color:var(--red)}
+.qt{display:flex;align-items:center;gap:10px;padding:0 12px;text-decoration:none;color:var(--ink)}
+.qn{font-size:15px;font-weight:700;line-height:1.15}
+.sp{flex-grow:1;min-height:12px;max-height:70px}
+.fill{flex-grow:1}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFF4DC; position: relative; overflow: hidden; display: flex; flex-direction: column;">
-
-  <div style="padding: 58px 16px 0; display: flex; align-items: center; gap: 8px;">
-    <a class="chip" href="Profil.dc.html" style="padding: 0 12px 0 3px; gap: 8px;">
-      <span class="emoji" style="width: 30px; height: 30px; border-radius: 999px; background: #FFC628; border: 2px solid #1B1530; display: flex; align-items: center; justify-content: center; font-size: 17px;">🍿</span>
-      <span>Alchimiste</span>
-    </a>
+<div class="scr {{theme}}" style="width: {{w}}px; height: {{h}}px; padding-top: {{st}}px;">
+  <div style="padding: 8px 16px 0; display: flex; align-items: center; gap: 8px;">
+    <a href="Profil.dc.html" class="badge emoji" style="width: 40px; height: 40px; border-radius: 999px; background: var(--gold-t); border: 1.5px solid var(--line); font-size: 22px; text-decoration: none;" aria-label="Mon profil">🍿</a>
     <div style="flex-grow: 1;"></div>
-    <a class="chip" href="Boutique.dc.html"><span class="emoji">💰</span>1 240</a>
-    <div class="chip"><span class="emoji">💡</span>8</div>
-    <a class="ibtn" href="Parametres.dc.html" aria-label="Réglages">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"></path></svg>
+    <a class="pill" href="Boutique.dc.html" aria-label="1 240 pièces, ouvrir la boutique"><span class="emoji">💰</span>1 240</a>
+    <span class="pill" aria-label="8 indices"><span class="emoji">💡</span>8</span>
+    <a class="ib" href="Parametres.dc.html" aria-label="Réglages" style="width: 40px; height: 40px; border-radius: 999px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
     </a>
   </div>
 
-  <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 26px;">
-    <div class="px" style="font-size: 30px; color: #FF3D7F; text-shadow: 3px 3px 0 #1B1530;">POP-CORN</div>
-    <div class="px" style="font-size: 30px; color: #19C6DB; text-shadow: 3px 3px 0 #1B1530;">ALCHEMY</div>
-    <div style="font-size: 12px; font-weight: 700; color: #5A5270; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px;">L'art de la fusion d'emojis</div>
+  <div class="sp"></div>
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+    <sc-if value="{{big}}" hint-placeholder-val="{{big}}"><div class="badge emoji" style="width: 96px; height: 96px; border-radius: 26px; background: var(--gold); box-shadow: 0 5px 0 var(--gold-d); font-size: 52px; margin-bottom: 18px;">🍿</div></sc-if>
+    <div class="px" style="font-size: {{wm}}px;"><span style="color: var(--red);">POP</span>-CORN</div>
+    <div class="px" style="font-size: {{wm}}px;">ALCHEMY</div>
+    <div style="margin-top: 6px; font-size: 14px; font-weight: 600; color: var(--muted);"><span class="emoji">🔥</span> Série de 4 jours · Record 45 200</div>
+  </div>
+  <div class="sp"></div>
+
+  <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 10px;">
+    <a class="b b-red" href="Jeu.dc.html" style="height: {{cta}}px; font-size: 19px; flex-direction: column; gap: 4px;">
+      <span style="display: flex; align-items: center; gap: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg>Continuer</span>
+      <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.02em; text-transform: none; opacity: 0.9;">Niveau 23 · Palier 2</span>
+    </a>
+    <a href="Categories.dc.html" style="align-self: center; padding: 6px 12px; font-size: 14px; font-weight: 700; color: var(--muted); text-decoration: none;">Nouvelle partie</a>
   </div>
 
-  <div style="margin: 22px 16px 0; display: flex; gap: 12px;">
-    <div class="card" style="flex: 1; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
-      <span class="emoji" style="font-size: 26px;">🔥</span>
-      <div style="display: flex; flex-direction: column; gap: 4px;">
-        <span class="px" style="font-size: 11px;">4 JOURS</span>
-        <span class="cap">Série en cours</span>
+  <div style="padding: 6px 16px 0;">
+    <a class="card" href="DefiDuJour.dc.html" style="height: {{daily}}px; padding: 0 12px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink);">
+      <div class="badge" style="width: 46px; height: 46px; background: var(--red-t); flex-direction: column; gap: 3px;">
+        <span style="font-size: 10px; font-weight: 800; color: var(--red);">SEPT</span>
+        <span style="font-size: 18px; font-weight: 800; line-height: 1;">25</span>
       </div>
-    </div>
-    <div class="card" style="flex: 1; padding: 10px 12px; display: flex; align-items: center; gap: 10px;">
-      <span class="emoji" style="font-size: 26px;">⭐</span>
-      <div style="display: flex; flex-direction: column; gap: 4px;">
-        <span class="px" style="font-size: 11px;">45 200</span>
-        <span class="cap">Meilleur score</span>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 16px; font-weight: 800;">Défi du jour</span>
+        <span class="cap">10 niveaux · +50 <span class="emoji">💰</span> +2 <span class="emoji">💡</span></span>
       </div>
-    </div>
-  </div>
-
-  <a class="btn" href="Categories.dc.html" style="margin: 18px 16px 0; height: 76px; background: #FFC628; font-size: 22px; box-shadow: 6px 6px 0 #1B1530;">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="#1B1530" stroke="#1B1530" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg>
-    JOUER
-  </a>
-  <a class="btn" href="Jeu.dc.html" style="margin: 12px 16px 0; height: 46px; background: #2BCB6E; font-size: 11px; box-shadow: 3px 3px 0 #1B1530;">REPRENDRE · NIVEAU 23</a>
-
-  <a class="card" href="DefiDuJour.dc.html" style="margin: 16px 16px 0; padding: 12px 14px; background: #1B1530; display: flex; align-items: center; gap: 12px; text-decoration: none; box-shadow: 4px 4px 0 #FF3D7F;">
-    <div style="width: 52px; height: 52px; box-sizing: border-box; border-radius: 12px; background: #FF3D7F; border: 2px solid #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #1B1530;">
-      <span class="px" style="font-size: 7px;">SEPT</span>
-      <span class="px" style="font-size: 16px;">25</span>
-    </div>
-    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
-      <span class="px" style="font-size: 12px; color: #FFC628;">DÉFI DU JOUR</span>
-      <span style="font-size: 13px; font-weight: 600; color: #E9E4F7;">10 niveaux · +50 <span class="emoji">💰</span> +2 <span class="emoji">💡</span></span>
-    </div>
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
-  </a>
-
-  <div style="margin: 16px 16px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
-    <a class="card" href="Modes.dc.html" style="height: 78px; padding: 10px 12px; background: #19C6DB; display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1B1530;">
-      <span class="emoji" style="font-size: 28px;">🎮</span>
-      <span class="px" style="font-size: 10px; line-height: 1.5;">MODES<br>DE JEU</span>
-    </a>
-    <a class="card" href="Roue.dc.html" style="height: 78px; padding: 10px 12px; background: #FF3D7F; display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1B1530; position: relative;">
-      <span class="emoji" style="font-size: 28px;">🎡</span>
-      <span class="px" style="font-size: 10px; line-height: 1.5;">ROUE DE<br>LA CHANCE</span>
-      <span style="position: absolute; top: -12px; right: 8px; background: #FFC628; border: 2px solid #1B1530; border-radius: 999px; padding: 3px 8px; font-size: 11px; font-weight: 800;">1 tour gratuit</span>
-    </a>
-    <a class="card" href="Defier.dc.html" style="height: 78px; padding: 10px 12px; background: #2BCB6E; display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1B1530;">
-      <span class="emoji" style="font-size: 28px;">⚔️</span>
-      <span class="px" style="font-size: 10px; line-height: 1.5;">DÉFIER<br>UN AMI</span>
-    </a>
-    <a class="card" href="Profil.dc.html" style="height: 78px; padding: 10px 12px; background: #FFFFFF; display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1B1530;">
-      <span class="emoji" style="font-size: 28px;">🏆</span>
-      <span class="px" style="font-size: 10px; line-height: 1.5;">CLASSE-<br>MENT</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--muted);"><path d="M9 5l7 7-7 7"></path></svg>
     </a>
   </div>
 
-  <nav style="position: absolute; left: 0; right: 0; bottom: 0; height: 86px; box-sizing: border-box; background: #FFFFFF; border-top: 3px solid #1B1530; display: flex; padding: 0 8px 26px;" aria-label="Navigation principale">
-    <a class="tab" href="Main.dc.html" style="color: #1B1530;">
-      <span style="width: 56px; height: 30px; border-radius: 999px; background: #FFC628; border: 2px solid #1B1530; display: flex; align-items: center; justify-content: center; box-sizing: border-box;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>
-      </span>
-      Jouer
-    </a>
-    <a class="tab" href="Boutique.dc.html">
-      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg></span>
-      Boutique
-    </a>
-    <a class="tab" href="Trophees.dc.html">
-      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"></path><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4"></path><path d="M12 13v4M8 20h8M10 17h4"></path></svg></span>
-      Trophées
-    </a>
-    <a class="tab" href="Profil.dc.html">
-      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
-      Profil
-    </a>
+  <div style="padding: 10px 16px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+    <a class="card qt" href="Modes.dc.html" style="height: {{qt}}px;"><span class="badge emoji" style="width: 40px; height: 40px; background: var(--blue-t); font-size: 20px;">🎮</span><span class="qn">Modes</span></a>
+    <a class="card qt" href="Roue.dc.html" style="height: {{qt}}px; position: relative;"><span class="badge emoji" style="width: 40px; height: 40px; background: var(--gold-t); font-size: 20px;">🎡</span><span class="qn">Roue</span><span style="position: absolute; top: 10px; right: 10px; width: 10px; height: 10px; border-radius: 999px; background: var(--red);" aria-label="1 tour gratuit disponible"></span></a>
+    <a class="card qt" href="Defier.dc.html" style="height: {{qt}}px;"><span class="badge emoji" style="width: 40px; height: 40px; background: var(--mint-t); font-size: 20px;">⚔️</span><span class="qn">Défier un ami</span></a>
+    <a class="card qt" href="Profil.dc.html" style="height: {{qt}}px;"><span class="badge emoji" style="width: 40px; height: 40px; background: var(--lilac-t); font-size: 20px;">🏆</span><span class="qn">Classement</span></a>
+  </div>
+  <div class="fill" style="min-height: 14px;"></div>
+
+  <nav class="tabbar" style="padding-bottom: {{sb}}px;" aria-label="Navigation principale">
+    <a class="tab on" href="Main.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>Jouer</a>
+    <a class="tab" href="Boutique.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>Boutique</a>
+    <a class="tab" href="Trophees.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"></path><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4"></path><path d="M12 13v4M8 20h8M10 17h4"></path></svg>Trophées</a>
+    <a class="tab" href="Profil.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>Profil</a>
   </nav>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"w":{"editor":"int","default":375,"section":"Écran"},"h":{"editor":"int","default":667,"section":"Écran"},"st":{"editor":"int","default":20,"section":"Écran"},"sb":{"editor":"int","default":0,"section":"Écran"},"theme":{"editor":"enum","options":["t-light","t-dark"],"default":"t-light","section":"Écran"},"$preview":{"width":375,"height":667}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  renderVals() {
+    return {
+      w: this.props.w ?? 375,
+      h: this.props.h ?? 667,
+      st: this.props.st ?? 20,
+      sb: this.props.sb ?? 0,
+      theme: this.props.theme ?? 't-light',
+      big: Number(this.props.h ?? 667) > 800,
+      wm: Number(this.props.h ?? 667) > 800 ? 26 : 22,
+      cta: Number(this.props.h ?? 667) > 800 ? 76 : 64,
+      daily: Number(this.props.h ?? 667) > 800 ? 80 : 70,
+      qt: Number(this.props.h ?? 667) > 800 ? 80 : 64
+    };
+  }
 }
 </script>
 </body>

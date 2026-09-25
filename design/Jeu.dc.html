@@ -10,108 +10,115 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
 <style>
-body{margin:0;background:#FFF4DC;color:#1B1530;font-family:'Rubik',system-ui,sans-serif}
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
-a{color:#1B1530}a:hover{color:#1B1530}
-.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.t-dark{--bg:#15121E;--surface:#221E2E;--ink:#F5F0E6;--muted:#A9A2BC;--line:#302A40;--line2:#3D3652;--sunk:#1B1726;--red:#D93A3A;--red-d:#8E2222;--red-t:#3A2129;--gold:#FFC93C;--gold-d:#A87B0F;--gold-t:#3A3120;--green:#2BB673;--green-t:#1E3A2C;--blue-t:#1F2A3D;--lilac-t:#2A2440;--mint-t:#1C3531}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
+.px{font-family:'Press Start 2P',monospace;line-height:1.25}
 .emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
-.btn{display:flex;align-items:center;justify-content:center;gap:12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;box-shadow:4px 4px 0 #1B1530;font-family:'Press Start 2P',monospace;color:#1B1530;text-decoration:none}
-.card{box-sizing:border-box;background:#FFFFFF;border:3px solid #1B1530;border-radius:18px;box-shadow:4px 4px 0 #1B1530}
-.ibtn{display:flex;align-items:center;justify-content:center;width:44px;height:44px;box-sizing:border-box;border:3px solid #1B1530;border-radius:14px;background:#FFFFFF;box-shadow:3px 3px 0 #1B1530;color:#1B1530;text-decoration:none}
-.cap{font-size:12px;font-weight:700;color:#5A5270}
-.tile{display:flex;align-items:center;justify-content:center;height:56px;box-sizing:border-box;border:3px solid #1B1530;border-radius:14px;background:#FFFFFF;box-shadow:3px 3px 0 #1B1530;font-size:30px}
-.tile-off{opacity:0.28;box-shadow:none;transform:translate(3px,3px)}
-.slot{display:flex;align-items:center;justify-content:center;width:62px;height:62px;box-sizing:border-box;border:3px solid #1B1530;border-radius:14px;background:#FFFFFF;box-shadow:3px 3px 0 #1B1530;font-size:32px}
-.slot-empty{border-style:dashed;background:#FFF9EC;box-shadow:none}
-.pw{display:flex;align-items:center;justify-content:center;gap:8px;flex:1;height:42px;box-sizing:border-box;border:2px solid #1B1530;border-radius:12px;background:#FFFFFF;box-shadow:2px 2px 0 #1B1530;font-size:20px}
+.b{display:flex;align-items:center;justify-content:center;gap:10px;box-sizing:border-box;border-radius:16px;font-weight:800;font-size:16px;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none}
+.b-off{background:var(--sunk);color:var(--muted);border:2px dashed var(--line2)}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:20px;box-sizing:border-box}
+.ib{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:44px;height:44px;border-radius:14px;background:var(--surface);border:1.5px solid var(--line);color:var(--ink);box-sizing:border-box;text-decoration:none}
+.cap{font-size:12px;font-weight:600;color:var(--muted)}
+.tile{display:flex;align-items:center;justify-content:center;border-radius:14px;background:var(--surface);border:2px solid var(--line);box-shadow:0 3px 0 var(--line2);box-sizing:border-box}
+.used{background:var(--sunk);box-shadow:none;border-style:dashed;transform:translateY(3px)}
+.used span{opacity:0.25}
+.slot{display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:14px;box-sizing:border-box;background:var(--surface);border:2px solid var(--ink)}
+.slot-e{background:transparent;border:2px dashed var(--line2)}
+.pw{position:relative;display:flex;align-items:center;justify-content:center;flex:1;height:44px;border-radius:14px;background:var(--surface);border:1.5px solid var(--line);box-sizing:border-box;font-size:20px}
+.cnt{position:absolute;top:-7px;right:-4px;min-width:20px;height:20px;padding:0 5px;box-sizing:border-box;border-radius:999px;background:var(--ink);color:var(--bg);font-family:'Rubik',sans-serif;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.bar{height:6px;border-radius:999px;background:var(--sunk);overflow:hidden}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFF4DC; position: relative; overflow: hidden; display: flex; flex-direction: column;">
-
-  <div style="padding: 56px 16px 0; display: flex; align-items: center; gap: 12px;">
-    <a class="ibtn" href="Pause.dc.html" aria-label="Pause">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M9 5v14M15 5v14"></path></svg>
+<div class="scr {{theme}}" style="width: {{w}}px; height: {{h}}px; padding: {{st}}px 0 {{sb}}px;">
+  <div style="padding: 8px 16px 0; display: flex; align-items: center; gap: 12px;">
+    <a class="ib" href="Pause.dc.html" aria-label="Pause">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1.5"></rect><rect x="14" y="4" width="4" height="16" rx="1.5"></rect></svg>
     </a>
-    <div style="flex: 1; display: flex; flex-direction: column; gap: 7px;">
-      <div style="display: flex; justify-content: space-between; align-items: baseline;">
-        <span class="px" style="font-size: 10px;">NIVEAU 12</span>
-        <span class="cap">Palier 1 · 12/20</span>
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 13px; font-weight: 700;">Niveau 12 <span style="color: var(--muted); font-weight: 600;">· Palier 1</span></span>
+      <div class="bar"><div style="width: 60%; height: 100%; background: var(--ink); border-radius: 999px;"></div></div>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+      <span style="font-size: 17px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1;">12 450</span>
+      <span class="cap" style="font-size: 11px;">record 45 200</span>
+    </div>
+  </div>
+
+  <div style="padding: 14px 16px 0;">
+    <div class="card" style="padding: 12px 14px 12px; display: flex; flex-direction: column; gap: 10px; position: relative;">
+      <span style="position: absolute; top: -11px; left: 50%; transform: translateX(-50%); padding: 3px 10px; border-radius: 999px; background: var(--gold); color: #1F1B2D; font-size: 11px; font-weight: 800; letter-spacing: 0.06em;">COMBO ×3</span>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 8px; background: var(--blue-t); font-size: 12px; font-weight: 700;"><span class="emoji">📺</span>Série</span>
+        <span class="emoji" style="font-size: 14px; letter-spacing: 1px;" aria-label="3 vies sur 4">❤️❤️❤️🤍</span>
       </div>
-      <div style="height: 12px; box-sizing: border-box; border: 2px solid #1B1530; border-radius: 999px; background: #FFFFFF; overflow: hidden;">
-        <div style="width: 60%; height: 100%; background: #19C6DB;"></div>
-      </div>
-    </div>
-    <div class="emoji" style="font-size: 17px; display: flex; gap: 2px;" aria-label="3 vies sur 4">❤️❤️❤️🖤</div>
-  </div>
-
-  <div style="margin: 14px 16px 0; display: flex; align-items: center; justify-content: space-between;">
-    <div style="display: flex; flex-direction: column; gap: 4px;">
-      <span class="cap">SCORE</span>
-      <span class="px" style="font-size: 14px; color: #D81B60;">12 450</span>
-    </div>
-    <span class="px" style="font-size: 10px; background: #FFC628; border: 2px solid #1B1530; border-radius: 999px; padding: 7px 12px; box-shadow: 2px 2px 0 #1B1530;">COMBO ×3</span>
-    <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-end;">
-      <span class="cap">RECORD</span>
-      <span class="px" style="font-size: 11px;">45 200</span>
+      <span style="font-size: {{titleSize}}px; font-weight: 800; text-align: center; line-height: 1.15;">Stranger Things</span>
+      <div class="bar" aria-label="Bonus de temps"><div style="width: 68%; height: 100%; background: var(--red); border-radius: 999px;"></div></div>
     </div>
   </div>
 
-  <div style="margin: 12px 16px 0; display: flex; align-items: center; gap: 8px;">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B1530" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2M9 2h6"></path></svg>
-    <div style="flex: 1; height: 12px; box-sizing: border-box; border: 2px solid #1B1530; border-radius: 999px; background: #FFFFFF; overflow: hidden;">
-      <div style="width: 68%; height: 100%; background: #FF3D7F;"></div>
+  <div style="padding: 14px 16px 0; display: flex; justify-content: center; gap: 10px;" aria-label="Zone de fusion, 2 sur 4">
+    <button class="slot emoji" style="width: {{slot}}px; height: {{slot}}px; font-size: {{slotEmo}}px;" aria-label="Retirer gaufre">🧇</button>
+    <button class="slot emoji" style="width: {{slot}}px; height: {{slot}}px; font-size: {{slotEmo}}px;" aria-label="Retirer vélo">🚲</button>
+    <div class="slot slot-e" style="width: {{slot}}px; height: {{slot}}px;"></div>
+    <div class="slot slot-e" style="width: {{slot}}px; height: {{slot}}px;"></div>
+  </div>
+
+  <div style="flex: 1; min-height: 0; padding: 14px 16px 3px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(5, minmax(0, 1fr)); gap: {{gap}}px;">
+    <button class="tile emoji" style="font-size: {{emo}}px;">🔥</button>
+    <button class="tile used emoji" style="font-size: {{emo}}px;"><span>🧇</span></button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">💧</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">🎸</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">👽</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">⚡</button>
+    <button class="tile used emoji" style="font-size: {{emo}}px;"><span>🚲</span></button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">🍕</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">🌈</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">💀</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">🍔</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">🔦</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">🚗</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">👾</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">🍦</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">🚀</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">💎</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">👑</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">🎩</button>
+    <button class="tile emoji" style="font-size: {{emo}}px;">🎲</button>
+  </div>
+
+  <div style="padding: 12px 16px 10px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; gap: 10px;">
+      <button class="pw emoji" style="background: var(--gold-t); border-color: var(--gold);" aria-label="Indice, 3 restants">💡<span class="cnt">3</span></button>
+      <button class="pw emoji" aria-label="Bouclier, 2 restants">🛡️<span class="cnt">2</span></button>
+      <button class="pw emoji" aria-label="Passer le niveau, 1 restant">⏭️<span class="cnt">1</span></button>
+      <button class="pw emoji" style="opacity: 0.4;" aria-label="Double pièces, aucun">✨<span class="cnt">0</span></button>
     </div>
-    <span class="cap" style="width: 50px; text-align: right;">bonus</span>
+    <a class="b b-off" href="JeuFever.dc.html" style="height: 54px;">Fusionner · 2/4</a>
   </div>
-
-  <div class="card" style="margin: 14px 16px 0; padding: 14px 16px 16px; background: #1B1530; box-shadow: 4px 4px 0 #19C6DB; display: flex; flex-direction: column; align-items: center; gap: 12px;">
-    <span style="display: inline-flex; align-items: center; gap: 6px; background: #19C6DB; border: 2px solid #FFFFFF; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; color: #1B1530;"><span class="emoji">📺</span>SÉRIE</span>
-    <span class="px" style="font-size: 19px; color: #FFFFFF; text-align: center; line-height: 1.4;">STRANGER THINGS</span>
-  </div>
-
-  <div style="margin: 16px 16px 0; display: flex; justify-content: center; gap: 12px;" aria-label="Zone de fusion, 2 emojis sur 4">
-    <button class="slot emoji" aria-label="Retirer gaufre">🧇</button>
-    <button class="slot emoji" aria-label="Retirer vélo">🚲</button>
-    <div class="slot slot-empty emoji" style="font-size: 24px; color: #1B1530;"><span style="opacity: 0.25;">🍿</span></div>
-    <div class="slot slot-empty emoji" style="font-size: 24px;"><span style="opacity: 0.25;">🍿</span></div>
-  </div>
-
-  <div style="margin: 16px 16px 0; display: flex; gap: 8px;">
-    <button class="pw" aria-label="Bouclier, 2 restants"><span class="emoji">🛡️</span><span class="px" style="font-size: 10px;">2</span></button>
-    <button class="pw" aria-label="Passer le niveau, 1 restant"><span class="emoji">⏭️</span><span class="px" style="font-size: 10px;">1</span></button>
-    <button class="pw" style="opacity: 0.45; box-shadow: none;" aria-label="Double pièces, aucun"><span class="emoji">✨</span><span class="px" style="font-size: 10px;">0</span></button>
-    <button class="pw" style="background: #FFC628;" aria-label="Indice, 3 restants"><span class="emoji">💡</span><span class="px" style="font-size: 10px;">3</span></button>
-  </div>
-
-  <div style="margin: 16px 16px 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px;">
-    <button class="tile emoji">🔥</button>
-    <button class="tile tile-off emoji">🧇</button>
-    <button class="tile emoji">💧</button>
-    <button class="tile emoji">🎸</button>
-    <button class="tile emoji">👽</button>
-    <button class="tile emoji">⚡</button>
-    <button class="tile tile-off emoji">🚲</button>
-    <button class="tile emoji">🍕</button>
-    <button class="tile emoji">🌈</button>
-    <button class="tile emoji">💀</button>
-    <button class="tile emoji">🍔</button>
-    <button class="tile emoji">🔦</button>
-    <button class="tile emoji">🚗</button>
-    <button class="tile emoji">👾</button>
-    <button class="tile emoji">🍦</button>
-    <button class="tile emoji">🚀</button>
-    <button class="tile emoji">💎</button>
-    <button class="tile emoji">👑</button>
-    <button class="tile emoji">🎩</button>
-    <button class="tile emoji">🎲</button>
-  </div>
-
-  <a class="btn" href="JeuFever.dc.html" style="position: absolute; left: 16px; right: 16px; bottom: 44px; height: 60px; background: #E9DFC6; color: #6B6280; border-color: #8C84A0; box-shadow: none; font-size: 14px;">🍿 FUSIONNER · 2/4</a>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"w":{"editor":"int","default":375,"section":"Écran"},"h":{"editor":"int","default":667,"section":"Écran"},"st":{"editor":"int","default":20,"section":"Écran"},"sb":{"editor":"int","default":0,"section":"Écran"},"theme":{"editor":"enum","options":["t-light","t-dark"],"default":"t-light","section":"Écran"},"$preview":{"width":375,"height":667}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  renderVals() {
+    const h = Number(this.props.h ?? 667);
+    const big = h > 800;
+    return {
+      w: this.props.w ?? 375,
+      h: h,
+      st: this.props.st ?? 20,
+      sb: this.props.sb ?? 0,
+      theme: this.props.theme ?? 't-light',
+      emo: big ? 38 : 26,
+      gap: big ? 10 : 7,
+      slot: big ? 64 : 50,
+      slotEmo: big ? 34 : 26,
+      titleSize: big ? 26 : 22
+    };
+  }
 }
 </script>
 </body>

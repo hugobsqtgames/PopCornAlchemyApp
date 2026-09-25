@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Accueil sur iPad</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
+.px{font-family:'Press Start 2P',monospace;line-height:1.25}
+.emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
+.b{display:flex;align-items:center;justify-content:center;gap:12px;box-sizing:border-box;border-radius:20px;font-weight:800;font-size:18px;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none}
+.b-red{background:var(--red);color:#FFFFFF;box-shadow:0 5px 0 var(--red-d)}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:24px;box-sizing:border-box}
+.pill{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:999px;background:var(--surface);border:1.5px solid var(--line);font-weight:700;font-size:15px;box-sizing:border-box;color:var(--ink);text-decoration:none}
+.badge{display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:16px}
+.tp{display:flex;align-items:center;gap:8px;height:40px;padding:0 18px;border-radius:999px;font-size:15px;font-weight:600;color:var(--muted);text-decoration:none}
+.qt{display:flex;flex-direction:column;justify-content:space-between;height:150px;padding:18px;text-decoration:none;color:var(--ink)}
+.qn{font-size:19px;font-weight:800}
+.qs{font-size:14px;font-weight:500;color:var(--muted)}
+</style>
+</helmet>
+<div class="scr t-light" style="width: 1180px; height: 820px; padding-top: 24px;">
+  <div style="padding: 14px 40px 0; display: flex; align-items: center;">
+    <div style="flex: 1; display: flex; align-items: center; gap: 10px;">
+      <a href="Profil.dc.html" class="badge emoji" style="width: 44px; height: 44px; border-radius: 999px; background: var(--gold-t); font-size: 24px; text-decoration: none;" aria-label="Mon profil">🍿</a>
+      <span style="font-size: 16px; font-weight: 700;">Alchimiste</span>
+    </div>
+    <nav style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--surface); border: 1.5px solid var(--line); box-shadow: 0 4px 16px rgba(31,27,45,0.06);" aria-label="Navigation principale">
+      <a class="tp" href="MainIpad.dc.html" style="background: var(--red); color: #FFFFFF;">Jouer</a>
+      <a class="tp" href="Boutique.dc.html">Boutique</a>
+      <a class="tp" href="Trophees.dc.html">Trophées</a>
+      <a class="tp" href="Profil.dc.html">Profil</a>
+    </nav>
+    <div style="flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+      <span class="pill"><span class="emoji">💰</span>1 240</span>
+      <span class="pill"><span class="emoji">💡</span>8</span>
+      <a class="pill" href="Parametres.dc.html" aria-label="Réglages" style="width: 40px; padding: 0; justify-content: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
+    </div>
+  </div>
+
+  <div style="flex: 1; padding: 0 64px; display: flex; align-items: center; gap: 56px;">
+    <div style="width: 470px; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+      <div class="badge emoji" style="width: 120px; height: 120px; border-radius: 32px; background: var(--gold); box-shadow: 0 6px 0 var(--gold-d); font-size: 64px; margin-bottom: 18px;">🍿</div>
+      <div class="px" style="font-size: 34px;"><span style="color: var(--red);">POP</span>-CORN</div>
+      <div class="px" style="font-size: 34px;">ALCHEMY</div>
+      <div style="margin: 6px 0 22px; font-size: 16px; font-weight: 600; color: var(--muted);"><span class="emoji">🔥</span> Série de 4 jours · Record 45 200</div>
+      <a class="b b-red" href="JeuIpad.dc.html" style="width: 100%; height: 84px; font-size: 22px; flex-direction: column; gap: 4px;">
+        <span style="display: flex; align-items: center; gap: 12px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg>Continuer</span>
+        <span style="font-size: 14px; font-weight: 600; letter-spacing: 0.02em; text-transform: none; opacity: 0.9;">Niveau 23 · Palier 2</span>
+      </a>
+      <a href="Categories.dc.html" style="padding: 10px 14px; font-size: 16px; font-weight: 700; color: var(--muted); text-decoration: none;">Nouvelle partie</a>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 16px;">
+      <a class="card" href="DefiDuJour.dc.html" style="height: 104px; padding: 0 22px; display: flex; align-items: center; gap: 18px; text-decoration: none; color: var(--ink);">
+        <div class="badge" style="width: 64px; height: 64px; background: var(--red-t); flex-direction: column; gap: 3px;"><span style="font-size: 12px; font-weight: 800; color: var(--red);">SEPT</span><span style="font-size: 24px; font-weight: 800; line-height: 1;">25</span></div>
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 20px; font-weight: 800;">Défi du jour</span><span style="font-size: 15px; font-weight: 500; color: var(--muted);">10 niveaux mystère · +50 <span class="emoji">💰</span> +2 <span class="emoji">💡</span></span></div>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--muted);"><path d="M9 5l7 7-7 7"></path></svg>
+      </a>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+        <a class="card qt" href="Modes.dc.html"><span class="badge emoji" style="width: 52px; height: 52px; background: var(--blue-t); font-size: 26px;">🎮</span><div style="display: flex; flex-direction: column; gap: 4px;"><span class="qn">Modes de jeu</span><span class="qs">Classique · Chrono · Hardcore</span></div></a>
+        <a class="card qt" href="Roue.dc.html" style="position: relative;"><span class="badge emoji" style="width: 52px; height: 52px; background: var(--gold-t); font-size: 26px;">🎡</span><span style="position: absolute; top: 18px; right: 18px; padding: 4px 10px; border-radius: 999px; background: var(--red); color: #FFFFFF; font-size: 12px; font-weight: 800;">1 tour gratuit</span><div style="display: flex; flex-direction: column; gap: 4px;"><span class="qn">Roue de la chance</span><span class="qs">Pièces, indices, bonus</span></div></a>
+        <a class="card qt" href="Defier.dc.html"><span class="badge emoji" style="width: 52px; height: 52px; background: var(--mint-t); font-size: 26px;">⚔️</span><div style="display: flex; flex-direction: column; gap: 4px;"><span class="qn">Défier un ami</span><span class="qs">1 défi reçu de Léa</span></div></a>
+        <a class="card qt" href="Profil.dc.html"><span class="badge emoji" style="width: 52px; height: 52px; background: var(--lilac-t); font-size: 26px;">🏆</span><div style="display: flex; flex-direction: column; gap: 4px;"><span class="qn">Classement</span><span class="qs">#1 284 mondial</span></div></a>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

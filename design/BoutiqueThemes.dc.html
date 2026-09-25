@@ -10,119 +10,78 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
 <style>
-body{margin:0;background:#FFF4DC;color:#1B1530;font-family:'Rubik',system-ui,sans-serif}
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
-a{color:#1B1530}a:hover{color:#1B1530}
-.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
 .emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
-.chip{display:inline-flex;align-items:center;gap:6px;box-sizing:border-box;height:38px;padding:0 12px;border:2px solid #1B1530;border-radius:999px;background:#FFFFFF;font-weight:800;font-size:14px;box-shadow:2px 2px 0 #1B1530}
-.seg{display:flex;align-items:center;justify-content:center;flex:1;height:36px;border-radius:10px;font-size:13px;font-weight:800;color:#1B1530;text-decoration:none}
-.th{display:flex;flex-direction:column;gap:8px;height:172px;padding:8px;box-sizing:border-box;border:3px solid #1B1530;border-radius:18px;background:#FFFFFF;box-shadow:4px 4px 0 #1B1530;text-align:left}
-.pv{display:flex;flex-direction:column;gap:5px;height:98px;padding:8px;box-sizing:border-box;border-radius:10px;border:2px solid #1B1530}
-.pt{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
-.pc{height:14px;border-radius:3px;box-sizing:border-box;border:1.5px solid}
-.nm{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;padding:0 2px}
-.tab{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;font-size:11px;font-weight:700;color:#5A5270;text-decoration:none;padding-top:10px}
+.pill{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:999px;background:var(--surface);border:1.5px solid var(--line);font-weight:700;font-size:14px;box-sizing:border-box}
+.seg{display:flex;align-items:center;justify-content:center;flex:1;height:32px;border-radius:10px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none}
+.seg-on{background:var(--surface);color:var(--ink);font-weight:700;box-shadow:0 1px 3px rgba(31,27,45,0.15)}
+.th{display:flex;flex-direction:column;gap:7px;padding:7px;border-radius:18px;background:var(--surface);border:1.5px solid var(--line);box-sizing:border-box;text-align:left}
+.pv{display:flex;flex-direction:column;gap:4px;height:74px;padding:7px;border-radius:12px;box-sizing:border-box}
+.row4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}
+.c{height:13px;border-radius:4px}
+.nm{display:flex;justify-content:space-between;align-items:center;padding:0 3px 2px;font-size:13px;font-weight:700}
+.pr{font-size:12px;font-weight:700}
+.tabbar{display:flex;box-sizing:border-box;background:var(--surface);border-top:1.5px solid var(--line);flex-shrink:0}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:50px;font-size:10px;font-weight:600;color:var(--muted);text-decoration:none}
+.on{color:var(--red)}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFF4DC; position: relative; overflow: hidden; display: flex; flex-direction: column;">
-  <div style="padding: 60px 16px 0; display: flex; align-items: center; justify-content: space-between;">
-    <h1 class="px" style="margin: 0; font-size: 18px;">BOUTIQUE</h1>
-    <div class="chip"><span class="emoji">💰</span>1 240</div>
+<div class="scr t-light" style="width: 375px; height: 667px; padding-top: 20px;">
+  <div style="padding: 8px 16px 0; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;">
+    <h1 style="margin: 0; font-size: 24px; font-weight: 800;">Boutique</h1>
+    <span class="pill"><span class="emoji">💰</span>1 240</span>
   </div>
-
-  <nav style="margin: 16px 16px 0; padding: 3px; display: flex; gap: 2px; box-sizing: border-box; border: 3px solid #1B1530; border-radius: 14px; background: #FFFFFF;" aria-label="Rayons">
+  <nav style="margin: 12px 16px 0; padding: 3px; display: flex; gap: 2px; border-radius: 13px; background: var(--sunk);" aria-label="Rayons">
     <a class="seg" href="Boutique.dc.html">Pièces</a>
     <a class="seg" href="Boutique.dc.html">Bonus</a>
-    <a class="seg" href="BoutiqueThemes.dc.html" style="background: #FFC628; border: 2px solid #1B1530;">Thèmes</a>
+    <a class="seg seg-on" href="BoutiqueThemes.dc.html">Thèmes</a>
     <a class="seg" href="BoutiqueThemes.dc.html">Styles</a>
     <a class="seg" href="BoutiqueThemes.dc.html">Avatars</a>
   </nav>
+  <p style="margin: 12px 20px 0; font-size: 13px; font-weight: 500; color: var(--muted);">Le mode sombre suit ton iPhone, gratuitement. Les thèmes changent les couleurs du jeu.</p>
 
-  <div style="margin: 18px 16px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 12px;">
-    <button class="th" style="border-color: #1B1530; box-shadow: 0 0 0 3px #FFC628, 4px 4px 0 3px #1B1530;">
-      <div class="pv" style="background: #FFF4DC;">
-        <div style="height: 16px; border-radius: 4px; background: #1B1530;"></div>
-        <div class="pt"><div class="pc" style="background: #FFFFFF; border-color: #1B1530;"></div><div class="pc" style="background: #FFFFFF; border-color: #1B1530;"></div><div class="pc" style="background: #FFFFFF; border-color: #1B1530;"></div><div class="pc" style="background: #FFFFFF; border-color: #1B1530;"></div></div>
-        <div class="pt"><div class="pc" style="background: #FFFFFF; border-color: #1B1530;"></div><div class="pc" style="background: #FFFFFF; border-color: #1B1530;"></div><div class="pc" style="background: #FFFFFF; border-color: #1B1530;"></div><div class="pc" style="background: #FFFFFF; border-color: #1B1530;"></div></div>
-        <div style="margin-top: auto; height: 14px; border-radius: 4px; background: #2BCB6E; border: 1.5px solid #1B1530;"></div>
-      </div>
-      <div class="nm"><span>Classique</span><span style="font-size: 11px; color: #1E8F4E;">ÉQUIPÉ ✓</span></div>
+  <div style="padding: 12px 16px 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+    <button class="th" style="border: 2px solid var(--ink);">
+      <div class="pv" style="background: #FBF6EC;"><div class="c" style="background: #FFFFFF; height: 16px;"></div><div class="row4"><div class="c" style="background: #FFFFFF;"></div><div class="c" style="background: #FFFFFF;"></div><div class="c" style="background: #FFFFFF;"></div><div class="c" style="background: #FFFFFF;"></div></div><div class="c" style="background: #D93A3A; margin-top: auto;"></div></div>
+      <div class="nm"><span>Pop-corn</span></div><span class="pr" style="padding: 0 3px 3px; color: var(--green);">Équipé ✓</span>
     </button>
-
     <button class="th">
-      <div class="pv" style="background: #17131F;">
-        <div style="height: 16px; border-radius: 4px; background: #000000;"></div>
-        <div class="pt"><div class="pc" style="background: #2A2438; border-color: #FFF4DC;"></div><div class="pc" style="background: #2A2438; border-color: #FFF4DC;"></div><div class="pc" style="background: #2A2438; border-color: #FFF4DC;"></div><div class="pc" style="background: #2A2438; border-color: #FFF4DC;"></div></div>
-        <div class="pt"><div class="pc" style="background: #2A2438; border-color: #FFF4DC;"></div><div class="pc" style="background: #2A2438; border-color: #FFF4DC;"></div><div class="pc" style="background: #2A2438; border-color: #FFF4DC;"></div><div class="pc" style="background: #2A2438; border-color: #FFF4DC;"></div></div>
-        <div style="margin-top: auto; height: 14px; border-radius: 4px; background: #FFC628;"></div>
-      </div>
-      <div class="nm"><span>Nuit</span><span style="font-size: 11px; color: #1E8F4E;">POSSÉDÉ</span></div>
+      <div class="pv" style="background: #EAF6F1;"><div class="c" style="background: #FFFFFF; height: 16px;"></div><div class="row4"><div class="c" style="background: #FFFFFF;"></div><div class="c" style="background: #FFFFFF;"></div><div class="c" style="background: #FFFFFF;"></div><div class="c" style="background: #FFFFFF;"></div></div><div class="c" style="background: #1E8A6E; margin-top: auto;"></div></div>
+      <div class="nm"><span>Menthe</span></div><span class="pr" style="padding: 0 3px 3px;">400 <span class="emoji">💰</span></span>
     </button>
-
     <button class="th">
-      <div class="pv" style="background: #05050A;">
-        <div style="height: 16px; border-radius: 4px; background: #111118; border: 1.5px solid #00F0FF;"></div>
-        <div class="pt"><div class="pc" style="background: #111118; border-color: #FF00E5;"></div><div class="pc" style="background: #111118; border-color: #00F0FF;"></div><div class="pc" style="background: #111118; border-color: #FF00E5;"></div><div class="pc" style="background: #111118; border-color: #00F0FF;"></div></div>
-        <div class="pt"><div class="pc" style="background: #111118; border-color: #00F0FF;"></div><div class="pc" style="background: #111118; border-color: #FF00E5;"></div><div class="pc" style="background: #111118; border-color: #00F0FF;"></div><div class="pc" style="background: #111118; border-color: #FF00E5;"></div></div>
-        <div style="margin-top: auto; height: 14px; border-radius: 4px; background: #FF00E5;"></div>
-      </div>
-      <div class="nm"><span>Néon</span><span class="px" style="font-size: 9px;">600 <span class="emoji">💰</span></span></div>
+      <div class="pv" style="background: #F1EEFA;"><div class="c" style="background: #FFFFFF; height: 16px;"></div><div class="row4"><div class="c" style="background: #FFFFFF;"></div><div class="c" style="background: #FFFFFF;"></div><div class="c" style="background: #FFFFFF;"></div><div class="c" style="background: #FFFFFF;"></div></div><div class="c" style="background: #6A4FD8; margin-top: auto;"></div></div>
+      <div class="nm"><span>Lavande</span></div><span class="pr" style="padding: 0 3px 3px;">600 <span class="emoji">💰</span></span>
     </button>
-
     <button class="th">
-      <div class="pv" style="background: #FFC628;">
-        <div style="height: 16px; border-radius: 4px; background: #000000;"></div>
-        <div class="pt"><div class="pc" style="background: #FFF9E6; border-color: #000000;"></div><div class="pc" style="background: #FFF9E6; border-color: #000000;"></div><div class="pc" style="background: #FFF9E6; border-color: #000000;"></div><div class="pc" style="background: #FFF9E6; border-color: #000000;"></div></div>
-        <div class="pt"><div class="pc" style="background: #FFF9E6; border-color: #000000;"></div><div class="pc" style="background: #FFF9E6; border-color: #000000;"></div><div class="pc" style="background: #FFF9E6; border-color: #000000;"></div><div class="pc" style="background: #FFF9E6; border-color: #000000;"></div></div>
-        <div style="margin-top: auto; height: 14px; border-radius: 4px; background: #2340FF;"></div>
-      </div>
-      <div class="nm"><span>Rétro Or</span><span class="px" style="font-size: 9px;">800 <span class="emoji">💰</span></span></div>
+      <div class="pv" style="background: #0F1B33;"><div class="c" style="background: #1B2A4A; height: 16px;"></div><div class="row4"><div class="c" style="background: #1B2A4A;"></div><div class="c" style="background: #1B2A4A;"></div><div class="c" style="background: #1B2A4A;"></div><div class="c" style="background: #1B2A4A;"></div></div><div class="c" style="background: #FFC93C; margin-top: auto;"></div></div>
+      <div class="nm"><span>Minuit</span></div><span class="pr" style="padding: 0 3px 3px;">800 <span class="emoji">💰</span></span>
     </button>
-
     <button class="th">
-      <div class="pv" style="background: #2B0054;">
-        <div style="height: 16px; border-radius: 4px; background: #1A0033; border: 1.5px solid #FF0055;"></div>
-        <div class="pt"><div class="pc" style="background: #3D0066; border-color: #00FF9F;"></div><div class="pc" style="background: #3D0066; border-color: #00FF9F;"></div><div class="pc" style="background: #3D0066; border-color: #00FF9F;"></div><div class="pc" style="background: #3D0066; border-color: #00FF9F;"></div></div>
-        <div class="pt"><div class="pc" style="background: #3D0066; border-color: #00FF9F;"></div><div class="pc" style="background: #3D0066; border-color: #00FF9F;"></div><div class="pc" style="background: #3D0066; border-color: #00FF9F;"></div><div class="pc" style="background: #3D0066; border-color: #00FF9F;"></div></div>
-        <div style="margin-top: auto; height: 14px; border-radius: 4px; background: #F3FF00;"></div>
-      </div>
-      <div class="nm"><span>Cyberpunk</span><span class="px" style="font-size: 9px;">1 200 <span class="emoji">💰</span></span></div>
+      <div class="pv" style="background: #7A1022;"><div class="c" style="background: #FBF6EC; height: 16px;"></div><div class="row4"><div class="c" style="background: #FBF6EC;"></div><div class="c" style="background: #FBF6EC;"></div><div class="c" style="background: #FBF6EC;"></div><div class="c" style="background: #FBF6EC;"></div></div><div class="c" style="background: #FFC93C; margin-top: auto;"></div></div>
+      <div class="nm"><span>Cinéma</span></div><span class="pr" style="padding: 0 3px 3px;">1 200 <span class="emoji">💰</span></span>
     </button>
-
     <button class="th" style="position: relative;">
-      <span style="position: absolute; top: -12px; right: 10px; padding: 2px 8px; border: 2px solid #1B1530; border-radius: 999px; background: #FF3D7F; font-size: 10px; font-weight: 800; z-index: 2;">NOUVEAU</span>
-      <div class="pv" style="background: #B3122E;">
-        <div style="height: 16px; border-radius: 4px; background: #1B1530;"></div>
-        <div class="pt"><div class="pc" style="background: #FFF4DC; border-color: #1B1530;"></div><div class="pc" style="background: #FFF4DC; border-color: #1B1530;"></div><div class="pc" style="background: #FFF4DC; border-color: #1B1530;"></div><div class="pc" style="background: #FFF4DC; border-color: #1B1530;"></div></div>
-        <div class="pt"><div class="pc" style="background: #FFF4DC; border-color: #1B1530;"></div><div class="pc" style="background: #FFF4DC; border-color: #1B1530;"></div><div class="pc" style="background: #FFF4DC; border-color: #1B1530;"></div><div class="pc" style="background: #FFF4DC; border-color: #1B1530;"></div></div>
-        <div style="margin-top: auto; height: 14px; border-radius: 4px; background: #FFC628; border: 1.5px solid #1B1530;"></div>
-      </div>
-      <div class="nm"><span>Cinéma</span><span class="px" style="font-size: 9px;">2 000 <span class="emoji">💰</span></span></div>
+      <span style="position: absolute; top: -8px; right: 6px; padding: 1px 6px; border-radius: 999px; background: var(--ink); color: var(--bg); font-size: 9px; font-weight: 800; z-index: 2;">ORIGINAL</span>
+      <div class="pv" style="background: #FDF6E3; border: 2px solid #2D2D2D;"><div class="c" style="background: #2C3E50; height: 16px; border: 1px solid #00BCD4;"></div><div class="row4"><div class="c" style="background: #FFFFFF; box-shadow: 1px 1px 0 #000;"></div><div class="c" style="background: #FFFFFF; box-shadow: 1px 1px 0 #000;"></div><div class="c" style="background: #FFFFFF; box-shadow: 1px 1px 0 #000;"></div><div class="c" style="background: #FFFFFF; box-shadow: 1px 1px 0 #000;"></div></div><div class="c" style="background: #E91E63; margin-top: auto;"></div></div>
+      <div class="nm"><span>Rétro 8-bit</span></div><span class="pr" style="padding: 0 3px 3px;">2 000 <span class="emoji">💰</span></span>
     </button>
   </div>
 
-  <nav style="position: absolute; left: 0; right: 0; bottom: 0; height: 86px; box-sizing: border-box; background: #FFFFFF; border-top: 3px solid #1B1530; display: flex; padding: 0 8px 26px;" aria-label="Navigation principale">
-    <a class="tab" href="Main.dc.html">
-      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg></span>
-      Jouer
-    </a>
-    <a class="tab" href="Boutique.dc.html" style="color: #1B1530;">
-      <span style="width: 56px; height: 30px; border-radius: 999px; background: #FFC628; border: 2px solid #1B1530; display: flex; align-items: center; justify-content: center; box-sizing: border-box;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg></span>
-      Boutique
-    </a>
-    <a class="tab" href="Trophees.dc.html">
-      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"></path><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4"></path><path d="M12 13v4M8 20h8M10 17h4"></path></svg></span>
-      Trophées
-    </a>
-    <a class="tab" href="Profil.dc.html">
-      <span style="height: 30px; display: flex; align-items: center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
-      Profil
-    </a>
+  <div style="flex: 1;"></div>
+  <nav class="tabbar" aria-label="Navigation principale">
+    <a class="tab" href="Main.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>Jouer</a>
+    <a class="tab on" href="Boutique.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2" fill="none"></path></svg>Boutique</a>
+    <a class="tab" href="Trophees.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"></path><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4"></path><path d="M12 13v4M8 20h8M10 17h4"></path></svg>Trophées</a>
+    <a class="tab" href="Profil.dc.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>Profil</a>
   </nav>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":375,"height":667}}'>
 class Component extends DCLogic {
   renderVals() { return {}; }
 }

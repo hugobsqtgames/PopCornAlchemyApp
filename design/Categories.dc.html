@@ -10,52 +10,55 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
 <style>
-body{margin:0;background:#FFF4DC;color:#1B1530;font-family:'Rubik',system-ui,sans-serif}
-a{color:#1B1530}a:hover{color:#1B1530}
-.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
 .emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
-.card{box-sizing:border-box;background:#FFFFFF;border:3px solid #1B1530;border-radius:18px;box-shadow:4px 4px 0 #1B1530}
-.ibtn{display:flex;align-items:center;justify-content:center;width:44px;height:44px;box-sizing:border-box;border:3px solid #1B1530;border-radius:14px;background:#FFFFFF;box-shadow:3px 3px 0 #1B1530;color:#1B1530;text-decoration:none}
-.cat{display:flex;align-items:center;gap:10px;height:76px;padding:0 10px;box-sizing:border-box;background:#FFFFFF;border:3px solid #1B1530;border-radius:16px;box-shadow:3px 3px 0 #1B1530;text-decoration:none;color:#1B1530}
-.badge{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:42px;height:42px;box-sizing:border-box;border:2px solid #1B1530;border-radius:12px;font-size:22px}
-.name{font-size:14px;font-weight:800;line-height:1.1}
-.bar{height:8px;box-sizing:border-box;border:1.5px solid #1B1530;border-radius:999px;background:#FFF4DC;overflow:hidden}
-.num{font-size:11px;font-weight:700;color:#5A5270}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:20px;box-sizing:border-box}
+.ib{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:44px;height:44px;border-radius:14px;background:var(--surface);border:1.5px solid var(--line);color:var(--ink);box-sizing:border-box;text-decoration:none}
+.badge{display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:12px}
+.cat{display:flex;align-items:center;gap:10px;height:62px;padding:0 10px;border-radius:18px;background:var(--surface);border:1.5px solid var(--line);box-sizing:border-box;text-decoration:none;color:var(--ink)}
+.cb{width:40px;height:40px;font-size:20px}
+.nm{font-size:15px;font-weight:700;line-height:1.1}
+.bar{height:5px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.fill{height:100%;border-radius:999px;background:var(--ink)}
+.n{font-size:11px;font-weight:600;color:var(--muted)}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFF4DC; position: relative; overflow: hidden; display: flex; flex-direction: column;">
-  <div style="padding: 56px 16px 0; display: flex; align-items: center; gap: 14px;">
-    <a class="ibtn" href="Main.dc.html" aria-label="Retour">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
-    </a>
-    <h1 class="px" style="margin: 0; font-size: 17px;">CATÉGORIES</h1>
+<div class="scr t-light" style="width: 375px; height: 667px; padding-top: 20px;">
+  <div style="padding: 8px 16px 0; display: flex; align-items: center; gap: 12px;">
+    <a class="ib" href="Main.dc.html" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+    <h1 style="margin: 0; font-size: 20px; font-weight: 800;">Nouvelle partie</h1>
   </div>
-  <p style="margin: 14px 16px 0; font-size: 15px; font-weight: 600; color: #5A5270;">Choisis ton univers. Chaque catégorie compte 20 niveaux.</p>
 
-  <a class="card" href="Jeu.dc.html" style="margin: 16px 16px 0; height: 76px; padding: 0 14px; background: #FFC628; display: flex; align-items: center; gap: 14px; text-decoration: none; color: #1B1530;">
-    <span class="emoji" style="font-size: 32px;">🌟</span>
-    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
-      <span class="px" style="font-size: 14px;">TOUT MÉLANGÉ</span>
-      <span style="font-size: 13px; font-weight: 600;">Le mode aventure · 10 paliers · 200 niveaux</span>
-    </div>
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
-  </a>
+  <div style="padding: 16px 16px 0;">
+    <a class="card" href="Jeu.dc.html" style="height: 68px; padding: 0 14px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); background: var(--gold-t); border-color: var(--gold);">
+      <span class="badge emoji" style="width: 44px; height: 44px; background: var(--gold); font-size: 22px;">🌟</span>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 17px; font-weight: 800;">Tout mélangé</span>
+        <span style="font-size: 13px; font-weight: 600; color: var(--muted);">10 paliers · 200 niveaux</span>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+    </a>
+  </div>
 
-  <div style="margin: 16px 16px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
-    <a class="cat" href="Jeu.dc.html"><span class="badge emoji" style="background: #FFD6E4;">🎬</span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><span class="name">Films</span><div class="bar"><div style="width: 70%; height: 100%; background: #FF3D7F;"></div></div><span class="num">14/20</span></div></a>
-    <a class="cat" href="Jeu.dc.html"><span class="badge emoji" style="background: #CDF3F8;">📺</span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><span class="name">Séries</span><div class="bar"><div style="width: 45%; height: 100%; background: #19C6DB;"></div></div><span class="num">9/20</span></div></a>
-    <a class="cat" href="Jeu.dc.html"><span class="badge emoji" style="background: #D5F5E2;">🎮</span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><span class="name">Jeux vidéo</span><div class="bar"><div style="width: 100%; height: 100%; background: #2BCB6E;"></div></div><span class="num">20/20 ✓</span></div></a>
-    <a class="cat" href="Jeu.dc.html"><span class="badge emoji" style="background: #FFEFC2;">🎵</span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><span class="name">Musique</span><div class="bar"><div style="width: 30%; height: 100%; background: #FFC628;"></div></div><span class="num">6/20</span></div></a>
-    <a class="cat" href="Jeu.dc.html"><span class="badge emoji" style="background: #CDF3F8;">🌍</span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><span class="name">Géographie</span><div class="bar"><div style="width: 55%; height: 100%; background: #19C6DB;"></div></div><span class="num">11/20</span></div></a>
-    <a class="cat" href="Jeu.dc.html"><span class="badge emoji" style="background: #FFD6E4;">🏷️</span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><span class="name">Marques</span><div class="bar"><div style="width: 20%; height: 100%; background: #FF3D7F;"></div></div><span class="num">4/20</span></div></a>
-    <a class="cat" href="Jeu.dc.html"><span class="badge emoji" style="background: #D5F5E2;">🌿</span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><span class="name">Nature</span><div class="bar"><div style="width: 40%; height: 100%; background: #2BCB6E;"></div></div><span class="num">8/20</span></div></a>
-    <a class="cat" href="Jeu.dc.html"><span class="badge emoji" style="background: #FFEFC2;">🎥</span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><span class="name">YouTubeurs</span><div class="bar"><div style="width: 15%; height: 100%; background: #FFC628;"></div></div><span class="num">3/20</span></div></a>
-    <a class="cat" href="Jeu.dc.html"><span class="badge emoji" style="background: #FFD6E4;">🏮</span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><span class="name">Anime</span><div class="bar"><div style="width: 0%; height: 100%; background: #FF3D7F;"></div></div><span class="num">0/20</span></div></a>
-    <a class="cat" href="Jeu.dc.html"><span class="badge emoji" style="background: #CDF3F8;">🍕</span><div style="flex: 1; display: flex; flex-direction: column; gap: 6px;"><span class="name">Cuisine</span><div class="bar"><div style="width: 60%; height: 100%; background: #19C6DB;"></div></div><span class="num">12/20</span></div></a>
+  <div style="padding: 18px 20px 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: var(--muted);">OU UNE SEULE CATÉGORIE</div>
+  <div style="padding: 0 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+    <a class="cat" href="Jeu.dc.html"><span class="badge emoji cb" style="background: var(--red-t);">🎬</span><div style="flex: 1; display: flex; flex-direction: column; gap: 5px;"><span class="nm">Films</span><div class="bar"><div class="fill" style="width: 70%;"></div></div><span class="n">14/20</span></div></a>
+    <a class="cat" href="Jeu.dc.html"><span class="badge emoji cb" style="background: var(--blue-t);">📺</span><div style="flex: 1; display: flex; flex-direction: column; gap: 5px;"><span class="nm">Séries</span><div class="bar"><div class="fill" style="width: 45%;"></div></div><span class="n">9/20</span></div></a>
+    <a class="cat" href="Jeu.dc.html"><span class="badge emoji cb" style="background: var(--lilac-t);">🎮</span><div style="flex: 1; display: flex; flex-direction: column; gap: 5px;"><span class="nm">Jeux vidéo</span><div class="bar"><div class="fill" style="width: 100%; background: var(--green);"></div></div><span class="n" style="color: var(--green); font-weight: 700;">20/20 ✓</span></div></a>
+    <a class="cat" href="Jeu.dc.html"><span class="badge emoji cb" style="background: var(--gold-t);">🎵</span><div style="flex: 1; display: flex; flex-direction: column; gap: 5px;"><span class="nm">Musique</span><div class="bar"><div class="fill" style="width: 30%;"></div></div><span class="n">6/20</span></div></a>
+    <a class="cat" href="Jeu.dc.html"><span class="badge emoji cb" style="background: var(--mint-t);">🌍</span><div style="flex: 1; display: flex; flex-direction: column; gap: 5px;"><span class="nm">Géographie</span><div class="bar"><div class="fill" style="width: 55%;"></div></div><span class="n">11/20</span></div></a>
+    <a class="cat" href="Jeu.dc.html"><span class="badge emoji cb" style="background: var(--red-t);">🏷️</span><div style="flex: 1; display: flex; flex-direction: column; gap: 5px;"><span class="nm">Marques</span><div class="bar"><div class="fill" style="width: 20%;"></div></div><span class="n">4/20</span></div></a>
+    <a class="cat" href="Jeu.dc.html"><span class="badge emoji cb" style="background: var(--mint-t);">🌿</span><div style="flex: 1; display: flex; flex-direction: column; gap: 5px;"><span class="nm">Nature</span><div class="bar"><div class="fill" style="width: 40%;"></div></div><span class="n">8/20</span></div></a>
+    <a class="cat" href="Jeu.dc.html"><span class="badge emoji cb" style="background: var(--blue-t);">🎥</span><div style="flex: 1; display: flex; flex-direction: column; gap: 5px;"><span class="nm">YouTubeurs</span><div class="bar"><div class="fill" style="width: 15%;"></div></div><span class="n">3/20</span></div></a>
+    <a class="cat" href="Jeu.dc.html"><span class="badge emoji cb" style="background: var(--lilac-t);">🏮</span><div style="flex: 1; display: flex; flex-direction: column; gap: 5px;"><span class="nm">Anime</span><div class="bar"><div class="fill" style="width: 0%;"></div></div><span class="n">0/20</span></div></a>
+    <a class="cat" href="Jeu.dc.html"><span class="badge emoji cb" style="background: var(--gold-t);">🍕</span><div style="flex: 1; display: flex; flex-direction: column; gap: 5px;"><span class="nm">Cuisine</span><div class="bar"><div class="fill" style="width: 60%;"></div></div><span class="n">12/20</span></div></a>
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":375,"height":667}}'>
 class Component extends DCLogic {
   renderVals() { return {}; }
 }

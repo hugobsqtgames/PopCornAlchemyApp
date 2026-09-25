@@ -10,47 +10,52 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
 <style>
-body{margin:0;background:#1B1530;color:#FFFFFF;font-family:'Rubik',system-ui,sans-serif}
-a{color:#1B1530}a:hover{color:#1B1530}
-.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
+.px{font-family:'Press Start 2P',monospace;line-height:1.25}
 .emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
-.btn{display:flex;align-items:center;justify-content:center;gap:12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;box-shadow:4px 4px 0 #000000;font-family:'Press Start 2P',monospace;color:#1B1530;text-decoration:none}
+.b{display:flex;align-items:center;justify-content:center;gap:10px;box-sizing:border-box;border-radius:16px;font-weight:800;font-size:16px;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none}
+.b-red{background:var(--red);color:#FFFFFF;box-shadow:0 4px 0 var(--red-d)}
+.b-gold{background:var(--gold);color:#1F1B2D;box-shadow:0 4px 0 var(--gold-d)}
+.b-soft{background:var(--surface);color:var(--ink);border:2px solid var(--line2);box-shadow:0 3px 0 var(--line2)}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:20px;box-sizing:border-box}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; background: #1B1530; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center;">
-  <span class="emoji" style="margin-top: 96px; font-size: 64px;">💔</span>
-  <h1 class="px" style="margin: 24px 0 0; font-size: 30px; color: #FF3D7F; text-shadow: 4px 4px 0 #000000;">GAME OVER</h1>
-  <p style="margin: 14px 0 0; font-size: 15px; font-weight: 600; color: #DCD5F0;">Ton alchimie a échoué… au niveau 34</p>
-
-  <div style="margin-top: 26px; width: 358px; box-sizing: border-box; padding: 16px; border: 3px solid #FFFFFF; border-radius: 18px; background: #2E2650; display: flex; justify-content: space-around;">
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-      <span style="font-size: 12px; font-weight: 700; color: #CFC7E6; letter-spacing: 0.1em;">SCORE</span>
-      <span class="px" style="font-size: 16px; color: #FFC628;">28 940</span>
-    </div>
-    <div style="width: 2px; background: #4A4170;"></div>
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-      <span style="font-size: 12px; font-weight: 700; color: #CFC7E6; letter-spacing: 0.1em;">RECORD</span>
-      <span class="px" style="font-size: 16px; color: #FFFFFF;">45 200</span>
-    </div>
+<div class="scr t-light" style="width: 375px; height: 667px; padding-top: 20px;">
+  <div style="flex: 1;"></div>
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+    <span class="emoji" style="font-size: 52px;">💔</span>
+    <span class="px" style="font-size: 22px; color: var(--red);">GAME OVER</span>
+    <span style="font-size: 15px; font-weight: 500; color: var(--muted);">Ton alchimie a échoué au niveau 34</span>
   </div>
-  <p style="margin: 12px 0 0; font-size: 12px; font-weight: 600; color: #B9B0D6;">Score envoyé au classement Game Center</p>
-
-  <div style="margin-top: 26px; width: 358px; box-sizing: border-box; padding: 16px; border: 3px dashed #FFC628; border-radius: 20px; display: flex; flex-direction: column; gap: 12px;">
-    <span class="px" style="font-size: 11px; color: #FFC628; text-align: center;">CONTINUER ? 5</span>
-    <a class="btn" href="Jeu.dc.html" style="height: 58px; background: #FFC628; font-size: 11px;">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="M10 9l5 3-5 3z" fill="currentColor"></path></svg>
-      VOIR UNE PUB · +1 VIE
-    </a>
-    <a class="btn" href="Jeu.dc.html" style="height: 50px; background: #FFFFFF; font-size: 11px;">+1 VIE · 150 <span class="emoji" style="font-size: 16px;">💰</span></a>
+  <div style="padding: 20px 16px 0;">
+    <div class="card" style="padding: 14px; display: flex;">
+      <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: var(--muted);">SCORE</span><span style="font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums;">28 940</span></div>
+      <div style="width: 1px; background: var(--line);"></div>
+      <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: var(--muted);">RECORD</span><span style="font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums;">45 200</span></div>
+    </div>
+    <p style="margin: 8px 0 0; text-align: center; font-size: 12px; font-weight: 500; color: var(--muted);">Score envoyé au classement Game Center</p>
   </div>
 
-  <div style="position: absolute; left: 16px; right: 16px; bottom: 44px; display: flex; gap: 12px;">
-    <a class="btn" href="Categories.dc.html" style="flex: 1; height: 56px; background: #2BCB6E; font-size: 12px;">REJOUER</a>
-    <a class="btn" href="Main.dc.html" style="flex: 1; height: 56px; background: #19C6DB; font-size: 12px;">ACCUEIL</a>
+  <div style="padding: 18px 16px 0;">
+    <div style="padding: 14px; border-radius: 20px; background: var(--gold-t); display: flex; flex-direction: column; gap: 12px;">
+      <span style="font-size: 15px; font-weight: 800; text-align: center;">Continuer avec 1 vie ?</span>
+      <button class="b b-gold" style="height: 52px; font-size: 15px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="M10 9l5 3-5 3z" fill="currentColor"></path></svg>Voir une pub</button>
+      <button style="height: 36px; font-size: 15px; font-weight: 700;">ou 150 <span class="emoji">💰</span></button>
+    </div>
+  </div>
+
+  <div style="flex: 1;"></div>
+  <div style="padding: 0 16px 20px; display: flex; gap: 10px;">
+    <a class="b b-soft" href="Main.dc.html" style="flex: 1; height: 52px; font-size: 14px;">Accueil</a>
+    <a class="b b-red" href="Categories.dc.html" style="flex: 1; height: 52px; font-size: 14px;">Rejouer</a>
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":375,"height":667}}'>
 class Component extends DCLogic {
   renderVals() { return {}; }
 }

@@ -10,52 +10,49 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
 <style>
-body{margin:0;background:#FFC628;color:#1B1530;font-family:'Rubik',system-ui,sans-serif}
-a{color:#1B1530}a:hover{color:#1B1530}
-.px{font-family:'Press Start 2P',monospace;line-height:1.3}
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
+.px{font-family:'Press Start 2P',monospace;line-height:1.25}
 .emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
-.btn{display:flex;align-items:center;justify-content:center;gap:12px;box-sizing:border-box;border:3px solid #1B1530;border-radius:16px;box-shadow:4px 4px 0 #1B1530;font-family:'Press Start 2P',monospace;color:#1B1530;text-decoration:none}
-.card{box-sizing:border-box;background:#FFFFFF;border:3px solid #1B1530;border-radius:18px;box-shadow:4px 4px 0 #1B1530}
-.cf{position:absolute;width:12px;height:12px;border:2px solid #1B1530;box-sizing:border-box}
+.b{display:flex;align-items:center;justify-content:center;gap:10px;box-sizing:border-box;border-radius:16px;font-weight:800;font-size:16px;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none}
+.b-red{background:var(--red);color:#FFFFFF;box-shadow:0 4px 0 var(--red-d)}
+.b-soft{background:var(--surface);color:var(--ink);border:2px solid var(--line2);box-shadow:0 3px 0 var(--line2)}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:20px;box-sizing:border-box}
+.cf{position:absolute;width:10px;height:10px;border-radius:3px}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; background: #FFC628; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center;">
-  <div class="cf" style="left: 30px; top: 70px; background: #FF3D7F; transform: rotate(20deg);"></div>
-  <div class="cf" style="left: 90px; top: 130px; background: #19C6DB; transform: rotate(-15deg);"></div>
-  <div class="cf" style="left: 320px; top: 80px; background: #2BCB6E; transform: rotate(35deg);"></div>
-  <div class="cf" style="left: 270px; top: 160px; background: #FFFFFF; transform: rotate(10deg);"></div>
-  <div class="cf" style="left: 50px; top: 230px; background: #FFFFFF; transform: rotate(45deg);"></div>
-  <div class="cf" style="left: 340px; top: 250px; background: #FF3D7F; transform: rotate(-30deg);"></div>
-  <div class="cf" style="left: 180px; top: 60px; background: #19C6DB; transform: rotate(60deg);"></div>
-
-  <div style="margin-top: 110px; width: 140px; height: 140px; box-sizing: border-box; border: 4px solid #1B1530; border-radius: 999px; background: #FFF4DC; box-shadow: 6px 6px 0 #1B1530; display: flex; align-items: center; justify-content: center;">
-    <span class="emoji" style="font-size: 72px;">👑</span>
+<div class="scr t-light" style="width: 375px; height: 667px; padding-top: 20px;">
+  <div class="cf" style="left: 40px; top: 70px; background: var(--red); transform: rotate(20deg);"></div>
+  <div class="cf" style="left: 300px; top: 90px; background: var(--gold); transform: rotate(-25deg);"></div>
+  <div class="cf" style="left: 90px; top: 170px; background: var(--gold); transform: rotate(40deg);"></div>
+  <div class="cf" style="left: 320px; top: 200px; background: var(--green); transform: rotate(10deg);"></div>
+  <div class="cf" style="left: 200px; top: 50px; background: #6C8EEF; transform: rotate(60deg);"></div>
+  <div style="flex: 1;"></div>
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 0 24px;">
+    <div class="emoji" style="width: 104px; height: 104px; border-radius: 999px; background: var(--gold); box-shadow: 0 5px 0 var(--gold-d); display: flex; align-items: center; justify-content: center; font-size: 56px;">👑</div>
+    <span class="px" style="margin-top: 10px; font-size: 18px; text-align: center; line-height: 1.5;">VICTOIRE FINALE</span>
+    <p style="margin: 0; font-size: 15px; font-weight: 500; color: var(--muted); text-align: center;">Les 200 niveaux sont à toi. Tu es Maître de l'Alchimie Pop-Corn.</p>
   </div>
-  <h1 class="px" style="margin: 30px 0 0; font-size: 22px; color: #FFFFFF; text-shadow: 3px 3px 0 #1B1530, -1px -1px 0 #1B1530; text-align: center; line-height: 1.5;">VICTOIRE<br>FINALE !</h1>
-  <p style="margin: 12px 30px 0; text-align: center; font-size: 16px; font-weight: 700; line-height: 1.4;">Les 200 niveaux sont à toi. Tu es Maître de l'Alchimie Pop-Corn.</p>
-
-  <div class="card" style="margin-top: 22px; width: 358px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-    <span style="font-size: 12px; font-weight: 800; letter-spacing: 0.1em; color: #5A5270;">SCORE FINAL</span>
-    <span class="px" style="font-size: 24px; color: #D81B60;">312 450</span>
-    <div style="display: flex; gap: 8px; margin-top: 4px;">
-      <span style="border: 2px solid #1B1530; border-radius: 999px; padding: 5px 10px; font-weight: 800; font-size: 14px; background: #FFF4DC;">+500 <span class="emoji">💰</span></span>
-      <span style="border: 2px solid #1B1530; border-radius: 999px; padding: 5px 10px; font-weight: 800; font-size: 14px; background: #FFF4DC;"><span class="emoji">🏅</span> Trophée « Légende »</span>
+  <div style="padding: 20px 16px 0;">
+    <div class="card" style="padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: var(--muted);">SCORE FINAL</span>
+      <span style="font-size: 36px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1;">312 450</span>
+      <div style="display: flex; gap: 8px;">
+        <span style="padding: 5px 10px; border-radius: 999px; background: var(--gold-t); font-size: 14px; font-weight: 700;">+500 <span class="emoji">💰</span></span>
+        <span style="padding: 5px 10px; border-radius: 999px; background: var(--lilac-t); font-size: 14px; font-weight: 700;"><span class="emoji">🏅</span> Trophée Légende</span>
+      </div>
     </div>
   </div>
-
-  <div style="position: absolute; left: 16px; right: 16px; bottom: 44px; display: flex; flex-direction: column; gap: 12px;">
-    <a class="btn" href="Defier.dc.html" style="height: 60px; background: #19C6DB; font-size: 12px;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5"></path><path d="M5 13v7h14v-7"></path></svg>
-      PARTAGER MA VICTOIRE
-    </a>
-    <div style="display: flex; gap: 12px;">
-      <a class="btn" href="Categories.dc.html" style="flex: 1; height: 52px; background: #2BCB6E; font-size: 11px;">REJOUER</a>
-      <a class="btn" href="Main.dc.html" style="flex: 1; height: 52px; background: #FFFFFF; font-size: 11px;">ACCUEIL</a>
-    </div>
+  <div style="flex: 1;"></div>
+  <div style="padding: 0 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+    <a class="b b-red" href="Defier.dc.html" style="height: 56px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5"></path><path d="M5 13v7h14v-7"></path></svg>Partager ma victoire</a>
+    <a class="b b-soft" href="Main.dc.html" style="height: 50px; font-size: 14px;">Accueil</a>
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":375,"height":667}}'>
 class Component extends DCLogic {
   renderVals() { return {}; }
 }

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Jeu sur iPad</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Rubik',system-ui,sans-serif}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit}a:hover{color:inherit}
+.t-light{--bg:#FBF6EC;--surface:#FFFFFF;--ink:#1F1B2D;--muted:#6E6882;--line:#ECE3D2;--line2:#DDD2BD;--sunk:#F3ECDF;--red:#D93A3A;--red-d:#A92A2A;--red-t:#FDE9E6;--gold:#FFC93C;--gold-d:#D9A01A;--gold-t:#FFF3D1;--green:#1FA463;--green-t:#DDF4E7;--blue-t:#E4EEFB;--lilac-t:#EEE8FB;--mint-t:#DFF5EF}
+.scr{background:var(--bg);color:var(--ink);font-family:'Rubik',system-ui,sans-serif;position:relative;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column}
+.emoji{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1}
+.b{display:flex;align-items:center;justify-content:center;gap:10px;box-sizing:border-box;border-radius:20px;font-weight:800;font-size:18px;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none}
+.b-off{background:var(--sunk);color:var(--muted);border:2px dashed var(--line2)}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:24px;box-sizing:border-box}
+.ib{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:52px;height:52px;border-radius:16px;background:var(--surface);border:1.5px solid var(--line);color:var(--ink);box-sizing:border-box;text-decoration:none}
+.tile{display:flex;align-items:center;justify-content:center;border-radius:20px;background:var(--surface);border:2px solid var(--line);box-shadow:0 4px 0 var(--line2);box-sizing:border-box;font-size:52px}
+.used{background:var(--sunk);box-shadow:none;border-style:dashed;transform:translateY(4px)}
+.used span{opacity:0.25}
+.slot{display:flex;align-items:center;justify-content:center;width:76px;height:76px;border-radius:18px;box-sizing:border-box;background:var(--surface);border:2px solid var(--ink);font-size:40px}
+.slot-e{background:transparent;border:2px dashed var(--line2)}
+.pw{position:relative;display:flex;align-items:center;justify-content:center;flex:1;height:56px;border-radius:16px;background:var(--surface);border:1.5px solid var(--line);box-sizing:border-box;font-size:26px}
+.cnt{position:absolute;top:-8px;right:-6px;min-width:24px;height:24px;padding:0 6px;box-sizing:border-box;border-radius:999px;background:var(--ink);color:var(--bg);font-family:'Rubik',sans-serif;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.bar{height:8px;border-radius:999px;background:var(--sunk);overflow:hidden}
+</style>
+</helmet>
+<div class="scr t-light" style="width: 1180px; height: 820px; padding-top: 24px; flex-direction: row;">
+  <div style="width: 440px; flex-shrink: 0; box-sizing: border-box; padding: 20px 0 32px 40px; display: flex; flex-direction: column; gap: 22px;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <a class="ib" href="Pause.dc.html" aria-label="Pause"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1.5"></rect><rect x="14" y="4" width="4" height="16" rx="1.5"></rect></svg></a>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font-size: 16px; font-weight: 700;">Niveau 12 <span style="color: var(--muted); font-weight: 600;">· Palier 1</span></span>
+        <div class="bar"><div style="width: 60%; height: 100%; background: var(--ink); border-radius: 999px;"></div></div>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+        <span style="font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1;">12 450</span>
+        <span style="font-size: 13px; font-weight: 600; color: var(--muted);">record 45 200</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 16px; position: relative;">
+      <span style="position: absolute; top: -13px; left: 50%; transform: translateX(-50%); padding: 4px 12px; border-radius: 999px; background: var(--gold); color: #1F1B2D; font-size: 13px; font-weight: 800; letter-spacing: 0.06em;">COMBO ×3</span>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 10px; background: var(--blue-t); font-size: 14px; font-weight: 700;"><span class="emoji">📺</span>Série</span>
+        <span class="emoji" style="font-size: 18px; letter-spacing: 2px;">❤️❤️❤️🤍</span>
+      </div>
+      <span style="font-size: 32px; font-weight: 800; text-align: center; line-height: 1.15;">Stranger Things</span>
+      <div class="bar"><div style="width: 68%; height: 100%; background: var(--red); border-radius: 999px;"></div></div>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 12px;">
+      <button class="slot emoji" aria-label="Retirer gaufre">🧇</button>
+      <button class="slot emoji" aria-label="Retirer vélo">🚲</button>
+      <div class="slot slot-e"></div>
+      <div class="slot slot-e"></div>
+    </div>
+
+    <div style="flex: 1;"></div>
+    <div style="display: flex; gap: 12px;">
+      <button class="pw emoji" style="background: var(--gold-t); border-color: var(--gold);" aria-label="Indice, 3 restants">💡<span class="cnt">3</span></button>
+      <button class="pw emoji" aria-label="Bouclier, 2 restants">🛡️<span class="cnt">2</span></button>
+      <button class="pw emoji" aria-label="Passer, 1 restant">⏭️<span class="cnt">1</span></button>
+      <button class="pw emoji" style="opacity: 0.4;" aria-label="Double pièces, aucun">✨<span class="cnt">0</span></button>
+    </div>
+    <a class="b b-off" href="JeuFever.dc.html" style="height: 68px;">Fusionner · 2/4</a>
+  </div>
+
+  <div style="flex: 1; box-sizing: border-box; padding: 20px 40px 36px 40px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); gap: 16px;">
+    <button class="tile emoji">🔥</button><button class="tile used emoji"><span>🧇</span></button><button class="tile emoji">💧</button><button class="tile emoji">🎸</button><button class="tile emoji">👽</button>
+    <button class="tile emoji">⚡</button><button class="tile used emoji"><span>🚲</span></button><button class="tile emoji">🍕</button><button class="tile emoji">🌈</button><button class="tile emoji">💀</button>
+    <button class="tile emoji">🍔</button><button class="tile emoji">🔦</button><button class="tile emoji">🚗</button><button class="tile emoji">👾</button><button class="tile emoji">🍦</button>
+    <button class="tile emoji">🚀</button><button class="tile emoji">💎</button><button class="tile emoji">👑</button><button class="tile emoji">🎩</button><button class="tile emoji">🎲</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
