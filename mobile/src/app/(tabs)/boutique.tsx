@@ -27,6 +27,7 @@ export default function Boutique() {
   const buy = (price: number, give: () => void) => {
     if (!useProfile.getState().spend(price)) {
       buzz('error');
+      play('error');
       Alert.alert('', t('missing_coins', { n: price - useProfile.getState().coins }));
       return;
     }
@@ -42,6 +43,7 @@ export default function Boutique() {
     if (!ok) return;
     s.countAd();
     s.addCoins(REWARDS.ad);
+    play('coin');
   };
 
   const coins = (
@@ -208,7 +210,7 @@ export default function Boutique() {
                 if (owned) s.set({ style: st });
                 else buy(stylePrice(i), () => s.set({ ownedStyles: [...s.ownedStyles, st], style: st }));
               }}
-              style={{ width: tablet ? '15.3%' : '23.3%', paddingVertical: 10, alignItems: 'center', gap: 4, borderWidth: on ? 2 : p.border }}>
+              style={{ width: tablet ? '15.3%' : '22.9%', paddingVertical: 10, alignItems: 'center', gap: 4, borderWidth: on ? 2 : p.border }}>
               <Emoji size={28} style={{ opacity: owned ? 1 : 0.5 }}>
                 {st}
               </Emoji>
@@ -239,7 +241,7 @@ export default function Boutique() {
               if (owned) s.set({ avatar: a });
               else buy(PRICES.avatar, () => s.set({ ownedAvatars: [...s.ownedAvatars, a], avatar: a }));
             }}
-            style={{ width: tablet ? '15.3%' : '23.3%', paddingVertical: 12, alignItems: 'center', gap: 6, borderWidth: on ? 2 : p.border }}>
+            style={{ width: tablet ? '15.3%' : '22.9%', paddingVertical: 12, alignItems: 'center', gap: 6, borderWidth: on ? 2 : p.border }}>
             <Emoji size={32} style={{ opacity: owned ? 1 : 0.5 }}>
               {a}
             </Emoji>

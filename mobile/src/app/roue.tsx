@@ -54,9 +54,19 @@ export default function Roue() {
     s.bumpStats({ spins: 1 });
     const base = total.current - (total.current % 360);
     total.current = base + spinRotation(i);
-    const ticks = setInterval(() => play('tick'), 160);
-    Animated.timing(rot, { toValue: total.current, duration: 4200, easing: Easing.out(Easing.cubic), useNativeDriver: true }).start(() => {
-      clearInterval(ticks);
+    // One tick each time a slice passes the pointer: fast at first, slowing down with the wheel.
+    let lastSlice = Math.floor(base / SLICE_DEG);
+    const listener = rot.addListener(({ value }) => {
+      const slice = Math.floor((value + SLICE_DEG / 2) / SLICE_DEG);
+      if (slice !== lastSlice) {
+        lastSlice = slice;
+        play('tick');
+        buzz('select');
+      }
+    });
+    play('spin');
+    Animated.timing(rot, { toValue: total.current, duration: 4200, easing: Easing.out(Easing.cubic), useNativeDriver: false }).start(() => {
+      rot.removeListener(listener);
       const slice = WHEEL[i];
       const gift = slice.prize.kind === 'gift';
       const prize = gift ? openGift() : slice.prize;

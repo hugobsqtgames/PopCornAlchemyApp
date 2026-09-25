@@ -20,7 +20,9 @@ export function useT(): TFunction {
   const lang = useProfile((s) => s.lang) ?? 'fr';
   return useCallback(
     (key, vars) => {
-      let s: string = STRINGS[lang][key] ?? STRINGS.fr[key] ?? key;
+      // "{n}" strings have a "_one" variant for the singular.
+      const one = vars?.n === 1 ? (`${key}_one` as StringKey) : null;
+      let s: string = (one && STRINGS[lang][one]) || (STRINGS[lang][key] ?? STRINGS.fr[key] ?? key);
       if (vars) for (const [k, v] of Object.entries(vars)) s = s.replaceAll(`{${k}}`, typeof v === 'number' ? fmt(v) : v);
       return s;
     },

@@ -23,7 +23,7 @@ import {
 } from '@/game/rules';
 import type { Level, RunConfig } from '@/game/types';
 import { checkAchievements } from '@/services/achievements';
-import { buzz, play } from '@/services/feedback';
+import { buzz, play, playLater, type SoundName } from '@/services/feedback';
 import { submitScore } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
 
@@ -89,7 +89,9 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
         duration: bonusTimeMs(index) * from,
         easing: Easing.linear,
         useNativeDriver: false,
-      }).start();
+      }).start(({ finished }) => {
+        if (finished) play('timeup');
+      });
     },
     [bonus, index]
   );
@@ -116,6 +118,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   useEffect(() => {
     if (!level) return;
     levelStart.current = Date.now();
+    if (index > 0) play('whoosh');
     runBonus(1);
     profile.getState().set({ save: { ...config, index, lives, score, combo, continued } });
     // Saving only on level change on purpose: lives/score are saved with the next level.
@@ -187,6 +190,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     const id = setInterval(() => {
       chronoRef.current -= 1;
       setChronoLeft(chronoRef.current);
+      if (chronoRef.current > 0 && chronoRef.current <= 10) play('countdown');
       if (chronoRef.current <= 0) endChronoRef.current();
     }, 1000);
     return () => clearInterval(id);
@@ -226,6 +230,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   const removePick = (slot: number) => {
     if (phase !== 'play' || paused) return;
     buzz('select');
+    play('unpop');
     setPicked(picked.filter((_, i) => i !== slot));
   };
 
@@ -259,7 +264,10 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       setLast({ points, coins, seconds: (Date.now() - levelStart.current) / 1000 });
       if (config.mode === 'chrono') addChrono(CHRONO_BONUS_SECONDS);
       setPhase('correct');
-      play('success');
+      // The chime climbs with the combo; reaching 5 starts Fever.
+      const chime: SoundName = nextCombo === 5 ? 'fever' : nextCombo >= 2 ? (`combo${Math.min(nextCombo, 5)}` as SoundName) : 'success';
+      play(chime);
+      playLater('coin', 380);
       buzz('success');
       checkAchievements();
       setTimeout(() => advance(nextScore, clearedNow), 1100);
@@ -315,7 +323,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     s.bumpStats({ hintsUsed: 1 });
     setHintUsed(true);
     setHinted(target);
-    play('powerup');
+    play('sparkle');
     buzz('select');
     // Wrong picks are cleared so the hint always leads towards the answer.
     const keep = picked.filter((i) => level.sol.includes(grid[i]));
@@ -357,6 +365,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     if (continued) return false;
     if (withCoins && !profile.getState().spend(PRICES.continue)) return false;
     setContinued(true);
+    play('powerup');
     setLives(1);
     setResult(null);
     setPicked([]);

@@ -180,7 +180,7 @@ export function WinView({ run }: { run: Run }) {
     sub = t('category_done_sub', { cat: t(`cat_${run.config.category ?? 'movie'}` as StringKey) });
     pixel = false;
   } else if (mode === 'daily') {
-    icon = '📅';
+    icon = '🔥';
     title = t('daily_complete');
     sub = r?.rewarded ? t('daily_complete_sub') : t('daily_again');
     pixel = false;

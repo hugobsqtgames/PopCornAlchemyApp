@@ -2,8 +2,8 @@ import { router } from 'expo-router';
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
 
-import { useLayout, usePalette } from '@/hooks/use-app';
-import { buzz } from '@/services/feedback';
+import { useLayout, usePalette, useT } from '@/hooks/use-app';
+import { buzz, play } from '@/services/feedback';
 import { FONTS, type Palette } from '@/theme/palettes';
 
 import { BackIcon } from './icons';
@@ -100,7 +100,10 @@ export function Btn({ label, onPress, variant = 'action', icon, sub, height = 56
     <Pressable
       disabled={disabled || !onPress}
       onPressIn={() => buzz('tap')}
-      onPress={onPress}
+      onPress={() => {
+        play('click');
+        onPress?.();
+      }}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? (sub ? `${label}, ${sub}` : label)}
       accessibilityState={{ disabled: !!disabled }}
@@ -175,6 +178,7 @@ export function Tap({
     <Pressable
       onPress={() => {
         buzz('select');
+        play('click');
         onPress();
       }}
       accessibilityRole="button"
@@ -214,7 +218,14 @@ export function Pill({ children, onPress, label }: { children: ReactNode; onPres
   );
   if (!onPress) return <View accessibilityLabel={label}>{inner}</View>;
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} hitSlop={4}>
+    <Pressable
+      onPress={() => {
+        play('click');
+        onPress();
+      }}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      hitSlop={4}>
       {inner}
     </Pressable>
   );
@@ -226,6 +237,7 @@ export function IconBtn({ children, onPress, label, round }: { children: ReactNo
     <Pressable
       onPress={() => {
         buzz('tap');
+        play('click');
         onPress();
       }}
       accessibilityRole="button"
@@ -250,9 +262,10 @@ export function IconBtn({ children, onPress, label, round }: { children: ReactNo
 /** Top bar of pushed screens: back button + title. */
 export function Header({ title, right, onBack }: { title: string; right?: ReactNode; onBack?: () => void }) {
   const p = usePalette();
+  const t = useT();
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 16, paddingTop: 8, minHeight: 52 }}>
-      <IconBtn label="Retour" onPress={onBack ?? (() => (router.canGoBack() ? router.back() : router.replace('/')))}>
+      <IconBtn label={t('back')} onPress={onBack ?? (() => (router.canGoBack() ? router.back() : router.replace('/')))}>
         <BackIcon color={p.ink} />
       </IconBtn>
       <Txt size={20} weight="heavy" style={{ flex: 1 }} lines={1}>
@@ -312,6 +325,7 @@ export function Segments<T extends string>({ items, value, onChange }: { items: 
             key={it.id}
             onPress={() => {
               buzz('select');
+              play('click');
               onChange(it.id);
             }}
             accessibilityRole="tab"

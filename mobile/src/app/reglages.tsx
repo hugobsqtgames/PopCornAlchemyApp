@@ -7,6 +7,7 @@ import { ChevronIcon, InstagramIcon, TikTokIcon, YouTubeIcon } from '@/component
 import { Emoji, Header, Screen, Section, Txt } from '@/components/ui';
 import { NO_ADS_PACK } from '@/game/catalog';
 import { useLayout, usePalette, useT } from '@/hooks/use-app';
+import { play } from '@/services/feedback';
 import { purchase, restorePurchases } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
 
@@ -57,6 +58,10 @@ export default function Reglages() {
   const t = useT();
   const { insets } = useLayout();
   const s = useProfile();
+  const toggle = (key: 'sound' | 'music' | 'haptics', v: boolean) => {
+    s.set({ [key]: v });
+    play('toggle');
+  };
 
   return (
     <Screen>
@@ -64,9 +69,9 @@ export default function Reglages() {
       <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}>
         <Section>{t('sec_game')}</Section>
         <Group>
-          <Row first icon="🔊" label={t('sounds')} right={<Switch value={s.sound} onValueChange={(v) => s.set({ sound: v })} trackColor={{ true: p.green }} />} />
-          <Row icon="🎵" label={t('music')} right={<Switch value={s.music} onValueChange={(v) => s.set({ music: v })} trackColor={{ true: p.green }} />} />
-          <Row icon="📳" label={t('haptics')} right={<Switch value={s.haptics} onValueChange={(v) => s.set({ haptics: v })} trackColor={{ true: p.green }} />} />
+          <Row first icon="🔊" label={t('sounds')} right={<Switch value={s.sound} onValueChange={(v) => toggle('sound', v)} trackColor={{ true: p.green }} />} />
+          <Row icon="🎵" label={t('music')} right={<Switch value={s.music} onValueChange={(v) => toggle('music', v)} trackColor={{ true: p.green }} />} />
+          <Row icon="📳" label={t('haptics')} right={<Switch value={s.haptics} onValueChange={(v) => toggle('haptics', v)} trackColor={{ true: p.green }} />} />
           <Row
             icon="🌐"
             label={t('language')}

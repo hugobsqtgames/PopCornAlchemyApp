@@ -1,8 +1,9 @@
-import { router } from 'expo-router';
+import { router, useIsFocused } from 'expo-router';
 import { Modal, Pressable, Switch, View } from 'react-native';
 
 import type { Run } from '@/hooks/use-run';
 import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
+import { play } from '@/services/feedback';
 import { useProfile } from '@/store/profile';
 
 import { ChevronIcon, PlayIcon } from '../icons';
@@ -16,7 +17,13 @@ export function PauseSheet({ run }: { run: Run }) {
   const haptics = useProfile((s) => s.haptics);
   const music = useProfile((s) => s.music);
   const set = useProfile((s) => s.set);
+  // Hidden while another screen (rules, challenge) is on top, shown again on return.
+  const focused = useIsFocused();
   const resume = () => run.setPaused(false);
+  const toggle = (key: 'sound' | 'music' | 'haptics', v: boolean) => {
+    set({ [key]: v });
+    play('toggle');
+  };
 
   const row = (icon: string, label: string, right: React.ReactNode, onPress?: () => void, first?: boolean) => (
     <Pressable
@@ -41,8 +48,8 @@ export function PauseSheet({ run }: { run: Run }) {
   );
 
   return (
-    <Modal visible={run.paused && run.phase === 'play'} transparent animationType="slide" onRequestClose={resume}>
-      <View style={{ flex: 1, backgroundColor: 'rgba(31,27,45,0.88)' }}>
+    <Modal visible={run.paused && run.phase === 'play' && focused} transparent animationType="slide" onRequestClose={resume}>
+      <View style={{ flex: 1, backgroundColor: '#1F1B2D' }}>
         <Pressable style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 }} onPress={resume} accessibilityLabel={t('resume')}>
           <Px size={22} color="#FFFFFF">
             {t('pause')}
@@ -55,9 +62,9 @@ export function PauseSheet({ run }: { run: Run }) {
           <View style={{ width: 40, height: 5, borderRadius: 3, backgroundColor: p.line2, alignSelf: 'center', marginBottom: 4 }} />
           <Btn label={t('resume')} icon={<PlayIcon color={p.onAction} />} onPress={resume} />
           <View style={{ borderRadius: 18, backgroundColor: p.surface, borderWidth: p.border, borderColor: p.line, overflow: 'hidden' }}>
-            {row('🔊', t('sounds'), <Switch value={sound} onValueChange={(v) => set({ sound: v })} trackColor={{ true: p.green }} />, undefined, true)}
-            {row('🎵', t('music'), <Switch value={music} onValueChange={(v) => set({ music: v })} trackColor={{ true: p.green }} />)}
-            {row('📳', t('haptics'), <Switch value={haptics} onValueChange={(v) => set({ haptics: v })} trackColor={{ true: p.green }} />)}
+            {row('🔊', t('sounds'), <Switch value={sound} onValueChange={(v) => toggle('sound', v)} trackColor={{ true: p.green }} />, undefined, true)}
+            {row('🎵', t('music'), <Switch value={music} onValueChange={(v) => toggle('music', v)} trackColor={{ true: p.green }} />)}
+            {row('📳', t('haptics'), <Switch value={haptics} onValueChange={(v) => toggle('haptics', v)} trackColor={{ true: p.green }} />)}
             {row('📖', t('rules'), <ChevronIcon color={p.line2} />, () => router.push('/tutoriel'))}
             {row('⚔️', t('challenge_friend'), <ChevronIcon color={p.line2} />, () => router.push('/defier'))}
           </View>

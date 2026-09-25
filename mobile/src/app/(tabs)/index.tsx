@@ -38,7 +38,7 @@ export default function Home() {
           {fmt(s.coins)}
         </Txt>
       </Pill>
-      <Pill label={`${s.hints} indices`}>
+      <Pill label={`${s.hints} 💡`}>
         <Emoji size={15}>💡</Emoji>
         <Txt size={14} weight="bold">
           {s.hints}
