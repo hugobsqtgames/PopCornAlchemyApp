@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "Pop-Corn Alchemy",
+    "slug": "popcorn-alchemy",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/images/icon.png",
+    "scheme": "popcornalchemy",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#FBF6EC",
+    "ios": {
+      "bundleIdentifier": "com.hugobsqt.popcornalchemy",
+      "supportsTablet": true,
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.hugobsqt.popcornalchemy",
+      "adaptiveIcon": {
+        "backgroundColor": "#FFC93C",
+        "foregroundImage": "./assets/images/splash-icon.png"
+      }
+    },
+    "web": {
+      "output": "single",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#FBF6EC",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 140,
+          "dark": {
+            "backgroundColor": "#15121E",
+            "image": "./assets/images/splash-icon.png"
+          }
+        }
+      ],
+      "expo-audio",
+      "expo-localization",
+      "expo-screen-orientation"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
