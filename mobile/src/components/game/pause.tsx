@@ -14,6 +14,7 @@ export function PauseSheet({ run }: { run: Run }) {
   const { insets } = useLayout();
   const sound = useProfile((s) => s.sound);
   const haptics = useProfile((s) => s.haptics);
+  const music = useProfile((s) => s.music);
   const set = useProfile((s) => s.set);
   const resume = () => run.setPaused(false);
 
@@ -55,6 +56,7 @@ export function PauseSheet({ run }: { run: Run }) {
           <Btn label={t('resume')} icon={<PlayIcon color={p.onAction} />} onPress={resume} />
           <View style={{ borderRadius: 18, backgroundColor: p.surface, borderWidth: p.border, borderColor: p.line, overflow: 'hidden' }}>
             {row('🔊', t('sounds'), <Switch value={sound} onValueChange={(v) => set({ sound: v })} trackColor={{ true: p.green }} />, undefined, true)}
+            {row('🎵', t('music'), <Switch value={music} onValueChange={(v) => set({ music: v })} trackColor={{ true: p.green }} />)}
             {row('📳', t('haptics'), <Switch value={haptics} onValueChange={(v) => set({ haptics: v })} trackColor={{ true: p.green }} />)}
             {row('📖', t('rules'), <ChevronIcon color={p.line2} />, () => router.push('/tutoriel'))}
             {row('⚔️', t('challenge_friend'), <ChevronIcon color={p.line2} />, () => router.push('/defier'))}

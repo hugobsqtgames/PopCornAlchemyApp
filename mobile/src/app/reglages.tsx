@@ -65,6 +65,7 @@ export default function Reglages() {
         <Section>{t('sec_game')}</Section>
         <Group>
           <Row first icon="🔊" label={t('sounds')} right={<Switch value={s.sound} onValueChange={(v) => s.set({ sound: v })} trackColor={{ true: p.green }} />} />
+          <Row icon="🎵" label={t('music')} right={<Switch value={s.music} onValueChange={(v) => s.set({ music: v })} trackColor={{ true: p.green }} />} />
           <Row icon="📳" label={t('haptics')} right={<Switch value={s.haptics} onValueChange={(v) => s.set({ haptics: v })} trackColor={{ true: p.green }} />} />
           <Row
             icon="🌐"

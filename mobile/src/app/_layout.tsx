@@ -7,16 +7,17 @@ import {
   Rubik_800ExtraBold,
   useFonts,
 } from '@expo-google-fonts/rubik';
-import { Stack } from 'expo-router';
+import { Stack, usePathname } from 'expo-router';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Platform, View } from 'react-native';
+import { AppState, Platform, View } from 'react-native';
 
 import { SimulatedAd, Toasts } from '@/components/overlays';
 import { useLayout, usePalette } from '@/hooks/use-app';
 import { initSounds } from '@/services/feedback';
+import { setTrack, suspendMusic } from '@/services/music';
 import { useProfile } from '@/store/profile';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -43,7 +44,15 @@ export default function RootLayout() {
 
   useEffect(() => {
     initSounds();
+    const sub = AppState.addEventListener('change', (st) => suspendMusic(st !== 'active'));
+    return () => sub.remove();
   }, []);
+
+  // Calm loop in the menus, faster one during a game.
+  const pathname = usePathname();
+  useEffect(() => {
+    if (ready) setTrack(pathname.startsWith('/jeu') ? 'game' : 'menu');
+  }, [pathname, ready]);
 
   // Phones stay in portrait; iPads can rotate.
   useEffect(() => {

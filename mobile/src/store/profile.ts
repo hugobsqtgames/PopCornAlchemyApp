@@ -33,6 +33,7 @@ export interface ProfileState {
   ownedStyles: string[];
   ownedAvatars: string[];
   sound: boolean;
+  music: boolean;
   haptics: boolean;
   noAds: boolean;
   best: Partial<Record<Mode, number>>;
@@ -87,6 +88,7 @@ const INITIAL: ProfileState = {
   ownedStyles: ['🍿'],
   ownedAvatars: ['🍿'],
   sound: true,
+  music: true,
   haptics: true,
   noAds: false,
   best: {},
