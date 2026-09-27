@@ -65,7 +65,6 @@ export function ObjectiveCard({ run, big }: { run: Run; big?: boolean }) {
   const lifeCount = run.config.mode === 'hardcore' ? 1 : 4;
   const showLives = run.config.mode !== 'chrono' && !run.relaxed;
   const done = run.phase !== 'play';
-  const width = run.bonus.interpolate({ inputRange: [0, 1], outputRange: ['0%', '100%'] });
 
   return (
     <View
@@ -117,15 +116,20 @@ export function ObjectiveCard({ run, big }: { run: Run; big?: boolean }) {
       </Txt>
       {!run.relaxed && (
         <View style={{ height: big ? 8 : 6, borderRadius: 999, backgroundColor: p.sunk, overflow: 'hidden' }} accessibilityLabel={t('time_up')}>
-          <Animated.View style={{ height: '100%', width: done ? '0%' : width, borderRadius: 999, backgroundColor: p.action }} />
+          {/* Scaled from the left edge: a transform runs natively, a width would not. */}
+          <Animated.View
+            style={{ height: '100%', width: '100%', borderRadius: 999, backgroundColor: p.action, transformOrigin: 'left', transform: [{ scaleX: done ? 0 : run.bonus }] }}
+          />
         </View>
       )}
     </View>
   );
 }
 
-export function Slots({ run, size }: { run: Run; size: number }) {
+export function Slots({ run, size: wanted }: { run: Run; size: number }) {
   const p = usePalette();
+  // Up to 5 slots must fit the column (the iPad's side column is narrower than 5 big slots).
+  const [room, setRoom] = useState(0);
   const style = useProfile((s) => s.style);
   const still = useReduceMotion();
   // Fusion: the slots slide together and pop into a burst of pop-corn.
@@ -137,9 +141,10 @@ export function Slots({ run, size }: { run: Run; size: number }) {
   }, [done, still, merge]);
   if (!run.level) return null;
   const n = run.level.sol.length;
+  const size = room ? Math.min(wanted, Math.floor(room / (n * 1.2 - 0.2))) : wanted;
   const gap = size * 0.2;
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'center', gap }}>
+    <View onLayout={(e) => setRoom(e.nativeEvent.layout.width)} style={{ flexDirection: 'row', justifyContent: 'center', gap }}>
       {run.level.sol.map((_, i) => {
         const tile = run.picked[i];
         const emoji = tile !== undefined ? run.grid[tile] : null;

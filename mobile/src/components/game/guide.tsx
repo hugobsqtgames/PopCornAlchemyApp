@@ -11,7 +11,7 @@ import { Btn, Card, Emoji, Screen, Txt } from '../ui';
 /** Ends the guided level and opens the home screen. */
 function finish() {
   useProfile.getState().set({ tutorialDone: true });
-  router.replace('/');
+  router.dismissTo('/');
 }
 
 /** Grid index of the next emoji to tap in the guided level. */

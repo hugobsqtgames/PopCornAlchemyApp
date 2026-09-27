@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { Alert, Linking, Pressable, ScrollView, View } from 'react-native';
 
 import { ChevronIcon, InstagramIcon, TikTokIcon, YouTubeIcon } from '@/components/icons';
-import { Emoji, Header, Screen, Section, Toggle, Txt } from '@/components/ui';
+import { Emoji, Header, Screen, Section, Toggle, Txt, useOnePress } from '@/components/ui';
 import { NO_ADS_PACK } from '@/game/catalog';
 import { useLayout, usePalette, useT } from '@/hooks/use-app';
 import { play } from '@/services/feedback';
@@ -44,9 +44,10 @@ function Row({
   first?: boolean;
 }) {
   const p = usePalette();
+  const press = useOnePress(onPress);
   return (
     <Pressable
-      onPress={onPress}
+      onPress={press}
       disabled={!onPress}
       accessibilityRole={onPress ? 'button' : undefined}
       style={({ pressed }) => ({
@@ -152,7 +153,7 @@ export default function Reglages() {
         <Group>
           <View style={{ flexDirection: 'row' }}>
             {SOCIALS.map(({ name, url, Icon, tint }) => (
-              <Pressable key={name} onPress={() => Linking.openURL(url)} accessibilityRole="link" accessibilityLabel={name} style={{ flex: 1, alignItems: 'center', gap: 6, paddingVertical: 12 }}>
+              <Pressable key={name} onPress={() => Linking.openURL(url).catch(() => {})} accessibilityRole="link" accessibilityLabel={name} style={{ flex: 1, alignItems: 'center', gap: 6, paddingVertical: 12 }}>
                 <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: p[tint], alignItems: 'center', justifyContent: 'center' }}>
                   <Icon color={p.ink} />
                 </View>

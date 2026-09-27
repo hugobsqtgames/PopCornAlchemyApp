@@ -25,6 +25,7 @@ import {
   TIER_SIZE,
 } from '../rules';
 import { checkCode, rewardText } from '../codes';
+import { one, parseLevelIds, parseName, parseScore, safeIncomingPath } from '../links';
 import { pickSlice, SLICE_DEG, spinRotation, tickTimes, WHEEL } from '../wheel';
 
 describe('levels', () => {
@@ -231,5 +232,27 @@ describe('wheel ticks', () => {
     const gaps = times.slice(1).map((x, i) => x.at - times[i].at);
     expect(gaps[gaps.length - 1]).toBeGreaterThan(gaps[0]);
     expect(times[times.length - 1].at).toBeLessThanOrEqual(4200);
+  });
+});
+
+describe('links from outside the app', () => {
+  it('rebuilds a clean challenge link', () => {
+    expect(safeIncomingPath('popcornalchemy://defier?l=1,5,99999,abc&s=1200&n=L%C3%A9a')).toBe('/defier?l=1,5&s=1200&n=L%C3%A9a');
+  });
+
+  it('sends anything else home', () => {
+    expect(safeIncomingPath('popcornalchemy://reglages')).toBe('/');
+    expect(safeIncomingPath('popcornalchemy://defier?n=' + '%'.repeat(5000))).toBe('/');
+    expect(safeIncomingPath('popcornalchemy://defier?l=1&n=%E0%A4%A')).toBe('/defier?l=1&s=0&n=%3F');
+  });
+
+  it('bounds every value', () => {
+    expect(parseScore('NaN')).toBe(0);
+    expect(parseScore('-5')).toBe(0);
+    expect(parseScore('1e99')).toBe(10_000_000);
+    expect(parseLevelIds('1,1,5,' + Array.from({ length: 50 }, (_, i) => i + 1).join(','))).toHaveLength(10);
+    expect([...parseName('🦊'.repeat(30))]).toHaveLength(20);
+    expect(parseName('   ')).toBe('?');
+    expect(one(['a', 'b'])).toBe('a');
   });
 });

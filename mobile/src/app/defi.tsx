@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { CheckIcon, PlayIcon } from '@/components/icons';
 import { Btn, Card, Emoji, Header, Screen, Txt } from '@/components/ui';
 import { dayKey, daysBetween, msUntilTomorrow } from '@/game/dates';
-import { useLayout, usePalette, useT } from '@/hooks/use-app';
+import { useLayout, useNow, usePalette, useT } from '@/hooks/use-app';
 import { useProfile } from '@/store/profile';
 
 export default function Defi() {
@@ -13,7 +13,7 @@ export default function Defi() {
   const { insets } = useLayout();
   const s = useProfile();
   const lang = s.lang ?? 'fr';
-  const now = new Date();
+  const now = useNow();
   const today = dayKey(now);
   const streak = s.streak();
   const doneToday = s.dailyLast === today;

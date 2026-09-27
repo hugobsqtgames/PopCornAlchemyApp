@@ -28,7 +28,7 @@ export default function Profil() {
     Alert.prompt(
       t('edit_name'),
       undefined,
-      (v) => v.trim() && s.set({ name: v.trim().slice(0, 20) }),
+      (v) => v.trim() && s.set({ name: [...v.trim().replace(/\s+/g, ' ')].slice(0, 20).join('') }),
       'plain-text',
       name
     );

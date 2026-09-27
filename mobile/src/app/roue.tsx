@@ -6,7 +6,7 @@ import { AdIcon } from '@/components/icons';
 import { Btn, Card, Emoji, Header, Screen, Txt } from '@/components/ui';
 import { dayKey } from '@/game/dates';
 import { openGift, pickSlice, SLICE_DEG, spinRotation, tickTimes, WHEEL, type Prize } from '@/game/wheel';
-import { useLayout, usePalette, useReduceMotion, useT } from '@/hooks/use-app';
+import { useLayout, useNow, usePalette, useReduceMotion, useT } from '@/hooks/use-app';
 import { checkAchievements } from '@/services/achievements';
 import { buzz, play } from '@/services/feedback';
 import { MONEY_READY, showRewardedAd } from '@/services/store-services';
@@ -27,7 +27,7 @@ export default function Roue() {
   const t = useT();
   const { insets, width, height } = useLayout();
   const s = useProfile();
-  const today = dayKey();
+  const today = dayKey(useNow());
   const freeLeft = s.wheelLast !== today;
   const bonusLeft = s.wheelBonusLast !== today;
   const still = useReduceMotion();
@@ -48,8 +48,11 @@ export default function Roue() {
     if (prize.kind === 'shield') st.addItem('shields', 1);
   };
 
+  // The spin state updates on the next render: a ref also blocks a second tap in between.
+  const turning = useRef(false);
   const spin = (bonus: boolean) => {
-    if (spinning) return;
+    if (spinning || turning.current) return;
+    turning.current = true;
     const i = pickSlice();
     setWon(null);
     setSpinning(true);
@@ -77,6 +80,7 @@ export default function Roue() {
       give(prize);
       setWon({ prize, icon: gift ? '🎁' : slice.icon, gift });
       setSpinning(false);
+      turning.current = false;
       play('win');
       buzz('success');
       checkAchievements();

@@ -1,0 +1,9 @@
+# Secrets and signing keys: never commit
+.env
+.env*.local
+*.p8
+*.p12
+*.key
+*.mobileprovision
+.DS_Store
+node_modules/

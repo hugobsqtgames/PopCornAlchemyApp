@@ -36,7 +36,8 @@ export function ClueSheet({ run, open, onClose }: { run: Run; open: boolean; onC
   ];
 
   return (
-    <Modal visible={open && run.phase === 'play'} transparent animationType="fade" onRequestClose={onClose}>
+    // Never at the same time as the pause sheet: iOS shows only one sheet at a time.
+    <Modal visible={open && run.phase === 'play' && !run.paused} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={{ flex: 1, backgroundColor: 'rgba(31,27,45,0.55)' }} onPress={onClose} accessibilityLabel={t('close')} />
       <View
         style={{

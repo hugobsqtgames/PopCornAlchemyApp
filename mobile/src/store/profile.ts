@@ -1,12 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import { persist, type PersistStorage } from 'zustand/middleware';
 
 import { ACHIEVEMENTS, EMPTY_STATS, newlyUnlocked, type Stats } from '@/game/achievements';
 import type { ThemeId } from '@/game/catalog';
 import { currentStreak, dayKey, nextStreak } from '@/game/dates';
 import { REWARDS } from '@/game/rules';
 import type { Lang, Mode, RunSave } from '@/game/types';
+
+import { sanitizeProfile } from './sanitize';
 
 export type Item = 'hints' | 'shields' | 'skips' | 'doubles';
 
@@ -122,6 +124,36 @@ const INITIAL: ProfileState = {
   reviewAskedAt: null,
 };
 
+/**
+ * AsyncStorage behind a guard: an unreadable save reads as "no save" instead of throwing
+ * (which would leave the app on its splash screen), and a failed write (full disk) is ignored.
+ */
+const storage: PersistStorage<Partial<ProfileState>> = {
+  getItem: async (name) => {
+    try {
+      const raw = await AsyncStorage.getItem(name);
+      const value = raw ? JSON.parse(raw) : null;
+      return value && typeof value === 'object' ? value : null;
+    } catch {
+      return null;
+    }
+  },
+  setItem: async (name, value) => {
+    try {
+      await AsyncStorage.setItem(name, JSON.stringify(value));
+    } catch {
+      // Nothing to do: the next change will try again.
+    }
+  },
+  removeItem: async (name) => {
+    try {
+      await AsyncStorage.removeItem(name);
+    } catch {
+      // Same.
+    }
+  },
+};
+
 export const useProfile = create<ProfileState & ProfileActions>()(
   persist(
     (set, get) => ({
@@ -220,7 +252,9 @@ export const useProfile = create<ProfileState & ProfileActions>()(
     {
       name: 'popcorn-profile',
       version: 1,
-      storage: createJSONStorage(() => AsyncStorage),
+      storage,
+      // Any older shape is cleaned by `merge` below.
+      migrate: (saved) => saved as Partial<ProfileState>,
       partialize: (s) => {
         const out: Partial<ProfileState> = {};
         for (const k of Object.keys(INITIAL) as (keyof ProfileState)[]) {
@@ -228,14 +262,7 @@ export const useProfile = create<ProfileState & ProfileActions>()(
         }
         return out;
       },
-      merge: (saved, current) => {
-        const p = (saved ?? {}) as Partial<ProfileState>;
-        return {
-          ...current,
-          ...p,
-          stats: { ...EMPTY_STATS, ...p.stats, cat: { ...EMPTY_STATS.cat, ...p.stats?.cat } },
-        };
-      },
+      merge: (saved, current) => ({ ...current, ...sanitizeProfile(saved, INITIAL) }),
     }
   )
 );

@@ -23,9 +23,17 @@ import { useProfile } from '@/store/profile';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
+/** True once the saved profile is loaded; never waits more than 3 s (the app then starts fresh). */
 function useHydrated() {
   const [done, setDone] = useState(useProfile.persist.hasHydrated());
-  useEffect(() => useProfile.persist.onFinishHydration(() => setDone(true)), []);
+  useEffect(() => {
+    const unsub = useProfile.persist.onFinishHydration(() => setDone(true));
+    const timer = setTimeout(() => setDone(true), 3000);
+    return () => {
+      unsub();
+      clearTimeout(timer);
+    };
+  }, []);
   return done;
 }
 

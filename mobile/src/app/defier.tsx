@@ -5,6 +5,7 @@ import { ScrollView, Share, View } from 'react-native';
 
 import { ShareIcon } from '@/components/icons';
 import { Btn, Card, Emoji, Header, Screen, Section, Tap, Txt } from '@/components/ui';
+import { parseLevelIds, parseName, parseScore } from '@/game/links';
 import { levelById } from '@/game/rules';
 import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
 import { useProfile } from '@/store/profile';
@@ -14,21 +15,22 @@ export default function Defier() {
   const p = usePalette();
   const t = useT();
   const { insets } = useLayout();
-  const params = useLocalSearchParams<{ l?: string; s?: string; n?: string }>();
+  const params = useLocalSearchParams<{ l?: string | string[]; s?: string | string[]; n?: string | string[] }>();
   const s = useProfile();
   const name = s.name || t('default_name');
 
   // A challenge link was opened: keep it in the received list.
+  const link = [params.l, params.s, params.n].map((v) => (Array.isArray(v) ? v[0] : v)).join('|');
   useEffect(() => {
-    if (!params.l) return;
-    const ids = params.l.split(',').map(Number).filter((id) => levelById(id));
+    const [l, sc, n] = link.split('|');
+    const ids = parseLevelIds(l);
     if (!ids.length) return;
     const received = useProfile.getState().received;
     if (received.some((r) => r.ids.join() === ids.join())) return;
     useProfile.getState().set({
-      received: [{ ids, score: Number(params.s ?? 0), name: (params.n ?? '?').slice(0, 20), receivedAt: new Date().toISOString() }, ...received].slice(0, 20),
+      received: [{ ids, score: parseScore(sc), name: parseName(n), receivedAt: new Date().toISOString() }, ...received].slice(0, 20),
     });
-  }, [params.l, params.s, params.n]);
+  }, [link]);
 
   const run = s.lastRun;
   const send = () => {

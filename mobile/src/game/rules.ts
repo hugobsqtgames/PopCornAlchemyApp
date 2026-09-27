@@ -107,7 +107,7 @@ export function decoysToRemove(
   rng: () => number = Math.random
 ): number[] {
   const candidates = grid
-    .map((e, i) => i)
+    .map((_, i) => i)
     .filter((i) => !solution.includes(grid[i]) && !picked.includes(i) && !removed.includes(i));
   return shuffle(candidates, rng).slice(0, count);
 }

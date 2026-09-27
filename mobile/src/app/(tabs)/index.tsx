@@ -4,7 +4,7 @@ import { ScrollView, View } from 'react-native';
 import { ChevronIcon, GearIcon, PlayIcon } from '@/components/icons';
 import { Badge, Btn, Emoji, IconBtn, Logo, Pill, Tap, Txt } from '@/components/ui';
 import { dayKey } from '@/game/dates';
-import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
+import { fmt, useLayout, useNow, usePalette, useT } from '@/hooks/use-app';
 import { showLeaderboard } from '@/services/leaderboard';
 import { GAME_CENTER_READY } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
@@ -18,7 +18,8 @@ export default function Home() {
   const { wide, height, tabTop } = useLayout();
   const s = useProfile();
   const streak = s.streak();
-  const today = dayKey();
+  const now = useNow();
+  const today = dayKey(now);
   const bestAll = Math.max(0, ...Object.values(s.best).map((v) => v ?? 0));
   const big = height > 800;
 
@@ -102,7 +103,6 @@ export default function Home() {
   );
 
   const dailyDone = s.dailyLast === today;
-  const now = new Date();
   const daily = (
     <Tap onPress={() => router.push('/defi')} label={t('daily')} style={{ height: big || wide ? 84 : 70, paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
       <View style={{ width: 48, height: 48, borderRadius: 14, backgroundColor: p.actionTint, alignItems: 'center', justifyContent: 'center' }}>

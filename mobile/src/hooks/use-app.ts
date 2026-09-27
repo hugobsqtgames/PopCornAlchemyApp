@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { AccessibilityInfo, Platform, useColorScheme, useWindowDimensions } from 'react-native';
+import { AccessibilityInfo, AppState, Platform, useColorScheme, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { Level } from '@/game/types';
@@ -73,4 +73,22 @@ export function useReduceMotion(): boolean {
     return () => sub.remove();
   }, []);
   return mine || system;
+}
+
+/**
+ * The current time, refreshed every minute and when the app comes back: screens that show
+ * "today" (daily challenge, wheel, countdowns) turn to the next day at midnight on their own.
+ */
+export function useNow(): Date {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const tick = () => setNow(new Date());
+    const id = setInterval(tick, 60_000);
+    const sub = AppState.addEventListener('change', (st) => st === 'active' && tick());
+    return () => {
+      clearInterval(id);
+      sub.remove();
+    };
+  }, []);
+  return now;
 }

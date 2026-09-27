@@ -9,7 +9,7 @@ import { play } from '@/services/feedback';
 import { useProfile } from '@/store/profile';
 
 import { ChevronIcon, PlayIcon } from '../icons';
-import { Btn, Emoji, Px, Tap, Toggle, Txt } from '../ui';
+import { Btn, Emoji, Px, Tap, Toggle, Txt, useOnePress } from '../ui';
 
 export function PauseSheet({ run }: { run: Run }) {
   const p = usePalette();
@@ -34,6 +34,8 @@ export function PauseSheet({ run }: { run: Run }) {
     set({ save: null });
     router.dismissTo('/');
   };
+  const openRules = useOnePress(() => router.push('/tutoriel'));
+  const openChallenge = useOnePress(() => router.push('/defier'));
   const toggle = (key: 'sound' | 'music' | 'haptics', v: boolean) => {
     set({ [key]: v });
     play('toggle');
@@ -79,8 +81,8 @@ export function PauseSheet({ run }: { run: Run }) {
             {row('🔊', t('sounds'), <Toggle label={t('sounds')} value={sound} onValueChange={(v) => toggle('sound', v)} />, undefined, true)}
             {row('🎵', t('music'), <Toggle label={t('music')} value={music} onValueChange={(v) => toggle('music', v)} />)}
             {row('📳', t('haptics'), <Toggle label={t('haptics')} value={haptics} onValueChange={(v) => toggle('haptics', v)} />)}
-            {row('📖', t('rules'), <ChevronIcon color={p.line2} />, () => router.push('/tutoriel'))}
-            {row('⚔️', t('challenge_friend'), <ChevronIcon color={p.line2} />, () => router.push('/defier'))}
+            {row('📖', t('rules'), <ChevronIcon color={p.line2} />, openRules)}
+            {row('⚔️', t('challenge_friend'), <ChevronIcon color={p.line2} />, openChallenge)}
           </View>
           <Btn variant="soft" label={saved ? t('quit') : t('quit_plain')} height={50} size={14} onPress={() => router.dismissTo('/')} />
           {saved && !confirmAbandon && (

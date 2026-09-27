@@ -38,16 +38,31 @@ export async function enableReminder(): Promise<boolean> {
 
 export async function disableReminder() {
   useProfile.getState().set({ reminder: false });
-  if (!WEB) await Notifications.cancelAllScheduledNotificationsAsync().catch(() => {});
+  await scheduleReminders();
 }
 
-/** Replaces the scheduled reminders with the next evenings. Safe to call often. */
-export async function scheduleReminders() {
+/**
+ * Replaces the scheduled reminders with the next evenings. Safe to call often: calls run one
+ * after the other (two at once could otherwise schedule every evening twice), and each
+ * evening has its own id, so scheduling it again replaces it.
+ */
+let queue: Promise<void> = Promise.resolve();
+export function scheduleReminders(): Promise<void> {
+  queue = queue.then(reschedule, reschedule);
+  return queue;
+}
+
+async function reschedule() {
   if (WEB) return;
   const s = useProfile.getState();
   try {
     await Notifications.cancelAllScheduledNotificationsAsync();
     if (!s.reminder) return;
+    // Notifications turned off in the iPhone settings since: the game switch follows.
+    if (!(await Notifications.getPermissionsAsync()).granted) {
+      useProfile.getState().set({ reminder: false });
+      return;
+    }
     const text = STRINGS[s.lang ?? 'fr'];
     const now = new Date();
     for (let i = 0; i <= DAYS; i++) {
@@ -55,6 +70,7 @@ export async function scheduleReminders() {
       if (at <= now) continue;
       if (i === 0 && s.dailyLast === dayKey(now)) continue;
       await Notifications.scheduleNotificationAsync({
+        identifier: `daily-${dayKey(at)}`,
         content: { title: text.notif_title, body: text.notif_body },
         trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: at },
       });

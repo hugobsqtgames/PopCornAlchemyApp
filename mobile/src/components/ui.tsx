@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
 
 import { useLayout, usePalette, useT } from '@/hooks/use-app';
@@ -26,6 +26,20 @@ interface TxtProps {
   center?: boolean;
   lines?: number;
   style?: StyleProp<TextStyle>;
+}
+
+/**
+ * Ignores a second press within 450 ms on the same button: a double tap must not open a
+ * screen twice, go back two screens or buy twice.
+ */
+export function useOnePress(fn?: () => void) {
+  const last = useRef(0);
+  return () => {
+    const now = Date.now();
+    if (now - last.current < 450) return;
+    last.current = now;
+    fn?.();
+  };
 }
 
 export function Txt({ children, size = 15, weight = 'medium', color, center, lines, style }: TxtProps) {
@@ -109,14 +123,15 @@ export function Btn({ label, onPress, variant = 'action', icon, sub, height = 56
   const p = usePalette();
   const c = btnColors(disabled ? 'off' : variant, p);
   const depth = variant === 'soft' ? 3 : 4;
+  const press = useOnePress(() => {
+    play('click');
+    onPress?.();
+  });
   return (
     <Pressable
       disabled={disabled || !onPress}
       onPressIn={() => buzz('tap')}
-      onPress={() => {
-        play('click');
-        onPress?.();
-      }}
+      onPress={press}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? (sub ? `${label}, ${sub}` : label)}
       accessibilityState={{ disabled: !!disabled }}
@@ -190,13 +205,14 @@ export function Tap({
   label?: string;
 }) {
   const p = usePalette();
+  const press = useOnePress(() => {
+    buzz('select');
+    play('click');
+    onPress();
+  });
   return (
     <Pressable
-      onPress={() => {
-        buzz('select');
-        play('click');
-        onPress();
-      }}
+      onPress={press}
       accessibilityRole="button"
       accessibilityLabel={label}
       style={({ pressed }) => [
@@ -216,6 +232,10 @@ export function Tap({
 
 export function Pill({ children, onPress, label }: { children: ReactNode; onPress?: () => void; label?: string }) {
   const p = usePalette();
+  const press = useOnePress(() => {
+    play('click');
+    onPress?.();
+  });
   const inner = (
     <View
       style={{
@@ -234,14 +254,7 @@ export function Pill({ children, onPress, label }: { children: ReactNode; onPres
   );
   if (!onPress) return <View accessibilityLabel={label}>{inner}</View>;
   return (
-    <Pressable
-      onPress={() => {
-        play('click');
-        onPress();
-      }}
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      hitSlop={4}>
+    <Pressable onPress={press} accessibilityRole="button" accessibilityLabel={label} hitSlop={4}>
       {inner}
     </Pressable>
   );
@@ -249,13 +262,14 @@ export function Pill({ children, onPress, label }: { children: ReactNode; onPres
 
 export function IconBtn({ children, onPress, label, round }: { children: ReactNode; onPress: () => void; label: string; round?: boolean }) {
   const p = usePalette();
+  const press = useOnePress(() => {
+    buzz('tap');
+    play('click');
+    onPress();
+  });
   return (
     <Pressable
-      onPress={() => {
-        buzz('tap');
-        play('click');
-        onPress();
-      }}
+      onPress={press}
       accessibilityRole="button"
       accessibilityLabel={label}
       hitSlop={6}

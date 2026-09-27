@@ -87,34 +87,60 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   const [removed, setRemoved] = useState<number[]>([]);
   const totalTiers = Math.ceil(config.ids.length / TIER_SIZE);
 
-  // Speed bonus bar: 1 → 0 over the level's bonus time.
+  // Speed bonus bar: 1 → 0 over the level's bonus time. It runs on the native side (smooth,
+  // no work for the JS thread every frame); the share left is computed from the clock.
   const bonus = useState(() => new Animated.Value(1))[0];
-  const bonusValue = useRef(1);
+  const bonusClock = useRef({ from: 1, start: 0, running: false });
   const levelStart = useRef(0);
   const chronoRef = useRef(CHRONO_SECONDS);
   const endChronoRef = useRef<() => void>(() => {});
   const shake = useState(() => new Animated.Value(0))[0];
+  /**
+   * Set while a level is being left (right answer, answer shown, skip) or the run is over:
+   * a second tap arriving before the screen updates must not count twice.
+   */
+  const busy = useRef(false);
+  const ended = useRef(false);
+  // Delayed steps belong to this screen: leaving it cancels them, so a run never goes on,
+  // ends or pays out in the background.
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const later = (fn: () => void, ms: number) => {
+    timers.current.push(setTimeout(fn, ms));
+  };
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
-  useEffect(() => {
-    const id = bonus.addListener(({ value }) => (bonusValue.current = value));
-    return () => bonus.removeListener(id);
-  }, [bonus]);
+  /** Share of the bonus time left right now, 0 to 1. */
+  const bonusLeft = useCallback(() => {
+    const c = bonusClock.current;
+    if (!c.running) return c.from;
+    return Math.max(0, c.from - (Date.now() - c.start) / bonusTimeMs(index));
+  }, [index]);
+  /** Stops the bar where it is. */
+  const stopBonus = useCallback(() => {
+    const left = bonusLeft();
+    bonusClock.current = { from: left, start: 0, running: false };
+    bonus.stopAnimation();
+    bonus.setValue(left);
+  }, [bonus, bonusLeft]);
 
   const runBonus = useCallback(
     (from: number) => {
-      // No clock in zen and in the guided level.
+      // No clock in zen and in the guided level; none while paused either (resuming restarts it).
       if (relaxed) return;
+      bonus.stopAnimation();
       bonus.setValue(from);
+      bonusClock.current = { from, start: Date.now(), running: !paused };
+      if (paused) return;
       Animated.timing(bonus, {
         toValue: 0,
         duration: bonusTimeMs(index) * from,
         easing: Easing.linear,
-        useNativeDriver: false,
+        useNativeDriver: true,
       }).start(({ finished }) => {
         if (finished) play('timeup');
       });
     },
-    [bonus, index, relaxed]
+    [bonus, index, relaxed, paused]
   );
 
   const flash = (text: string) => setMessage({ text, key: Date.now() });
@@ -131,6 +157,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       setHintUsed(false);
       setTierStats((st) => ({ ...st, mistakesThisLevel: 0 }));
       setPhase('play');
+      busy.current = false;
     },
     [config.ids]
   );
@@ -155,21 +182,31 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   // Pause stops the bonus bar and the chrono.
   useEffect(() => {
     if (phase !== 'play') return;
-    if (paused) bonus.stopAnimation();
-    else runBonus(bonusValue.current);
+    if (paused) stopBonus();
+    else runBonus(bonusClock.current.from);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paused]);
 
-  // Going to the background pauses the game.
+  // Going to the background pauses the game (even between two levels: the next one then
+  // waits paused instead of running its clock unseen).
   useEffect(() => {
     const sub = AppState.addEventListener('change', (st) => {
-      if (st !== 'active' && phase === 'play') setPaused(true);
+      if (st !== 'active') setPaused(true);
     });
     return () => sub.remove();
-  }, [phase]);
+  }, []);
+
+  /** Saves where the run stands, so closing the app keeps what was just earned. */
+  const saveAt = (next: number, livesLeft: number, scoreNow: number, comboNow: number) => {
+    if (canSave(config.mode)) profile.getState().set({ save: { ...config, index: next, lives: livesLeft, score: scoreNow, combo: comboNow, continued } });
+  };
+  const isTierEnd = (i: number) => hasTiers(config.mode) && (i + 1) % TIER_SIZE === 0;
 
   const endRun = useCallback(
     (won: boolean, finalScore: number, clearedNow: { id: number; points: number }[]) => {
+      if (ended.current) return;
+      ended.current = true;
+      busy.current = true;
       const s = profile.getState();
       const mode = config.mode;
       const newRecord = mode !== 'tutorial' && s.setBest(mode, finalScore);
@@ -213,7 +250,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   // Chrono mode countdown.
   useEffect(() => {
     endChronoRef.current = () => {
-      bonus.stopAnimation();
+      stopBonus();
       endRun(false, score, cleared);
     };
   });
@@ -241,6 +278,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
         s.addItem('hints', REWARDS.tier.hints);
         if (config.mode === 'classic') s.bumpStats({ bestTier: tierOf(index + 1) + 1 }, 'max');
         setLives(startLives(config.mode));
+        if (canSave(config.mode)) s.set({ save: { ...config, index: index + 1, lives: startLives(config.mode), score: nextScore, combo: 0, continued } });
         setPhase('tier');
         play('victory');
         checkAchievements();
@@ -249,11 +287,11 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       }
       goTo(index + 1);
     },
-    [config, index, endRun, profile, goTo]
+    [config, index, endRun, profile, goTo, continued]
   );
 
   const tapTile = (tile: number) => {
-    if (phase !== 'play' || paused || !level) return;
+    if (phase !== 'play' || paused || !level || busy.current || hinted !== null) return;
     if (picked.includes(tile) || removed.includes(tile) || picked.length >= level.sol.length) return;
     // The guided level only accepts the right emojis.
     if (config.mode === 'tutorial' && !level.sol.includes(grid[tile])) {
@@ -273,10 +311,11 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   };
 
   const fuse = () => {
-    if (!level || phase !== 'play' || paused || picked.length < level.sol.length) return;
+    if (!level || phase !== 'play' || paused || busy.current || picked.length < level.sol.length) return;
+    busy.current = true;
     const s = profile.getState();
-    const timeLeft = relaxed ? 0 : bonusValue.current;
-    bonus.stopAnimation();
+    const timeLeft = relaxed ? 0 : bonusLeft();
+    stopBonus();
 
     if (isCorrect(picked.map((i) => grid[i]), level.sol)) {
       const nextCombo = combo + 1;
@@ -308,11 +347,14 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       playLater('coin', 380);
       buzz('success');
       checkAchievements();
-      setTimeout(() => advance(nextScore, clearedNow), 1100);
+      // Saved right away: closing the app now resumes on the next level with these points.
+      if (index < config.ids.length - 1 && !isTierEnd(index)) saveAt(index + 1, lives, nextScore, nextCombo);
+      later(() => advance(nextScore, clearedNow), 1100);
       return;
     }
 
     // Wrong answer.
+    busy.current = false;
     setPicked([]);
     setCombo(0);
     setTierStats((t) => ({ ...t, mistakesThisLevel: t.mistakesThisLevel + 1 }));
@@ -335,7 +377,10 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       play('error');
       buzz('error');
       const tries = tierStats.mistakesThisLevel + 1;
-      if (tries >= ZEN_TRIES) reveal(level, false, () => advance(score, cleared));
+      if (tries >= ZEN_TRIES) {
+        busy.current = true;
+        reveal(level, false, () => advance(score, cleared));
+      }
       return;
     }
     if (config.mode !== 'hardcore' && s.useItem('shields')) {
@@ -351,6 +396,11 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     buzz('error');
     const left = lives - 1;
     setLives(left);
+    busy.current = true;
+    // Saved right away, so closing the app during the answer does not give the life back.
+    if (left <= 0) {
+      if (canSave(config.mode)) s.set({ save: null });
+    } else if (index < config.ids.length - 1 && !isTierEnd(index)) saveAt(index + 1, left, score, 0);
     reveal(level, false, () => (left <= 0 ? endRun(false, score, cleared) : advance(score, cleared)));
   };
 
@@ -358,11 +408,11 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   const reveal = (lvl: Level, skipped: boolean, then: () => void) => {
     setMissed({ level: lvl, skipped });
     setPhase('reveal');
-    setTimeout(then, REVEAL_MS);
+    later(then, REVEAL_MS);
   };
 
   const giveHint = () => {
-    if (!level || phase !== 'play' || paused || hintUsed) return;
+    if (!level || phase !== 'play' || paused || busy.current || hintUsed || hinted !== null) return;
     const s = profile.getState();
     const missing = [...level.sol];
     for (const i of picked) {
@@ -382,7 +432,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     buzz('select');
     // Wrong picks are cleared so the hint always leads towards the answer.
     const keep = picked.filter((i) => level.sol.includes(grid[i]));
-    setTimeout(() => {
+    later(() => {
       setHinted(null);
       setPicked([...keep, target].slice(0, level.sol.length));
     }, 650);
@@ -390,7 +440,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
 
   /** Cheaper clue: takes 5 wrong emojis off the grid, paid in coins. Once per level. */
   const removeDecoys = () => {
-    if (!level || phase !== 'play' || paused || removed.length > 0) return false;
+    if (!level || phase !== 'play' || paused || busy.current || removed.length > 0) return false;
     const s = profile.getState();
     if (!s.spend(PRICES.removeDecoys)) {
       flash('no_coins');
@@ -405,7 +455,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
 
   /** Free clue: shuffles the tiles, which often makes the answer jump out. */
   const shuffleTiles = () => {
-    if (phase !== 'play' || paused) return;
+    if (phase !== 'play' || paused || busy.current || hinted !== null) return;
     const next = shuffleGrid(grid, picked, removed);
     setGrid(next.grid);
     setPicked(next.picked);
@@ -415,17 +465,19 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   };
 
   const skip = () => {
-    if (!level || phase !== 'play' || paused) return;
+    if (!level || phase !== 'play' || paused || busy.current) return;
     const s = profile.getState();
     if (!s.useItem('skips')) return;
+    busy.current = true;
+    if (index < config.ids.length - 1 && !isTierEnd(index)) saveAt(index + 1, lives, score, combo);
     s.bumpStats({ skipsUsed: 1 });
-    bonus.stopAnimation();
+    stopBonus();
     play('powerup');
     reveal(level, true, () => advance(score, cleared));
   };
 
   const double = () => {
-    if (phase !== 'play' || paused || doubleOn) return;
+    if (phase !== 'play' || paused || busy.current || doubleOn) return;
     const s = profile.getState();
     if (!s.useItem('doubles')) return;
     s.bumpStats({ doublesUsed: 1 });
@@ -435,6 +487,8 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   };
 
   const nextTier = () => {
+    if (phase !== 'tier') return;
+    setPaused(false);
     setTierStats({ bestCombo: 0, flawless: 0, mistakesThisLevel: 0 });
     setCombo(0);
     goTo(index + 1);
@@ -442,8 +496,11 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
 
   /** Continue after a game over with one life (ad or coins); once per run. */
   const revive = (withCoins: boolean) => {
-    if (continued) return false;
+    if (continued || !ended.current || phase !== 'over') return false;
     if (withCoins && !profile.getState().spend(PRICES.continue)) return false;
+    // Guards against a second tap before the screen updates.
+    ended.current = false;
+    setPaused(false);
     setContinued(true);
     play('powerup');
     setLives(1);

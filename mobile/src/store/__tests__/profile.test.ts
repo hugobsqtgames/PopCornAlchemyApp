@@ -4,6 +4,7 @@ import { dayKey } from '@/game/dates';
 import { REWARDS } from '@/game/rules';
 
 import { useProfile } from '../profile';
+import { cleanSave, sanitizeProfile } from '../sanitize';
 
 // jest.mock calls are hoisted above the imports.
 jest.mock('@react-native-async-storage/async-storage', () =>
@@ -101,5 +102,54 @@ describe('ads and reset', () => {
     expect(state().coins).toBe(0);
     expect(state().theme).toBe('popcorn');
     expect(state().tutorialDone).toBe(true);
+  });
+});
+
+describe('damaged saves', () => {
+  const INITIAL = { ...useProfile.getInitialState() };
+
+  it('replaces every wrong value with its default', () => {
+    const p = sanitizeProfile(
+      { lang: 'de', coins: 'lots', hints: -3, stats: 'x', achievements: 'nope', theme: 'rainbow', style: 42, best: { classic: NaN, chrono: 30 }, received: {}, ownedThemes: null, avatar: null, dailyLast: 123, name: '🦊'.repeat(40) },
+      INITIAL
+    );
+    expect(p.lang).toBeNull();
+    expect(p.coins).toBe(INITIAL.coins);
+    expect(p.hints).toBe(0);
+    expect(p.stats.levels).toBe(0);
+    expect(p.achievements).toEqual([]);
+    expect(p.theme).toBe('popcorn');
+    expect(p.style).toBe('🍿');
+    expect(p.best).toEqual({ classic: 0, chrono: 30 });
+    expect(p.received).toEqual([]);
+    expect(p.ownedThemes).toEqual(['popcorn']);
+    expect(p.dailyLast).toBeNull();
+    expect([...p.name]).toHaveLength(20);
+  });
+
+  it('drops a saved run that points outside its levels', () => {
+    expect(cleanSave({ mode: 'classic', ids: [1, 5], index: 9, lives: 4, score: 0, combo: 0, continued: false })).toBeNull();
+    expect(cleanSave({ mode: 'classic', ids: [1, 999999], index: 0, lives: 4 })).toBeNull();
+    expect(cleanSave({ mode: 'classic', ids: [1, 5], index: 1, lives: 0 })).toBeNull();
+    expect(cleanSave({ mode: 'classic', difficulty: 2, ids: [1, 5], index: 1, lives: 3, score: 40, combo: 2, continued: true })).toEqual({
+      mode: 'classic',
+      difficulty: 2,
+      ids: [1, 5],
+      index: 1,
+      lives: 3,
+      score: 40,
+      combo: 2,
+      continued: true,
+    });
+  });
+
+  it('keeps a good save as it is', () => {
+    state().addCoins(123);
+    state().set({ theme: 'mint', ownedThemes: ['popcorn', 'mint'], name: 'Léa' });
+    const saved = JSON.parse(JSON.stringify(state()));
+    const p = sanitizeProfile(saved, INITIAL);
+    expect(p.coins).toBe(123);
+    expect(p.theme).toBe('mint');
+    expect(p.name).toBe('Léa');
   });
 });

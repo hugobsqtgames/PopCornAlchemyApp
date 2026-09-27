@@ -1,5 +1,5 @@
-import { Redirect, router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { Redirect, router, useIsFocused, useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Animated, View } from 'react-native';
 
 import { CorrectCard, FlashMessage, FuseButton, Grid, Hud, ObjectiveCard, PowerUps, RevealCard, Slots } from '@/components/game/board';
@@ -8,35 +8,40 @@ import { GuideBar, GuideBubble, GuideDone, guideTarget } from '@/components/game
 import { PauseSheet } from '@/components/game/pause';
 import { OverView, TierView, WinView } from '@/components/game/results';
 import { dayKey, daySeed } from '@/game/dates';
-import { buildDaily, buildRun, levelById } from '@/game/rules';
-import type { Category, Difficulty, Mode, RunConfig, RunSave } from '@/game/types';
+import { one, parseCategory, parseLevelIds, parseName, parseScore } from '@/game/links';
+import { buildDaily, buildRun } from '@/game/rules';
+import type { Difficulty, Mode, RunConfig, RunSave } from '@/game/types';
 import { useLayout, usePalette } from '@/hooks/use-app';
 import { useRun } from '@/hooks/use-run';
 import { useProfile } from '@/store/profile';
 
-type Params = { mode?: Mode; cat?: Category; diff?: string; resume?: string; ids?: string; target?: string; name?: string };
+type Param = string | string[] | undefined;
+type Params = { mode?: Param; cat?: Param; diff?: Param; resume?: Param; ids?: Param; target?: Param; name?: Param };
 
 function makeConfig(params: Params): { config: RunConfig; save?: RunSave } {
+  // The profile store already dropped any save that does not point to a real level.
   const save = useProfile.getState().save;
-  if (params.resume && save && save.ids.every((id) => levelById(id))) return { config: save, save };
-  switch (params.mode) {
+  if (one(params.resume) && save) return { config: save, save };
+  const mode = one(params.mode) as Mode | undefined;
+  switch (mode) {
     case 'daily':
       return { config: buildDaily(daySeed(dayKey())) };
     case 'tutorial':
       // The guided first level: Titanic, 🚢 + 🧊.
       return { config: { mode: 'tutorial', ids: [1] } };
-    case 'challenge': {
-      const ids = (params.ids ?? '').split(',').map(Number).filter((id) => levelById(id));
-      return { config: { mode: 'challenge', ids, target: Number(params.target ?? 0), challenger: params.name } };
+    case 'challenge':
+      return { config: { mode: 'challenge', ids: parseLevelIds(params.ids), target: parseScore(params.target), challenger: parseName(params.name) } };
+    case 'category': {
+      const category = parseCategory(params.cat);
+      // An unknown category is not a run: back home.
+      return { config: category ? buildRun('category', { category }) : { mode: 'category', ids: [] } };
     }
-    case 'category':
-      return { config: buildRun('category', { category: params.cat }) };
     case 'chrono':
     case 'hardcore':
     case 'zen':
-      return { config: buildRun(params.mode) };
+      return { config: buildRun(mode) };
     default: {
-      const d = Number(params.diff);
+      const d = Number(one(params.diff));
       return { config: buildRun('classic', { difficulty: d === 2 || d === 3 ? d : (1 as Difficulty) }) };
     }
   }
@@ -47,6 +52,14 @@ export default function Jeu() {
   const [{ config, save }] = useState(() => makeConfig(params));
   const run = useRun(config, save);
   const [cluesOpen, setCluesOpen] = useState(false);
+  // Another screen on top (rules, a challenge link…): the run waits paused underneath.
+  const focused = useIsFocused();
+  const { setPaused } = run;
+  useEffect(() => {
+    if (!focused) setPaused(true);
+  }, [focused, setPaused]);
+  // The clue sheet closes when the game pauses (the pause sheet takes its place).
+  if (run.paused && cluesOpen) setCluesOpen(false);
   const openClues = () => setCluesOpen(true);
   const p = usePalette();
   const { wide: wideScreen, tablet, insets, height, width } = useLayout();
