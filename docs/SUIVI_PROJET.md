@@ -62,6 +62,10 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
   (le premier était bloqué par Apple). Utiliser ce même identifiant pour TestFlight et App Store Connect.
   Apple peut mettre jusqu'à 48 h à activer le compte (e-mail « Welcome to the Apple Developer Program »).
 - `mobile/eas.json` est prêt (profil `production`, numéro de build géré par EAS).
+- **Expo** : compte `aazerty12`, projet `@aazerty12/popcorn-alchemy` relié (projectId dans `app.json`).
+  Le jeton `EXPO_TOKEN` est dans les variables d'environnement de la session et fonctionne.
+- Module audio : micro et audio en arrière-plan désactivés dans `app.json` (sinon Apple risquait de
+  refuser l'app : règle 2.5.4).
 - **À faire par Hugo** :
   - créer son compte gratuit sur expo.dev ;
   - ajouter le jeton `EXPO_TOKEN` dans les réglages de l'environnement (jamais dans le chat) ;

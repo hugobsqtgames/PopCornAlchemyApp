@@ -41,7 +41,15 @@
           }
         }
       ],
-      "expo-audio",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false,
+          "enableBackgroundPlayback": false,
+          "enableBackgroundRecording": false
+        }
+      ],
       "expo-localization",
       "expo-screen-orientation",
       "expo-asset",
@@ -50,6 +58,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "37f058a6-fb03-4d56-97cb-56bbeaf05c20"
+      }
+    },
+    "owner": "aazerty12"
   }
 }
