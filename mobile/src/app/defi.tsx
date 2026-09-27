@@ -103,6 +103,9 @@ export default function Defi() {
               </View>
             ))}
           </View>
+          <Txt size={13} weight="semibold" color={p.muted} center style={{ paddingTop: 12 }}>
+            {t('streak_saves', { n: s.streakSaves })}
+          </Txt>
         </Card>
 
         <View style={{ paddingHorizontal: 4, paddingTop: 6, gap: 12 }}>

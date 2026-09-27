@@ -71,7 +71,7 @@ describe('daily challenge', () => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     state().set({ dailyLast: dayKey(yesterday), dailyStreak: 2 });
-    expect(state().finishDaily()).toEqual({ rewarded: true, chest: false });
+    expect(state().finishDaily()).toEqual({ rewarded: true, chest: false, saved: 0 });
     expect(state().coins).toBe(REWARDS.daily.coins);
     expect(state().dailyStreak).toBe(3);
     expect(state().streak()).toBe(3);
@@ -127,6 +127,19 @@ describe('damaged saves', () => {
     expect([...p.name]).toHaveLength(20);
   });
 
+  it('repairs the Pop-Cornédex, calendar and statistics', () => {
+    const p = sanitizeProfile(
+      { found: [1, 1, 'x', 99999, 2], stars: { 1: 7, 2: 2, abc: 3 }, loginDay: 99, streakSaves: 50, stats: { cat: { movie: 5 }, catTries: { movie: 2 } } },
+      INITIAL
+    );
+    expect(p.found).toEqual([1, 2]);
+    expect(p.stars).toEqual({ 2: 2 });
+    expect(p.loginDay).toBe(0);
+    expect(p.streakSaves).toBe(2);
+    // Never fewer tries than right answers: older saves start at 100 %.
+    expect(p.stats.catTries.movie).toBe(5);
+  });
+
   it('drops a saved run that points outside its levels', () => {
     expect(cleanSave({ mode: 'classic', ids: [1, 5], index: 9, lives: 4, score: 0, combo: 0, continued: false })).toBeNull();
     expect(cleanSave({ mode: 'classic', ids: [1, 999999], index: 0, lives: 4 })).toBeNull();
@@ -151,5 +164,45 @@ describe('damaged saves', () => {
     expect(p.coins).toBe(123);
     expect(p.theme).toBe('mint');
     expect(p.name).toBe('Léa');
+  });
+});
+
+describe('Pop-Cornédex, calendar and streak protection', () => {
+  it('records finds and keeps the best stars', () => {
+    expect(state().recordSolve(1, 2)).toBe(true);
+    expect(state().recordSolve(1, 1)).toBe(false);
+    expect(state().stars['1']).toBe(2);
+    state().recordSolve(1, 3);
+    expect(state().stars['1']).toBe(3);
+    expect(state().found).toEqual([1]);
+    expect(state().bestDay?.levels).toBe(3);
+  });
+
+  it('gives one calendar gift a day, in order', () => {
+    state().set({ loginDay: 0, loginLast: null });
+    const first = state().claimLogin();
+    expect(first?.day).toBe(0);
+    expect(state().coins).toBe(25);
+    expect(state().claimLogin()).toBeNull();
+    state().set({ loginDay: 6, loginLast: '2000-01-01' });
+    state().claimLogin();
+    expect(state().streakSaves).toBe(1);
+    expect(state().loginDay).toBe(0);
+  });
+
+  it('uses a protection for a missed day of the daily challenge', () => {
+    const d = new Date();
+    d.setDate(d.getDate() - 2);
+    state().set({ dailyLast: dayKey(d), dailyStreak: 5, streakSaves: 2 });
+    expect(state().streak()).toBe(5);
+    const r = state().finishDaily();
+    expect(r.saved).toBe(1);
+    expect(state().dailyStreak).toBe(6);
+    expect(state().streakSaves).toBe(1);
+  });
+
+  it('never holds more than 2 protections', () => {
+    state().addItem('streakSaves', 5);
+    expect(state().streakSaves).toBe(2);
   });
 });

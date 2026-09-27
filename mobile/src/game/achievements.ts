@@ -16,8 +16,18 @@ export interface Stats {
   victories: number;
   /** Longest run of cleared levels in hardcore. */
   bestHardcore: number;
+  /** Seconds spent playing (clock running, not paused). */
+  playSeconds: number;
+  /** Right answers per category. */
   cat: Record<Category, number>;
+  /** Answers tried per category (right or wrong), for the accuracy. */
+  catTries: Record<Category, number>;
 }
+
+const ZERO_BY_CATEGORY: Record<Category, number> = {
+  movie: 0, series: 0, game: 0, music: 0, geo: 0, brand: 0, nature: 0, youtube: 0, anime: 0, food: 0,
+  sport: 0, job: 0, tale: 0, home: 0, party: 0, place: 0,
+};
 
 export const EMPTY_STATS: Stats = {
   levels: 0,
@@ -33,10 +43,9 @@ export const EMPTY_STATS: Stats = {
   bestTier: 0,
   victories: 0,
   bestHardcore: 0,
-  cat: {
-    movie: 0, series: 0, game: 0, music: 0, geo: 0, brand: 0, nature: 0, youtube: 0, anime: 0, food: 0,
-    sport: 0, job: 0, tale: 0, home: 0, party: 0, place: 0,
-  },
+  playSeconds: 0,
+  cat: { ...ZERO_BY_CATEGORY },
+  catTries: { ...ZERO_BY_CATEGORY },
 };
 
 export interface AchievementContext {

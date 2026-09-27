@@ -2,6 +2,7 @@ import { Redirect, router } from 'expo-router';
 import { ScrollView, View } from 'react-native';
 
 import { ChevronIcon, GearIcon, PlayIcon } from '@/components/icons';
+import { LoginGift } from '@/components/login-gift';
 import { Badge, Btn, Emoji, IconBtn, Logo, Pill, Tap, Txt } from '@/components/ui';
 import { dayKey } from '@/game/dates';
 import { fmt, useLayout, useNow, usePalette, useT } from '@/hooks/use-app';
@@ -153,6 +154,7 @@ export default function Home() {
   if (wide) {
     return (
       <View style={{ flex: 1, backgroundColor: p.bg, paddingTop: tabTop }}>
+        <LoginGift />
         {topBar}
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 56, paddingHorizontal: 64, paddingBottom: 90 }}>
           <View style={{ width: 460, gap: 26 }}>
@@ -173,6 +175,7 @@ export default function Home() {
       style={{ flex: 1, backgroundColor: p.bg }}
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={{ flexGrow: 1, paddingTop: tabTop, paddingBottom: 12 }}>
+      <LoginGift />
       {topBar}
       <View style={{ flexGrow: 1, minHeight: 12, maxHeight: 70 }} />
       {hero}

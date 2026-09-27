@@ -7,6 +7,8 @@ export interface GiftReward {
   hints?: number;
   shields?: number;
   skips?: number;
+  /** Streak protections for the daily challenge. */
+  streakSaves?: number;
 }
 
 export const GIFT_CODES: { code: string; reward: GiftReward; until?: string }[] = [
@@ -38,6 +40,7 @@ export function rewardText(r: GiftReward): string {
     r.hints && `${r.hints} 💡`,
     r.shields && `${r.shields} 🛡️`,
     r.skips && `${r.skips} ⏭️`,
+    r.streakSaves && `${r.streakSaves} 🧊`,
   ]
     .filter(Boolean)
     .join(' · ');

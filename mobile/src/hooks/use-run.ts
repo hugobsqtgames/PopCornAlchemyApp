@@ -27,10 +27,11 @@ import {
   tierOf,
   ZEN_TRIES,
 } from '@/game/rules';
+import { starsFor, type StarCount } from '@/game/progress';
 import type { Level, RunConfig } from '@/game/types';
 import { useReduceMotion } from '@/hooks/use-app';
 import { checkAchievements } from '@/services/achievements';
-import { buzz, play, playLater, type SoundName } from '@/services/feedback';
+import { announce, buzz, play, playLater, type SoundName } from '@/services/feedback';
 import { enableReminder, scheduleReminders } from '@/services/reminder';
 import { celebrate } from '@/services/review';
 import { submitScore } from '@/services/store-services';
@@ -48,6 +49,8 @@ export interface RunResult {
   rewarded: boolean;
   chest: boolean;
   coins: number;
+  /** Daily: streak protections used to keep the streak. */
+  saved: number;
 }
 
 interface TierStats {
@@ -71,7 +74,13 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   const [hintUsed, setHintUsed] = useState(false);
   const [doubleOn, setDoubleOn] = useState(false);
   const [chronoLeft, setChronoLeft] = useState(CHRONO_SECONDS);
-  const [last, setLast] = useState({ points: 0, coins: 0, seconds: 0 });
+  const [last, setLast] = useState<{ points: number; coins: number; seconds: number; stars: StarCount | null; first: boolean }>({
+    points: 0,
+    coins: 0,
+    seconds: 0,
+    stars: null,
+    first: false,
+  });
   const [result, setResult] = useState<RunResult | null>(null);
   const [tierStats, setTierStats] = useState<TierStats>({ bestCombo: 0, flawless: 0, mistakesThisLevel: 0 });
   const [cleared, setCleared] = useState<{ id: number; points: number }[]>([]);
@@ -79,6 +88,10 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   /** The level whose answer is (or was last) shown: on the reveal card and the game over screen. */
   const [missed, setMissed] = useState<{ level: Level; skipped: boolean } | null>(null);
   const relaxed = isRelaxed(config.mode);
+  /** Replaying one level from the Pop-Cornédex: stars only, no coins, no stats. */
+  const practice = config.mode === 'replay';
+  /** Modes where a wrong answer costs no life: try again, the answer shows after a few tries. */
+  const retry = relaxed || practice;
   const still = useReduceMotion();
 
   const level: Level | undefined = levelById(config.ids[index]);
@@ -196,6 +209,16 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     return () => sub.remove();
   }, []);
 
+  // Play time for the statistics: counted while a level is on screen and the game is not paused.
+  useEffect(() => {
+    if (phase !== 'play' || paused || config.mode === 'tutorial') return;
+    const start = Date.now();
+    return () => {
+      const seconds = Math.round((Date.now() - start) / 1000);
+      if (seconds > 0) profile.getState().bumpStats({ playSeconds: seconds });
+    };
+  }, [phase, paused, config.mode, profile]);
+
   /** Saves where the run stands, so closing the app keeps what was just earned. */
   const saveAt = (next: number, livesLeft: number, scoreNow: number, comboNow: number) => {
     if (canSave(config.mode)) profile.getState().set({ save: { ...config, index: next, lives: livesLeft, score: scoreNow, combo: comboNow, continued } });
@@ -209,10 +232,11 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       busy.current = true;
       const s = profile.getState();
       const mode = config.mode;
-      const newRecord = mode !== 'tutorial' && s.setBest(mode, finalScore);
+      const newRecord = mode !== 'tutorial' && mode !== 'replay' && s.setBest(mode, finalScore);
       submitScore(mode, finalScore);
       let rewarded = false;
       let chest = false;
+      let saved = 0;
       let coins = 0;
       if (won) {
         if (mode === 'classic') {
@@ -223,6 +247,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
           const r = s.finishDaily();
           rewarded = r.rewarded;
           chest = r.chest;
+          saved = r.saved;
           // Tonight's reminder is no longer needed. After the first daily, offer the reminder.
           if (s.reminderAsked) scheduleReminders();
           else setTimeout(enableReminder, 1500);
@@ -237,12 +262,15 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
         ...(canSave(mode) && { save: null }),
         lastRun: recent.length ? { ids: recent.map((c) => c.id), score: recent.reduce((a, c) => a + c.points, 0) } : s.lastRun,
       });
-      setResult({ newRecord, rewarded, chest, coins });
+      setResult({ newRecord, rewarded, chest, coins, saved });
       setPhase(won ? 'win' : 'over');
       play(won ? 'victory' : 'gameover');
       buzz(won ? 'success' : 'heavy');
       checkAchievements();
-      if (won && mode !== 'tutorial' && (mode !== 'challenge' || rewarded)) celebrate();
+      if (won && mode !== 'tutorial' && mode !== 'replay' && (mode !== 'challenge' || rewarded)) {
+        celebrate();
+        announce('voice_amazing');
+      }
     },
     [config, profile]
   );
@@ -266,7 +294,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   }, [config.mode, phase, paused]);
 
   const advance = useCallback(
-    (nextScore: number, clearedNow: { id: number; points: number }[]) => {
+    (nextScore: number, clearedNow: { id: number; points: number }[], perfectTier = false) => {
       const lastIndex = config.ids.length - 1;
       if (index >= lastIndex) {
         endRun(true, nextScore, clearedNow);
@@ -281,6 +309,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
         if (canSave(config.mode)) s.set({ save: { ...config, index: index + 1, lives: startLives(config.mode), score: nextScore, combo: 0, continued } });
         setPhase('tier');
         play('victory');
+        announce(perfectTier ? 'voice_perfect' : 'voice_amazing');
         checkAchievements();
         celebrate();
         return;
@@ -316,19 +345,25 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     const s = profile.getState();
     const timeLeft = relaxed ? 0 : bonusLeft();
     stopBonus();
+    const counted = config.mode !== 'tutorial' && !practice;
+    if (counted) s.bumpStats({ catTries: { [level.cat]: 1 } });
 
     if (isCorrect(picked.map((i) => grid[i]), level.sol)) {
       const nextCombo = combo + 1;
       const points = pointsFor({ index, timeLeft, combo: nextCombo, styleBonus: styleBonus(s.style) });
-      const coins = coinsFor({ timeLeft, combo: nextCombo, mode: config.mode, double: doubleOn });
+      const coins = practice ? 0 : coinsFor({ timeLeft, combo: nextCombo, mode: config.mode, double: doubleOn });
+      const stars = starsFor({ clueUsed: hintUsed || removed.length > 0, mistakes: tierStats.mistakesThisLevel, timeLeft });
+      const first = config.mode !== 'tutorial' && s.recordSolve(level.id, stars);
       const nextScore = score + points;
       const clearedNow = [...cleared, { id: level.id, points }];
-      s.addCoins(coins);
-      const recent = clearedNow.slice(-CHALLENGE_LENGTH);
-      s.set({ lastRun: { ids: recent.map((c) => c.id), score: recent.reduce((sum, c) => sum + c.points, 0) } });
-      s.bumpStats({ levels: 1, cat: { [level.cat]: 1 } });
-      s.bumpStats({ bestCombo: nextCombo, ...(config.mode === 'hardcore' ? { bestHardcore: index + 1 } : {}) }, 'max');
-      if (nextCombo === 5) s.bumpStats({ fevers: 1 });
+      if (coins) s.addCoins(coins);
+      if (!practice) {
+        const recent = clearedNow.slice(-CHALLENGE_LENGTH);
+        s.set({ lastRun: { ids: recent.map((c) => c.id), score: recent.reduce((sum, c) => sum + c.points, 0) } });
+        s.bumpStats({ levels: 1, cat: { [level.cat]: 1 } });
+        s.bumpStats({ bestCombo: nextCombo, ...(config.mode === 'hardcore' ? { bestHardcore: index + 1 } : {}) }, 'max');
+        if (nextCombo === 5) s.bumpStats({ fevers: 1 });
+      }
       setCombo(nextCombo);
       setScore(nextScore);
       setCleared(clearedNow);
@@ -338,18 +373,24 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
         flawless: t.flawless + (t.mistakesThisLevel === 0 ? 1 : 0),
         mistakesThisLevel: 0,
       }));
-      setLast({ points, coins, seconds: secondsSince(levelStart.current) });
+      setLast({ points, coins, seconds: secondsSince(levelStart.current), stars: config.mode === 'tutorial' ? null : stars, first });
       if (config.mode === 'chrono') addChrono(CHRONO_BONUS_SECONDS);
       setPhase('correct');
       // The chime climbs with the combo; reaching 5 starts Fever.
       const chime: SoundName = nextCombo === 5 ? 'fever' : nextCombo >= 2 ? (`combo${Math.min(nextCombo, 5)}` as SoundName) : 'success';
       play(chime);
-      playLater('coin', 380);
+      if (coins) playLater('coin', 380);
+      // The announcer: a combo, Fever, a long streak, or 3 stars on a replayed level.
+      if (nextCombo === 3) announce('voice_combo');
+      else if (nextCombo === 5) announce('voice_fever');
+      else if (nextCombo === 10) announce('voice_unstoppable');
+      else if (practice && stars === 3) announce('voice_perfect');
       buzz('success');
       checkAchievements();
       // Saved right away: closing the app now resumes on the next level with these points.
       if (index < config.ids.length - 1 && !isTierEnd(index)) saveAt(index + 1, lives, nextScore, nextCombo);
-      later(() => advance(nextScore, clearedNow), 1100);
+      const perfectTier = isTierEnd(index) && tierStats.flawless + (tierStats.mistakesThisLevel === 0 ? 1 : 0) === TIER_SIZE;
+      later(() => advance(nextScore, clearedNow, perfectTier), 1100);
       return;
     }
 
@@ -372,15 +413,16 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       else runBonus(timeLeft);
       return;
     }
-    if (relaxed) {
+    if (retry) {
       // No lives: try again, and after a few tries the answer shows.
       play('error');
       buzz('error');
       const tries = tierStats.mistakesThisLevel + 1;
       if (tries >= ZEN_TRIES) {
         busy.current = true;
-        reveal(level, false, () => advance(score, cleared));
-      }
+        // A replayed level that is not found ends there; zen goes on with the next one.
+        reveal(level, false, () => (practice ? endRun(false, score, cleared) : advance(score, cleared)));
+      } else runBonus(timeLeft);
       return;
     }
     if (config.mode !== 'hardcore' && s.useItem('shields')) {
@@ -465,7 +507,8 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   };
 
   const skip = () => {
-    if (!level || phase !== 'play' || paused || busy.current) return;
+    // A replayed level is the whole run: skipping it would count as a win.
+    if (!level || phase !== 'play' || paused || busy.current || practice) return;
     const s = profile.getState();
     if (!s.useItem('skips')) return;
     busy.current = true;
@@ -477,7 +520,8 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   };
 
   const double = () => {
-    if (phase !== 'play' || paused || busy.current || doubleOn) return;
+    // No coins when replaying: a coin doubler would be wasted.
+    if (phase !== 'play' || paused || busy.current || doubleOn || practice) return;
     const s = profile.getState();
     if (!s.useItem('doubles')) return;
     s.bumpStats({ doublesUsed: 1 });
@@ -520,6 +564,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     removed,
     missed,
     relaxed,
+    practice,
     index,
     lives,
     score,

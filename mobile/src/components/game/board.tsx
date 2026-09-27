@@ -16,14 +16,16 @@ export function Hud({ run, onPause, big }: { run: Run; onPause: () => void; big?
   const best = useProfile((s) => s.best[run.config.mode] ?? 0);
   const inTier = (run.index % 20) + 1;
   const mode = run.config.mode;
-  const progressLabel = run.relaxed
+  // Zen and a replayed level have no progress to show: just the mode's name.
+  const calm = run.relaxed || run.practice;
+  const progressLabel = calm
     ? t(`mode_${mode}` as StringKey)
     : mode === 'chrono'
       ? `${Math.max(0, run.chronoLeft)} s`
       : mode === 'daily' || mode === 'challenge'
         ? `${run.index + 1}/${run.config.ids.length}`
         : `${t('tier')} ${Math.floor(run.index / 20) + 1}`;
-  const progress = run.relaxed
+  const progress = calm
     ? 0
     : mode === 'chrono' ? Math.max(0, run.chronoLeft) / 60 : mode === 'daily' || mode === 'challenge' ? run.index / run.config.ids.length : inTier / 20;
 
@@ -40,13 +42,13 @@ export function Hud({ run, onPause, big }: { run: Run; onPause: () => void; big?
             · {progressLabel}
           </Txt>
         </Txt>
-        {!run.relaxed && <Bar value={progress} color={mode === 'chrono' && run.chronoLeft <= 10 ? p.action : p.ink} height={big ? 8 : 6} />}
+        {!calm && <Bar value={progress} color={mode === 'chrono' && run.chronoLeft <= 10 ? p.action : p.ink} height={big ? 8 : 6} />}
       </View>
       <View style={{ alignItems: 'flex-end', gap: 2 }}>
         <Txt size={big ? 22 : 17} weight="heavy" style={{ fontVariant: ['tabular-nums'] }}>
           {fmt(run.score)}
         </Txt>
-        {!run.relaxed && (
+        {!calm && (
           <Txt size={11} weight="semibold" color={p.muted}>
             {t('record_small', { n: best })}
           </Txt>
@@ -63,7 +65,7 @@ export function ObjectiveCard({ run, big }: { run: Run; big?: boolean }) {
   if (!run.level) return null;
   const cat = CATEGORIES.find((c) => c.id === run.level?.cat);
   const lifeCount = run.config.mode === 'hardcore' ? 1 : 4;
-  const showLives = run.config.mode !== 'chrono' && !run.relaxed;
+  const showLives = run.config.mode !== 'chrono' && !run.relaxed && !run.practice;
   const done = run.phase !== 'play';
 
   return (
@@ -319,9 +321,10 @@ export function PowerUps({ run, big, onClues }: { run: Run; big?: boolean; onClu
   const items = [
     // The bulb opens the clue sheet: reveal an emoji, remove wrong ones, shuffle.
     { icon: '💡', n: s.hints, on: onClues, gold: true, off: run.phase !== 'play', label: t('clues') },
-    { icon: '🛡️', n: s.shields, on: undefined, off: run.config.mode === 'hardcore' || run.config.mode === 'chrono', label: t('bonus_shield') },
-    { icon: '⏭️', n: s.skips, on: () => run.skip(), off: false, label: t('bonus_skip') },
-    { icon: '✨', n: s.doubles, on: () => run.double(), off: run.doubleOn, label: t('bonus_double') },
+    // A replayed level has no lives, no coins, and skipping it would end the replay.
+    { icon: '🛡️', n: s.shields, on: undefined, off: run.config.mode === 'hardcore' || run.config.mode === 'chrono' || run.practice, label: t('bonus_shield') },
+    { icon: '⏭️', n: s.skips, on: () => run.skip(), off: run.practice, label: t('bonus_skip') },
+    { icon: '✨', n: s.doubles, on: () => run.double(), off: run.doubleOn || run.practice, label: t('bonus_double') },
   ];
   const h = big ? 56 : 44;
   return (
@@ -425,11 +428,17 @@ export function CorrectCard({ run }: { run: Run }) {
         <Px size={26} color={p.green}>
           {t('bravo')}
         </Px>
+        {run.last.stars !== null && <Stars n={run.last.stars} size={30} />}
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <Chip>+{run.last.points} pts</Chip>
-          <Chip>+{run.last.coins} 💰</Chip>
+          {!run.practice && <Chip>+{run.last.coins} 💰</Chip>}
           <Chip>⚡ {run.last.seconds.toFixed(1).replace('.', ',')} s</Chip>
         </View>
+        {run.last.first && (
+          <Txt size={14} weight="bold" color={p.muted}>
+            {t('dex_new')}
+          </Txt>
+        )}
       </Animated.View>
     </View>
   );
@@ -493,6 +502,21 @@ export function AnswerEmojis({ level, size = 52 }: { level: { sol: string[] }; s
           style={{ width: size, height: size, borderRadius: size * 0.28, backgroundColor: p.greenTint, borderWidth: 2, borderColor: p.green, alignItems: 'center', justifyContent: 'center' }}>
           <Emoji size={size * 0.5}>{e}</Emoji>
         </View>
+      ))}
+    </View>
+  );
+}
+
+/** 1 to 3 stars out of 3: gold for the ones earned. */
+export function Stars({ n, size = 20 }: { n: number; size?: number }) {
+  const p = usePalette();
+  const t = useT();
+  return (
+    <View style={{ flexDirection: 'row', gap: size * 0.12 }} accessible accessibilityLabel={`${n} / 3 ${t('st_stars')}`}>
+      {[1, 2, 3].map((i) => (
+        <Txt key={i} size={size} weight="heavy" color={i <= n ? p.gold : p.muted} style={{ lineHeight: size * 1.2, opacity: i <= n ? 1 : 0.3 }}>
+          ★
+        </Txt>
       ))}
     </View>
   );

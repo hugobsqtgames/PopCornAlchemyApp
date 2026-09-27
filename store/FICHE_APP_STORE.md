@@ -79,8 +79,11 @@ Révèle un emoji, retire 5 intrus ou mélange la grille. Et si tu rates, la ré
 ⚔️ DÉFIE TES AMIS
 Envoie tes 5 derniers niveaux et ton score : tes amis doivent faire mieux.
 
+⭐ 3 ÉTOILES ET LE POP-CORNÉDEX
+Chaque réponse trouvée rejoint ton album, rangé par catégorie. Rejoue tes niveaux pour décrocher les 3 étoiles : sans indice, sans erreur et en vitesse !
+
 🎡 ET AUSSI
-La roue de la chance quotidienne, un rappel du défi du jour, des boucliers et passe-niveaux, des thèmes et des styles à débloquer, un arbre de 46 trophées, un mode sombre, et une version pensée pour iPad.
+Un cadeau chaque jour, la roue de la chance, des protections de série, un rappel du défi du jour, des boucliers et passe-niveaux, des thèmes et des styles à débloquer, un arbre de 46 trophées, tes statistiques, un mode sombre, et une version pensée pour iPad.
 
 Jouable hors ligne, sans compte, en français, anglais et espagnol.
 
@@ -130,8 +133,11 @@ Reveal an emoji, remove 5 wrong ones or shuffle the grid. And if you miss, the a
 ⚔️ CHALLENGE YOUR FRIENDS
 Send your last 5 levels and your score: your friends have to beat it.
 
+⭐ 3 STARS AND THE POP-CORNÉDEX
+Every answer you find joins your album, sorted by category. Replay your levels to earn all 3 stars: no clue, no mistake, and fast!
+
 🎡 AND MORE
-A daily lucky wheel, a daily challenge reminder, shields and skips, themes and styles to unlock, a tree of 46 trophies, dark mode, and a layout made for iPad.
+A gift every day, the lucky wheel, streak freezes, a daily challenge reminder, shields and skips, themes and styles to unlock, a tree of 46 trophies, your stats, dark mode, and a layout made for iPad.
 
 Plays offline, no account needed, in English, French and Spanish.
 
@@ -181,8 +187,11 @@ Revela un emoji, quita 5 falsos o mezcla la cuadrícula. Y si fallas, se muestra
 ⚔️ RETA A TUS AMIGOS
 Envía tus 5 últimos niveles y tu puntuación: tus amigos tendrán que superarla.
 
+⭐ 3 ESTRELLAS Y EL POP-CORNÉDEX
+Cada respuesta que encuentras entra en tu álbum, ordenada por categoría. Repite tus niveles para conseguir las 3 estrellas: sin pistas, sin errores y rápido.
+
 🎡 Y ADEMÁS
-La ruleta de la suerte diaria, un recordatorio del reto diario, escudos y saltos de nivel, temas y estilos para desbloquear, un árbol de 46 trofeos, modo oscuro y una versión pensada para iPad.
+Un regalo cada día, la ruleta de la suerte, protectores de racha, un recordatorio del reto diario, escudos y saltos de nivel, temas y estilos para desbloquear, un árbol de 46 trofeos, tus estadísticas, modo oscuro y una versión pensada para iPad.
 
 Se juega sin conexión, sin cuenta, en español, francés e inglés.
 

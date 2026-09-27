@@ -29,6 +29,11 @@ function makeConfig(params: Params): { config: RunConfig; save?: RunSave } {
     case 'tutorial':
       // The guided first level: Titanic, 🚢 + 🧊.
       return { config: { mode: 'tutorial', ids: [1] } };
+    case 'replay': {
+      // One level again from the Pop-Cornédex: only an answer already found.
+      const found = useProfile.getState().found;
+      return { config: { mode: 'replay', ids: parseLevelIds(params.ids, 1).filter((id) => found.includes(id)) } };
+    }
     case 'challenge':
       return { config: { mode: 'challenge', ids: parseLevelIds(params.ids), target: parseScore(params.target), challenger: parseName(params.name) } };
     case 'category': {
@@ -74,14 +79,16 @@ export default function Jeu() {
       params:
         config.mode === 'challenge'
           ? { mode: 'challenge', ids: config.ids.join(','), target: String(config.target ?? 0), name: config.challenger ?? '' }
-          : { mode: config.mode, cat: config.category ?? '', diff: String(config.difficulty ?? 1), fresh: String(Date.now()) },
+          : config.mode === 'replay'
+            ? { mode: 'replay', ids: config.ids.join(','), fresh: String(Date.now()) }
+            : { mode: config.mode, cat: config.category ?? '', diff: String(config.difficulty ?? 1), fresh: String(Date.now()) },
     });
 
   const tutorial = config.mode === 'tutorial';
   if (tutorial && run.phase === 'win') return <GuideDone />;
   if (run.phase === 'tier') return <TierView run={run} />;
   if (run.phase === 'over') return <OverView run={run} onReplay={replay} />;
-  if (run.phase === 'win') return <WinView run={run} />;
+  if (run.phase === 'win') return <WinView run={run} onReplay={replay} />;
 
   const pause = () => run.setPaused(true);
   const big = height > 800;

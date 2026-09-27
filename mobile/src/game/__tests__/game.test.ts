@@ -1,7 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
 
 import { ACHIEVEMENTS, EMPTY_STATS, newlyUnlocked } from '../achievements';
-import { currentStreak, dayKey, daysBetween, nextStreak } from '../dates';
+import { currentStreak, dayKey, daysBetween, nextStreak, nextStreakWithSaves } from '../dates';
+import { addActivity, categoryStats, favoriteCategory, LOGIN_REWARDS, starsFor } from '../progress';
 import { LEVELS } from '../levels';
 import { mulberry32 } from '../random';
 import {
@@ -254,5 +255,45 @@ describe('links from outside the app', () => {
     expect([...parseName('🦊'.repeat(30))]).toHaveLength(20);
     expect(parseName('   ')).toBe('?');
     expect(one(['a', 'b'])).toBe('a');
+  });
+});
+
+describe('stars', () => {
+  it('gives 1 to 3 stars', () => {
+    expect(starsFor({ clueUsed: false, mistakes: 0, timeLeft: 0.8 })).toBe(3);
+    expect(starsFor({ clueUsed: true, mistakes: 0, timeLeft: 0.8 })).toBe(2);
+    expect(starsFor({ clueUsed: false, mistakes: 1, timeLeft: 0.1 })).toBe(1);
+    expect(starsFor({ clueUsed: false, mistakes: 0, timeLeft: 0.2 })).toBe(2);
+  });
+});
+
+describe('streak protection', () => {
+  it('covers missed days when there are enough protections', () => {
+    expect(nextStreakWithSaves('2026-10-01', '2026-10-02', 4, 0)).toEqual({ streak: 5, used: 0 });
+    expect(nextStreakWithSaves('2026-10-01', '2026-10-03', 4, 1)).toEqual({ streak: 5, used: 1 });
+    expect(nextStreakWithSaves('2026-10-01', '2026-10-04', 4, 1)).toEqual({ streak: 1, used: 0 });
+    expect(nextStreakWithSaves('2026-10-01', '2026-10-04', 4, 2)).toEqual({ streak: 5, used: 2 });
+    expect(currentStreak('2026-10-01', '2026-10-03', 4, 1)).toBe(4);
+    expect(currentStreak('2026-10-01', '2026-10-03', 4, 0)).toBe(0);
+  });
+});
+
+describe('statistics', () => {
+  it('computes accuracy, favourite category and keeps a bounded history', () => {
+    const stats = { ...EMPTY_STATS, cat: { ...EMPTY_STATS.cat, movie: 8, food: 3 }, catTries: { ...EMPTY_STATS.catTries, movie: 10, food: 1 } };
+    const movie = categoryStats(stats).find((c) => c.cat === 'movie')!;
+    expect(movie.accuracy).toBeCloseTo(0.8);
+    expect(categoryStats(stats).find((c) => c.cat === 'food')!.accuracy).toBe(1);
+    expect(categoryStats(stats).find((c) => c.cat === 'anime')!.accuracy).toBeNull();
+    expect(favoriteCategory(stats)).toBe('movie');
+    expect(favoriteCategory(EMPTY_STATS)).toBeNull();
+    let a: Record<string, number> = {};
+    for (let i = 0; i < 200; i++) a = addActivity(a, `2026-${String(1 + Math.floor(i / 28)).padStart(2, '0')}-${String(1 + (i % 28)).padStart(2, '0')}`);
+    expect(Object.keys(a).length).toBe(120);
+  });
+
+  it('has 7 login gifts, the last one the biggest', () => {
+    expect(LOGIN_REWARDS).toHaveLength(7);
+    expect(LOGIN_REWARDS[6].coins).toBeGreaterThan(Math.max(...LOGIN_REWARDS.slice(0, 6).map((r) => r.coins ?? 0)));
   });
 });

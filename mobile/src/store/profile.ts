@@ -4,13 +4,15 @@ import { persist, type PersistStorage } from 'zustand/middleware';
 
 import { ACHIEVEMENTS, EMPTY_STATS, newlyUnlocked, type Stats } from '@/game/achievements';
 import type { ThemeId } from '@/game/catalog';
-import { currentStreak, dayKey, nextStreak } from '@/game/dates';
+import type { GiftReward } from '@/game/codes';
+import { currentStreak, dayKey, nextStreakWithSaves } from '@/game/dates';
+import { addActivity, canClaimLogin, LOGIN_REWARDS, MAX_STREAK_SAVES, type StarCount } from '@/game/progress';
 import { REWARDS } from '@/game/rules';
 import type { Lang, Mode, RunSave } from '@/game/types';
 
 import { sanitizeProfile } from './sanitize';
 
-export type Item = 'hints' | 'shields' | 'skips' | 'doubles';
+export type Item = 'hints' | 'shields' | 'skips' | 'doubles' | 'streakSaves';
 
 export interface ReceivedChallenge {
   ids: number[];
@@ -58,6 +60,19 @@ export interface ProfileState {
   /** Last levels cleared, used to build a challenge for a friend. */
   lastRun: { ids: number[]; score: number } | null;
   received: ReceivedChallenge[];
+  /** Streak protections for the daily challenge (at most MAX_STREAK_SAVES). */
+  streakSaves: number;
+  /** Levels ever solved (the Pop-Cornédex) and the best stars of each, by level id. */
+  found: number[];
+  stars: Record<string, StarCount>;
+  /** Levels cleared per day (recent days) and the best day ever. */
+  activity: Record<string, number>;
+  bestDay: { day: string; levels: number } | null;
+  /** Login calendar: next gift (0 to 6) and the last day one was taken. */
+  loginDay: number;
+  loginLast: string | null;
+  /** Announcer voice ("COMBO!", "FEVER!"). */
+  voice: boolean;
   /** Gift codes already used on this device (kept on reset). */
   redeemedCodes: string[];
   /** Wins and cleared tiers, to ask for a rating at a happy moment; last time it was asked. */
@@ -73,11 +88,18 @@ interface ProfileActions {
   addItem: (item: Item, n: number) => void;
   /** Uses one item if available; returns false otherwise. */
   useItem: (item: Item) => boolean;
-  bumpStats: (patch: Partial<Omit<Stats, 'cat'>> & { cat?: Partial<Stats['cat']> }, mode?: 'add' | 'max') => void;
+  bumpStats: (
+    patch: Partial<Omit<Stats, 'cat' | 'catTries'>> & { cat?: Partial<Stats['cat']>; catTries?: Partial<Stats['catTries']> },
+    mode?: 'add' | 'max'
+  ) => void;
+  /** A level was solved: Pop-Cornédex, best stars, daily activity. Returns true on a first find. */
+  recordSolve: (levelId: number, stars: StarCount) => boolean;
+  /** Takes today's calendar gift; null when it was already taken today. */
+  claimLogin: () => { reward: GiftReward; day: number } | null;
   setBest: (mode: Mode, score: number) => boolean;
   /** Returns the achievements that just got unlocked. */
   checkAchievements: () => string[];
-  finishDaily: () => { rewarded: boolean; chest: boolean };
+  finishDaily: () => { rewarded: boolean; chest: boolean; saved: number };
   streak: () => number;
   adsLeft: () => number;
   countAd: () => void;
@@ -119,6 +141,14 @@ const INITIAL: ProfileState = {
   save: null,
   lastRun: null,
   received: [],
+  streakSaves: 0,
+  found: [],
+  stars: {},
+  activity: {},
+  bestDay: null,
+  loginDay: 0,
+  loginLast: null,
+  voice: true,
   redeemedCodes: [],
   happyMoments: 0,
   reviewAskedAt: null,
@@ -166,7 +196,8 @@ export const useProfile = create<ProfileState & ProfileActions>()(
         set((s) => ({ coins: s.coins - n }));
         return true;
       },
-      addItem: (item, n) => set((s) => ({ [item]: s[item] + n }) as Partial<ProfileState>),
+      addItem: (item, n) =>
+        set((s) => ({ [item]: item === 'streakSaves' ? Math.min(MAX_STREAK_SAVES, s[item] + n) : s[item] + n }) as Partial<ProfileState>),
       useItem: (item) => {
         if (get()[item] <= 0) return false;
         set((s) => ({ [item]: s[item] - 1 }) as Partial<ProfileState>);
@@ -174,16 +205,14 @@ export const useProfile = create<ProfileState & ProfileActions>()(
       },
       bumpStats: (patch, mode = 'add') =>
         set((s) => {
-          const stats = { ...s.stats, cat: { ...s.stats.cat } };
+          const stats = { ...s.stats, cat: { ...s.stats.cat }, catTries: { ...s.stats.catTries } };
           for (const [k, v] of Object.entries(patch)) {
-            if (k === 'cat' || typeof v !== 'number') continue;
-            const key = k as keyof Omit<Stats, 'cat'>;
+            if (k === 'cat' || k === 'catTries' || typeof v !== 'number') continue;
+            const key = k as keyof Omit<Stats, 'cat' | 'catTries'>;
             stats[key] = mode === 'max' ? Math.max(stats[key], v) : stats[key] + v;
           }
-          for (const [k, v] of Object.entries(patch.cat ?? {})) {
-            const key = k as keyof Stats['cat'];
-            stats.cat[key] += v ?? 0;
-          }
+          for (const [k, v] of Object.entries(patch.cat ?? {})) stats.cat[k as keyof Stats['cat']] += v ?? 0;
+          for (const [k, v] of Object.entries(patch.catTries ?? {})) stats.catTries[k as keyof Stats['catTries']] += v ?? 0;
           return { stats };
         }),
       setBest: (mode, score) => {
@@ -204,10 +233,12 @@ export const useProfile = create<ProfileState & ProfileActions>()(
       finishDaily: () => {
         const s = get();
         const today = dayKey();
-        if (s.dailyLast === today) return { rewarded: false, chest: false };
-        const streak = nextStreak(s.dailyLast, today, s.dailyStreak);
+        if (s.dailyLast === today) return { rewarded: false, chest: false, saved: 0 };
+        // Missed days are covered by streak protections when there are enough.
+        const { streak, used } = nextStreakWithSaves(s.dailyLast, today, s.dailyStreak, s.streakSaves);
         const chest = streak > 0 && streak % 7 === 0;
         set({
+          streakSaves: s.streakSaves - used,
           dailyLast: today,
           dailyStreak: streak,
           dailyBestStreak: Math.max(s.dailyBestStreak, streak),
@@ -215,11 +246,39 @@ export const useProfile = create<ProfileState & ProfileActions>()(
         });
         get().addCoins(REWARDS.daily.coins + (chest ? 300 : 0));
         get().bumpStats({ daily: 1 });
-        return { rewarded: true, chest };
+        return { rewarded: true, chest, saved: used };
       },
       streak: () => {
         const s = get();
-        return currentStreak(s.dailyLast, dayKey(), s.dailyStreak);
+        return currentStreak(s.dailyLast, dayKey(), s.dailyStreak, s.streakSaves);
+      },
+      recordSolve: (levelId, stars) => {
+        const s = get();
+        const key = String(levelId);
+        const first = !s.found.includes(levelId);
+        const today = dayKey();
+        const todayCount = (s.activity[today] ?? 0) + 1;
+        set({
+          found: first ? [...s.found, levelId] : s.found,
+          stars: stars > (s.stars[key] ?? 0) ? { ...s.stars, [key]: stars } : s.stars,
+          activity: addActivity(s.activity, today),
+          bestDay: !s.bestDay || todayCount > s.bestDay.levels ? { day: today, levels: todayCount } : s.bestDay,
+        });
+        return first;
+      },
+      claimLogin: () => {
+        const s = get();
+        const today = dayKey();
+        if (!canClaimLogin(s.loginLast, today)) return null;
+        const day = s.loginDay % LOGIN_REWARDS.length;
+        const reward = LOGIN_REWARDS[day];
+        set({ loginLast: today, loginDay: (day + 1) % LOGIN_REWARDS.length });
+        if (reward.coins) get().addCoins(reward.coins);
+        if (reward.hints) get().addItem('hints', reward.hints);
+        if (reward.shields) get().addItem('shields', reward.shields);
+        if (reward.skips) get().addItem('skips', reward.skips);
+        if (reward.streakSaves) get().addItem('streakSaves', reward.streakSaves);
+        return { reward, day };
       },
       adsLeft: () => {
         const s = get();
@@ -243,6 +302,10 @@ export const useProfile = create<ProfileState & ProfileActions>()(
           reduceMotion: s.reduceMotion,
           reminder: s.reminder,
           reminderAsked: s.reminderAsked,
+          voice: s.voice,
+          // Kept so a reset cannot be used to take today's calendar gift twice.
+          loginDay: s.loginDay,
+          loginLast: s.loginLast,
           redeemedCodes: s.redeemedCodes,
           happyMoments: s.happyMoments,
           reviewAskedAt: s.reviewAskedAt,

@@ -7,7 +7,7 @@ import { ChevronIcon, InstagramIcon, TikTokIcon, YouTubeIcon } from '@/component
 import { Emoji, Header, Screen, Section, Toggle, Txt, useOnePress } from '@/components/ui';
 import { NO_ADS_PACK } from '@/game/catalog';
 import { useLayout, usePalette, useT } from '@/hooks/use-app';
-import { play } from '@/services/feedback';
+import { announce, play } from '@/services/feedback';
 import { disableReminder, enableReminder } from '@/services/reminder';
 import { GAME_CENTER_READY, MONEY_READY, purchase, restorePurchases } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
@@ -79,9 +79,11 @@ export default function Reglages() {
   const t = useT();
   const { insets } = useLayout();
   const s = useProfile();
-  const toggle = (key: 'sound' | 'music' | 'haptics' | 'reduceMotion', v: boolean) => {
+  const toggle = (key: 'sound' | 'music' | 'haptics' | 'reduceMotion' | 'voice', v: boolean) => {
     s.set({ [key]: v });
     play('toggle');
+    // A taste of the announcer when it is turned on.
+    if (key === 'voice' && v) announce('voice_combo');
   };
   const toggleReminder = async (v: boolean) => {
     play('toggle');
@@ -97,6 +99,7 @@ export default function Reglages() {
         <Group>
           <Row first icon="🔊" label={t('sounds')} right={<Toggle label={t('sounds')} value={s.sound} onValueChange={(v) => toggle('sound', v)} />} />
           <Row icon="🎵" label={t('music')} right={<Toggle label={t('music')} value={s.music} onValueChange={(v) => toggle('music', v)} />} />
+          <Row icon="📣" label={t('voice')} right={<Toggle label={t('voice')} value={s.voice} onValueChange={(v) => toggle('voice', v)} />} />
           <Row icon="📳" label={t('haptics')} right={<Toggle label={t('haptics')} value={s.haptics} onValueChange={(v) => toggle('haptics', v)} />} />
           <Row
             icon="🎞️"

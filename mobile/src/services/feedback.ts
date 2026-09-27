@@ -29,7 +29,14 @@ const SOUNDS = {
   win: { src: require('@/assets/sounds/win.wav'), voices: 2, volume: 0.8 },
   tick: { src: require('@/assets/sounds/tick.wav'), voices: 6, volume: 0.7 },
   spin: { src: require('@/assets/sounds/spin.wav'), voices: 1, volume: 0.6 },
+  voice_combo: { src: require('@/assets/sounds/voice_combo.wav'), voices: 1, volume: 0.9 },
+  voice_fever: { src: require('@/assets/sounds/voice_fever.wav'), voices: 1, volume: 0.9 },
+  voice_unstoppable: { src: require('@/assets/sounds/voice_unstoppable.wav'), voices: 1, volume: 0.9 },
+  voice_perfect: { src: require('@/assets/sounds/voice_perfect.wav'), voices: 1, volume: 0.9 },
+  voice_amazing: { src: require('@/assets/sounds/voice_amazing.wav'), voices: 1, volume: 0.9 },
 };
+
+export type VoiceLine = 'voice_combo' | 'voice_fever' | 'voice_unstoppable' | 'voice_perfect' | 'voice_amazing';
 
 export type SoundName = keyof typeof SOUNDS;
 
@@ -79,6 +86,12 @@ export function play(name: SoundName) {
   p.seekTo(0)
     .then(() => p.play())
     .catch(() => {});
+}
+
+/** An announcer line, just after the chime, when the voice and the sounds are on. */
+export function announce(line: VoiceLine) {
+  if (!useProfile.getState().voice) return;
+  playLater(line, 220);
 }
 
 /** Plays a sound after a delay (to space out a small sequence). */

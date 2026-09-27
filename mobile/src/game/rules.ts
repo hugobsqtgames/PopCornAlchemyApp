@@ -23,6 +23,8 @@ export const PRICES = {
   shield: 150,
   skip: 200,
   double: 250,
+  /** A streak freeze for the daily challenge (at most 2 held). */
+  streakSave: 250,
   avatar: 200,
   continue: 150,
   /** Taking 5 wrong emojis off the grid, paid in coins during a level. */
@@ -134,7 +136,7 @@ export function isCorrect(picked: string[], solution: string[]): boolean {
 
 /** Level ids for a new run, in play order. */
 export function buildRun(
-  mode: Exclude<Mode, 'daily' | 'challenge' | 'tutorial'>,
+  mode: Exclude<Mode, 'daily' | 'challenge' | 'tutorial' | 'replay'>,
   options: { category?: Category; difficulty?: Difficulty } = {},
   rng: () => number = Math.random
 ): RunConfig {
@@ -164,7 +166,7 @@ export function buildDaily(seed: number): RunConfig {
 
 export function startLives(mode: Mode): number {
   if (mode === 'hardcore') return 1;
-  if (mode === 'chrono' || isRelaxed(mode)) return 0;
+  if (mode === 'chrono' || mode === 'replay' || isRelaxed(mode)) return 0;
   return LIVES;
 }
 

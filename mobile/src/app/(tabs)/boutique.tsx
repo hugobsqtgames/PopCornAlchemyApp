@@ -4,6 +4,7 @@ import { Alert, ScrollView, View } from 'react-native';
 import { AdIcon } from '@/components/icons';
 import { Emoji, Pill, Segments, Tap, Txt } from '@/components/ui';
 import { AVATARS, COIN_PACKS, NO_ADS_PACK, STYLES, stylePrice, THEMES, type ThemeId } from '@/game/catalog';
+import { MAX_STREAK_SAVES } from '@/game/progress';
 import { PRICES, REWARDS } from '@/game/rules';
 import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
@@ -119,20 +120,24 @@ export default function Boutique() {
     </View>
   );
 
-  const bonusItems: { item: Item; icon: string; price: number; qty: number; key: 'hints' | 'shield' | 'skip' | 'double' }[] = [
+  const bonusItems: { item: Item; icon: string; price: number; qty: number; key: 'hints' | 'shield' | 'skip' | 'double' | 'streak'; max?: number }[] = [
     { item: 'hints', icon: '💡', price: PRICES.hints5, qty: 5, key: 'hints' },
     { item: 'shields', icon: '🛡️', price: PRICES.shield, qty: 1, key: 'shield' },
     { item: 'skips', icon: '⏭️', price: PRICES.skip, qty: 1, key: 'skip' },
     { item: 'doubles', icon: '✨', price: PRICES.double, qty: 1, key: 'double' },
+    { item: 'streakSaves', icon: '🧊', price: PRICES.streakSave, qty: 1, key: 'streak', max: MAX_STREAK_SAVES },
   ];
   const bonus = (
     <View style={{ gap: 10 }}>
-      {bonusItems.map((b) => (
+      {bonusItems.map((b) => {
+        // The streak freeze is capped: no buying a third one.
+        const full = b.max !== undefined && s[b.item] >= b.max;
+        return (
         <Tap
           key={b.item}
-          onPress={() => buy(b.price, () => s.addItem(b.item, b.qty))}
-          label={t(`bonus_${b.key}`)}
-          style={{ minHeight: 72, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          onPress={() => !full && buy(b.price, () => s.addItem(b.item, b.qty))}
+          label={`${t(`bonus_${b.key}`)}${full ? `, ${t('max_owned')}` : ''}`}
+          style={{ minHeight: 72, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 12, opacity: full ? 0.6 : 1 }}>
           <View style={{ width: 48, height: 48, borderRadius: 14, backgroundColor: p.sunk, alignItems: 'center', justifyContent: 'center' }}>
             <Emoji size={24}>{b.icon}</Emoji>
           </View>
@@ -144,9 +149,16 @@ export default function Boutique() {
               {t(`bonus_${b.key}_sub` as StringKey)} · {t('you_have', { n: s[b.item] })}
             </Txt>
           </View>
-          <PricePill price={b.price} />
+          {full ? (
+            <Txt size={12} weight="bold" color={p.muted}>
+              {t('max_owned')}
+            </Txt>
+          ) : (
+            <PricePill price={b.price} />
+          )}
         </Tap>
-      ))}
+        );
+      })}
     </View>
   );
 

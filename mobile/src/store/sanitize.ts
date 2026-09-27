@@ -6,6 +6,7 @@
  */
 import { EMPTY_STATS, type Stats } from '@/game/achievements';
 import { AVATARS, STYLES, THEMES, type ThemeId } from '@/game/catalog';
+import { MAX_STREAK_SAVES } from '@/game/progress';
 import { levelById } from '@/game/rules';
 import type { Lang, Mode, RunSave } from '@/game/types';
 
@@ -25,7 +26,7 @@ const levelIds = (v: unknown, max: number) =>
 
 const LANGS: Lang[] = ['fr', 'en', 'es'];
 const THEME_IDS = THEMES.map((t) => t.id) as ThemeId[];
-const MODES: Mode[] = ['classic', 'category', 'chrono', 'hardcore', 'daily', 'challenge', 'zen', 'tutorial'];
+const MODES: Mode[] = ['classic', 'category', 'chrono', 'hardcore', 'daily', 'challenge', 'zen', 'tutorial', 'replay'];
 
 /** A resumable run, or null when anything about it is off. */
 export function cleanSave(v: unknown): RunSave | null {
@@ -45,11 +46,16 @@ export function cleanSave(v: unknown): RunSave | null {
 function cleanStats(v: unknown): Stats {
   const raw = isObj(v) ? v : {};
   const cat = isObj(raw.cat) ? raw.cat : {};
-  const stats = { ...EMPTY_STATS, cat: { ...EMPTY_STATS.cat } };
+  const tries = isObj(raw.catTries) ? raw.catTries : {};
+  const stats = { ...EMPTY_STATS, cat: { ...EMPTY_STATS.cat }, catTries: { ...EMPTY_STATS.catTries } };
   for (const k of Object.keys(EMPTY_STATS) as (keyof Stats)[]) {
-    if (k !== 'cat') stats[k] = count(raw[k], 0);
+    if (k !== 'cat' && k !== 'catTries') stats[k] = count(raw[k], 0);
   }
-  for (const k of Object.keys(EMPTY_STATS.cat) as (keyof Stats['cat'])[]) stats.cat[k] = count(cat[k], 0);
+  for (const k of Object.keys(EMPTY_STATS.cat) as (keyof Stats['cat'])[]) {
+    stats.cat[k] = count(cat[k], 0);
+    // Never fewer tries than right answers (saves from before tries were counted start at 100 %).
+    stats.catTries[k] = Math.max(count(tries[k], 0), stats.cat[k]);
+  }
   return stats;
 }
 
@@ -74,6 +80,13 @@ export function sanitizeProfile(saved: unknown, defaults: ProfileState): Profile
   const avatars = [...new Set(['🍿', ...(ownedAvatars ?? [])])];
   const best: ProfileState['best'] = {};
   if (isObj(p.best)) for (const m of MODES) if (typeof p.best[m] === 'number') best[m] = count(p.best[m], 0);
+  const stars: ProfileState['stars'] = {};
+  if (isObj(p.stars)) {
+    for (const [k, v] of Object.entries(p.stars)) if (levelById(Number(k)) && (v === 1 || v === 2 || v === 3)) stars[k] = v;
+  }
+  const activity: Record<string, number> = {};
+  if (isObj(p.activity)) for (const [k, v] of Object.entries(p.activity)) if (day(k)) activity[k] = count(v, 0);
+  const bestDay = isObj(p.bestDay) && day(p.bestDay.day) ? { day: p.bestDay.day as string, levels: count(p.bestDay.levels, 0) } : null;
   const lastRun = isObj(p.lastRun) ? { ids: levelIds(p.lastRun.ids, 10), score: count(p.lastRun.score, 0) } : null;
 
   return {
@@ -111,6 +124,15 @@ export function sanitizeProfile(saved: unknown, defaults: ProfileState): Profile
     save: cleanSave(p.save),
     lastRun: lastRun && lastRun.ids.length ? lastRun : null,
     received: cleanReceived(p.received),
+    streakSaves: count(p.streakSaves, 0, MAX_STREAK_SAVES),
+    found: [...new Set(levelIds(p.found, 1000))],
+    stars,
+    activity,
+    bestDay,
+    // A day number out of the 7-day calendar starts it over (never straight to the big gift).
+    loginDay: typeof p.loginDay === 'number' && Number.isInteger(p.loginDay) && p.loginDay >= 0 && p.loginDay <= 6 ? p.loginDay : 0,
+    loginLast: day(p.loginLast),
+    voice: bool(p.voice, d.voice),
     redeemedCodes: strings(p.redeemedCodes) ?? [],
     happyMoments: count(p.happyMoments, 0),
     reviewAskedAt: day(p.reviewAskedAt),

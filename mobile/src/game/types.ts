@@ -31,8 +31,9 @@ export interface Level {
 }
 
 /** classic = adventure through all tiers; category = one category; daily/challenge = fixed list;
- * zen = no clock, no lives; tutorial = the guided first level. */
-export type Mode = 'classic' | 'category' | 'chrono' | 'hardcore' | 'daily' | 'challenge' | 'zen' | 'tutorial';
+ * zen = no clock, no lives; tutorial = the guided first level; replay = one level again from the
+ * Pop-Cornédex, for more stars (no lives, no coins). */
+export type Mode = 'classic' | 'category' | 'chrono' | 'hardcore' | 'daily' | 'challenge' | 'zen' | 'tutorial' | 'replay';
 
 export interface RunConfig {
   mode: Mode;

@@ -14,7 +14,7 @@ import { Btn, Card, Emoji, Px, Screen, Txt } from '../ui';
 
 import { Confetti } from '../confetti';
 
-import { AnswerEmojis } from './board';
+import { AnswerEmojis, Stars } from './board';
 
 function shareScore(run: Run, t: ReturnType<typeof useT>) {
   Share.share({ message: t('share_score', { s: fmt(run.score), n: run.index + 1 }) }).catch(() => {});
@@ -95,7 +95,7 @@ export function OverView({ run, onReplay }: { run: Run; onReplay: () => void }) 
   const coins = useProfile((s) => s.coins);
   const [busy, setBusy] = useState(false);
   const chrono = run.config.mode === 'chrono';
-  const canContinue = !run.continued && !chrono;
+  const canContinue = !run.continued && !chrono && !run.practice;
 
   const watchAd = async () => {
     setBusy(true);
@@ -124,6 +124,7 @@ export function OverView({ run, onReplay }: { run: Run; onReplay: () => void }) 
           </View>
         )}
       </View>
+      {!run.practice && (
       <View style={{ paddingHorizontal: 16, paddingTop: 20 }}>
         <Card style={{ padding: 14, flexDirection: 'row' }}>
           <Stat label={t('score').toUpperCase()} value={fmt(run.score)} />
@@ -136,6 +137,7 @@ export function OverView({ run, onReplay }: { run: Run; onReplay: () => void }) 
           </Txt>
         )}
       </View>
+      )}
       {canContinue && (
         <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
           <View style={{ padding: 14, borderRadius: 20, backgroundColor: p.goldTint, gap: 10 }}>
@@ -159,7 +161,11 @@ export function OverView({ run, onReplay }: { run: Run; onReplay: () => void }) 
       <View style={{ flex: 1 }} />
       <Bottom>
         <View style={{ flexDirection: 'row', gap: 10 }}>
-          <Btn variant="soft" label={t('home')} size={14} height={52} style={{ flex: 1 }} onPress={() => router.dismissTo('/')} />
+          {run.practice ? (
+            <Btn variant="soft" label={t('back_dex')} size={14} height={52} style={{ flex: 1 }} onPress={backToDex} />
+          ) : (
+            <Btn variant="soft" label={t('home')} size={14} height={52} style={{ flex: 1 }} onPress={() => router.dismissTo('/')} />
+          )}
           <Btn label={t('replay')} size={14} height={52} style={{ flex: 1 }} onPress={onReplay} />
         </View>
       </Bottom>
@@ -181,11 +187,58 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function WinView({ run }: { run: Run }) {
+/** A replayed level sits on top of the Pop-Cornédex page it came from. */
+function backToDex() {
+  if (router.canGoBack()) router.back();
+  else router.dismissTo('/popcornedex');
+}
+
+/** The end of a level replayed from the Pop-Cornédex: its stars, and a way to try for more. */
+function ReplayWinView({ run, onReplay }: { run: Run; onReplay: () => void }) {
+  const p = usePalette();
+  const t = useT();
+  const name = useLevelName();
+  const stars = run.last.stars ?? 1;
+  const best = useProfile((s) => (run.level ? (s.stars[run.level.id] ?? stars) : stars));
+  return (
+    <Screen>
+      {stars === 3 && <Confetti />}
+      <View style={{ flex: 1 }} />
+      <View style={{ alignItems: 'center', gap: 12, paddingHorizontal: 24 }}>
+        {run.level && <AnswerEmojis level={run.level} size={56} />}
+        <Txt size={26} weight="heavy" center style={{ marginTop: 10 }}>
+          {t('replay_done')}
+        </Txt>
+        {run.level && (
+          <Txt size={16} weight="bold" color={p.muted} center lines={2}>
+            {name(run.level)}
+          </Txt>
+        )}
+        <Stars n={stars} size={44} />
+        <Txt size={13} color={p.muted} center>
+          {t('star_rules')}
+        </Txt>
+        {best > stars && (
+          <Txt size={13} weight="bold" color={p.muted} center>
+            {t('dex_best', { n: best })}
+          </Txt>
+        )}
+      </View>
+      <View style={{ flex: 1 }} />
+      <Bottom>
+        <Btn label={t('replay')} onPress={onReplay} variant={stars === 3 ? 'soft' : 'action'} />
+        <Btn variant={stars === 3 ? 'action' : 'soft'} label={t('back_dex')} size={14} height={50} onPress={backToDex} />
+      </Bottom>
+    </Screen>
+  );
+}
+
+export function WinView({ run, onReplay }: { run: Run; onReplay: () => void }) {
   const p = usePalette();
   const t = useT();
   const mode = run.config.mode;
   const r = run.result;
+  if (run.practice) return <ReplayWinView run={run} onReplay={onReplay} />;
   let icon = '👑';
   let title = t('victory');
   let sub = t('victory_sub');
@@ -210,6 +263,7 @@ export function WinView({ run }: { run: Run }) {
   if (r?.coins) rewards.push(`+${r.coins} 💰`);
   if (mode === 'daily' && r?.rewarded) rewards.push(`+${REWARDS.daily.coins} 💰`, `+${REWARDS.daily.hints} 💡`);
   if (r?.chest) rewards.push(t('chest'));
+  if (r?.saved) rewards.push(t('streak_saved'));
 
   const party = mode !== 'challenge' || !!r?.rewarded;
   return (

@@ -58,6 +58,14 @@ const tab = async (name) => {
   await page.waitForTimeout(400);
 };
 const back = () => btn(/^(Retour|Back|Volver)$/);
+const pad = (n) => String(n).padStart(2, '0');
+const dayKey = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const daysAgo = (n) => {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return dayKey(d);
+};
+const toggle = (name) => page.getByRole('switch', { name, exact: true }).filter({ visible: true }).first().click({ force: true });
 const sounds = () => page.evaluate(() => window.__sounds.splice(0));
 const profile = () => page.evaluate(() => JSON.parse(localStorage.getItem('popcorn-profile')).state);
 const patchProfile = async (patch) => {
@@ -153,6 +161,20 @@ await step('first launch', async () => {
   check(await see('You got it! 🎉'), 'guided level ends with a summary');
   await shot('niveau-guide-fini');
   await tap("Let's go!");
+  // First visit to home: the daily gift calendar opens, day 1.
+  check(await see("Today's gift"), 'the daily gift calendar opens on home after the guided level');
+  await shot('calendrier');
+  const c0 = (await profile()).coins;
+  await tap('🎁 Collect');
+  check(await see('You get 25 💰'), 'day 1 gift is 25 coins');
+  const g = await profile();
+  check(g.coins === c0 + 25 && g.loginDay === 1 && g.loginLast === dayKey(), `day 1 collected (coins +${g.coins - c0}, day ${g.loginDay})`);
+  await shot('calendrier-recu');
+  await tap('Great!');
+  check(!(await see("Today's gift")), 'the calendar closes');
+  await page.reload();
+  await page.waitForTimeout(1300);
+  check(!(await see("Today's gift")), 'one gift a day: no calendar after a restart');
   check(await see('Play'), 'home in English after the guided level');
   check((await profile()).tutorialDone === true, 'guided level marks the tutorial as done');
   await btn('Settings');
@@ -209,6 +231,17 @@ await step('shop', async () => {
   check(pr.coins === 20000 - 100 - 150 - 200 - 250 - 150, `coins debited correctly (${pr.coins})`);
   check((await sounds()).filter((s) => s === 'buy').length === 5, 'purchase sound on every buy');
   await shot('boutique-bonus');
+  // Streak freeze: 2 at most.
+  // Taps are 500 ms apart: a button ignores a second tap within 450 ms.
+  await page.getByRole('button', { name: 'Protection de série' }).filter({ visible: true }).click();
+  await page.waitForTimeout(500);
+  await page.getByRole('button', { name: 'Protection de série' }).filter({ visible: true }).click();
+  await page.waitForTimeout(500);
+  const c1 = (await profile()).coins;
+  await page.getByRole('button', { name: 'Protection de série, Maximum atteint' }).filter({ visible: true }).click();
+  await page.waitForTimeout(250);
+  const pf = await profile();
+  check(pf.streakSaves === 2 && pf.coins === c1 && c1 === pr.coins - 500, `streak freeze: 2 bought for 250 each, a third refused (${pf.streakSaves}, ${pr.coins - c1})`);
 
   await tap('Thèmes');
   await page.getByRole('button', { name: 'Menthe' }).click();
@@ -311,6 +344,7 @@ await step('classic run', async () => {
   // Combo chimes & fever: solve until the tier ends.
   let fever = false;
   let tier = false;
+  const heard = [];
   for (let i = 0; i < 20; i++) {
     if (await see('Palier terminé !')) {
       tier = true;
@@ -318,11 +352,13 @@ await step('classic run', async () => {
     }
     await solve();
     const s = await sounds();
+    heard.push(...s);
     if (s.includes('fever')) fever = true;
     if (i === 4) await shot('fever');
   }
   tier = tier || (await see('Palier terminé !'));
   check(fever, 'fever chime plays at combo 5');
+  check(heard.includes('voice_combo') && heard.includes('voice_fever'), `announcer says combo and fever (${[...new Set(heard.filter((x) => x.startsWith('voice')))].join(',')})`);
   check(tier, 'tier screen after 20 levels');
   await shot('palier');
   const pr = await profile();
@@ -522,6 +558,91 @@ await step('trophies & profile', async () => {
   await tab('Jouer');
 });
 
+// ───────────────────────── Pop-Cornédex, stars and replaying a level
+await step('pop-cornedex & replay', async () => {
+  await tab('Profil');
+  const pr = await profile();
+  check(pr.found.length > 0 && pr.found.every((id) => [1, 2, 3].includes(pr.stars[id])), `answers found are in the Pop-Cornédex with stars (${pr.found.length})`);
+  await tap('Pop-Cornédex');
+  check(await see(`${pr.found.length} / ${LEVELS.length} réponses trouvées`), 'Pop-Cornédex counts the answers found');
+  await shot('popcornedex');
+  await page.getByRole('button', { name: /, [1-9]\d* \/ \d+$/ }).filter({ visible: true }).first().click();
+  await page.waitForTimeout(500);
+  check(await see('???'), 'answers not found yet stay hidden');
+  let target = null;
+  for (const l of LEVELS.filter((x) => pr.found.includes(x.id))) if (await see(l.name.fr)) { target = l; break; }
+  check(!!target, 'a found answer is listed by name in its category');
+  await shot('popcornedex-categorie');
+  const save0 = JSON.stringify(pr.save);
+  const coins0 = pr.coins;
+  const levels0 = pr.stats.levels;
+  await sounds();
+  await page.getByRole('button', { name: new RegExp(`^${target.name.fr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}, `) }).filter({ visible: true }).first().click();
+  await page.waitForTimeout(700);
+  check(await see('Rejouer un niveau', false), 'replay shows its mode in the top bar');
+  check(!(await page.locator('[aria-label*="sur 4"]').filter({ visible: true }).count()), 'replay has no lives');
+  check((await currentLevel())?.id === target.id, 'replay opens the chosen level');
+  await pick(target.sol);
+  await fuseBtn().click();
+  await page.waitForTimeout(350);
+  check((await page.locator('[aria-label="3 / 3 Étoiles"]').filter({ visible: true }).count()) > 0, 'a fast answer without clue or mistake shows 3 stars');
+  await shot('etoiles');
+  await page.waitForTimeout(1300);
+  check(await see('Niveau réussi !'), 'replay ends on its own win screen');
+  await shot('rejouer-reussi');
+  const p1 = await profile();
+  check(p1.coins === coins0 && p1.stats.levels === levels0, `replay gives no coins and no stats (coins ${p1.coins - coins0}, levels ${p1.stats.levels - levels0})`);
+  check(p1.stars[target.id] === 3, 'best stars saved');
+  check(JSON.stringify(p1.save) === save0, 'replay never touches the saved adventure');
+  check((await sounds()).includes('voice_perfect'), 'announcer says perfect on 3 stars');
+  // Replay again and miss three times: the answer shows, no continue offer.
+  await tap('Rejouer');
+  await page.waitForTimeout(600);
+  await miss();
+  await miss();
+  await miss();
+  await page.waitForTimeout(600);
+  check(await see('GAME OVER') && !(await see('Continuer avec 1 vie ?')), 'a missed replay ends without a continue offer');
+  check((await profile()).stars[target.id] === 3, 'a missed replay keeps the best stars');
+  await shot('rejouer-rate');
+  await tap('Retour au Pop-Cornédex');
+  check(await see(target.name.fr), 'back to the Pop-Cornédex category');
+  await back();
+  await back();
+  await tap('📊 Statistiques');
+  check(await see('Temps de jeu') && await see('Précision par catégorie'), 'statistics page');
+  check(!(await see('NaN', false)) && !(await see('undefined', false)), 'statistics show no NaN');
+  const p2 = await profile();
+  check(p2.stats.playSeconds > 0 && Object.values(p2.activity).length > 0 && p2.bestDay?.levels > 0, `play time and best day recorded (${p2.stats.playSeconds} s, best day ${p2.bestDay?.levels})`);
+  await shot('statistiques');
+  await back();
+  await tab('Jouer');
+});
+
+// ───────────────────────── Streak freeze and the 7th day gift
+await step('streak freeze & day 7', async () => {
+  await patchProfile({ dailyLast: daysAgo(2), dailyStreak: 5, streakSaves: 1 });
+  await tap('Défi du jour');
+  check(await see('🧊 1 protection de série'), 'daily page shows the streak freezes');
+  check(await see('Série : 5 jours', false), 'a missed day with a freeze keeps the streak alive');
+  await tap('Jouer le défi');
+  for (let i = 0; i < 10 && !(await see('Défi du jour réussi !')); i++) await solve();
+  check(await see('🧊 Série sauvée !'), 'daily win says the streak was saved');
+  const pr = await profile();
+  check(pr.dailyStreak === 6 && pr.streakSaves === 0, `streak goes on with the freeze used (streak ${pr.dailyStreak}, freezes ${pr.streakSaves})`);
+  await shot('serie-sauvee');
+  await tap('Accueil');
+  await patchProfile({ loginLast: daysAgo(1), loginDay: 6 });
+  check(await see('Cadeau du jour'), 'calendar opens again the next day');
+  const c0 = (await profile()).coins;
+  await tap('🎁 Récupérer');
+  check(await see('Tu reçois 200 💰 · 1 🧊'), 'day 7 is the big gift');
+  const g = await profile();
+  check(g.coins === c0 + 200 && g.streakSaves === 1 && g.loginDay === 0, `day 7 collected, calendar starts over (coins +${g.coins - c0}, day ${g.loginDay})`);
+  await shot('calendrier-jour-7');
+  await tap('Super !');
+});
+
 await step('settings', async () => {
   await btn('Réglages');
   await sounds();
@@ -544,11 +665,18 @@ await step('settings', async () => {
   await tap('Passer');
   check(!(await see('Restaurer mes achats')) && !(await see('Supprimer les pubs', false)), 'no purchase rows in settings');
   // Reduce motion
-  await page.getByRole('switch').filter({ visible: true }).nth(3).click({ force: true });
+  await toggle('Réduire les animations');
   check((await profile()).reduceMotion === true, 'reduce motion switch');
-  await page.getByRole('switch').filter({ visible: true }).nth(3).click({ force: true });
+  await toggle('Réduire les animations');
+  // The announcer voice: a sample line when it is turned back on.
+  await toggle("Voix d'annonceur");
+  check((await profile()).voice === false, 'announcer voice switch off');
+  await sounds();
+  await toggle("Voix d'annonceur");
+  await page.waitForTimeout(400);
+  check((await profile()).voice === true && (await sounds()).includes('voice_combo'), 'announcer voice back on, with a sample line');
   // Reminder: no notifications on the web build, it must stay off without crashing.
-  await page.getByRole('switch').filter({ visible: true }).nth(4).click({ force: true });
+  await toggle('Rappel du défi du jour');
   await page.waitForTimeout(300);
   check((await profile()).reminder === false && (await profile()).reminderAsked === true, 'reminder switch asks, stays off when refused');
   await shot('reglages');

@@ -29,6 +29,22 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 - **Demande de note** : fenêtre officielle d'Apple après la 3ᵉ victoire.
 - **Codes cadeaux** (`mobile/src/game/codes.ts`) : `POPCORN500` (500 💰), `BIENVENUE` (300 💰 + 5 💡),
   `TIKTOK` (3 💡 + 1 ⏭️). En ajouter un demande une mise à jour de l'app.
+- **Étoiles par niveau** (1 à 3) : ⭐ trouvé, ⭐ sans indice ni erreur, ⭐ rapide (au moins la moitié
+  de la barre de temps). Règles dans `mobile/src/game/progress.ts` (`starsFor`).
+- **Pop-Cornédex** (Profil → Pop-Cornédex) : album des réponses trouvées par catégorie, les autres
+  en « ??? ». Toucher une réponse la rejoue (mode `replay` : sans vies, sans pièces, sans toucher à
+  la partie sauvegardée) pour viser les 3 étoiles.
+- **Cadeau du jour** : une fenêtre sur l'accueil à la première ouverture de chaque jour. 7 jours
+  (25 💰, 1 💡, 50 💰, 1 🛡️, 75 💰, 2 💡, puis 200 💰 + 1 🧊), puis ça recommence. Un jour raté
+  ne remet pas à zéro.
+- **Protection de série 🧊** : utilisée toute seule si on rate un jour de défi. 2 au maximum,
+  250 💰 dans la boutique (Bonus) ou offerte le 7ᵉ jour du calendrier.
+- **Voix d'annonceur** (en anglais, toutes langues) : « Great combo! » (combo 3), « Fever time! »
+  (combo 5), « Unstoppable! » (combo 10), « Perfect! », « Amazing! ». Se coupe dans les réglages.
+  Fichiers générés par `mobile/scripts/build-voice.py` avec la voix LJSpeech (domaine public,
+  donc utilisable dans une app payante).
+- **Statistiques** (Profil → Statistiques) : temps de jeu, précision, catégorie préférée,
+  meilleur jour, étoiles, précision par catégorie.
 - **Autres** : roue quotidienne, boutique (thèmes, styles, avatars, bonus), 46 trophées,
   mode sombre, iPad, gros texte jusqu'à +30 %, musique et sons.
 - **Cachés tant qu'ils ne sont pas branchés** : achats intégrés, pubs, classement Game Center.
@@ -37,7 +53,7 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 
 ## Tests
 
-- `cd mobile && npm test` → 39 tests des règles du jeu.
+- `cd mobile && npm test` → 48 tests des règles du jeu et de la sauvegarde.
 - `npx tsc --noEmit` (types) et `npx expo lint` (règles de code).
 - `bash tests-e2e/run.sh` → robot complet (172 vérifications) + robot casseur (47 scénarios).
 
@@ -79,10 +95,10 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 1. Compte Apple débloqué + expo.dev + `EXPO_TOKEN` → construire l'app avec EAS → TestFlight →
    test final → remplir la fiche App Store → envoi à Apple.
 2. **Version 1.1** : vrais achats et pubs, pack de bienvenue à 0,99 €, Game Center (classement et
-   trophées), missions du jour, calendrier de connexion, protection de série, énigme impossible
-   du jour, étoiles par niveau.
-3. **Version 1.2** : Pop-Cornédex, mode inversé, mode soirée à plusieurs, mascotte et voix
-   d'annonceur, page de statistiques, cadres de profil.
+   trophées), missions du jour, énigme impossible du jour.
+3. **Version 1.2** : mode inversé, mode soirée à plusieurs, mascotte, cadres de profil.
+   (Déjà faits en avance : étoiles, Pop-Cornédex, cadeau du jour, protection de série, voix
+   d'annonceur, statistiques.)
 4. **Version 1.3** : « Crée ton énigme », parrainage, allemand, italien et portugais,
    sauvegarde iCloud.
 5. **Plus tard** : carte de l'aventure, widget, mode Duel en direct, « Ton année Pop-Corn ».

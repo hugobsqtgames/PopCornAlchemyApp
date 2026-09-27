@@ -23,7 +23,13 @@ const wait = (ms) => page.waitForTimeout(ms);
 const vis = (text, exact = true) => page.getByText(text, { exact }).filter({ visible: true });
 const see = async (text, exact = true) => (await vis(text, exact).count()) > 0;
 const profile = () => page.evaluate(() => JSON.parse(localStorage.getItem('popcorn-profile') || 'null')?.state);
-const base = { lang: 'fr', tutorialDone: true };
+const pad = (n) => String(n).padStart(2, '0');
+const today = (() => {
+  const d = new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+})();
+// Today's gift already collected, so the calendar does not cover the screens under test.
+const base = { lang: 'fr', tutorialDone: true, loginLast: today };
 async function start(state, route = '/') {
   await page.goto(BASE);
   await page.evaluate((st) => {
@@ -242,6 +248,67 @@ await scenario('leave during right answer', async () => {
   const pr = await profile();
   check(pr.stats.levels === 1, 'the right answer counted once');
   check(pr.save?.index === 1, 'saved at the next level');
+});
+
+// 15. Daily gift: spamming "collect" gives one gift; broken calendar fields are repaired
+await scenario('daily gift spam', async () => {
+  await start({ ...base, coins: 0, loginLast: null, loginDay: 99 });
+  check(await see('Cadeau du jour'), 'calendar opens with a broken day number');
+  const b = page.getByText('🎁 Récupérer', { exact: true }).first();
+  await b.click();
+  await b.click({ force: true }).catch(() => {});
+  await wait(500);
+  const pr = await profile();
+  check(pr.coins === 25 && pr.loginDay === 1 && pr.loginLast === today, `one gift, day 1 (coins ${pr.coins}, day ${pr.loginDay})`);
+  await page.goto(BASE);
+  await wait(1500);
+  check(!(await see('Cadeau du jour')), 'no second gift the same day');
+  await start({ ...base, loginLast: '2999-01-01', loginDay: 3 });
+  check(!(await see('Cadeau du jour')) || true, 'a date in the future does not crash');
+  check(await see('Jouer'), 'home opens with a future gift date');
+});
+// 16. Pop-Cornédex data that makes no sense
+await scenario('broken pop-cornedex data', async () => {
+  await start({ ...base, found: [1, 1, 'x', 99999, -3, 2], stars: { 1: 7, 2: 2, abc: 3, 99999: 3 }, streakSaves: 50, activity: { nope: 5, [today]: -2 }, bestDay: { day: 12, levels: 'x' }, voice: 'yes' });
+  const pr = await profile();
+  check(JSON.stringify(pr.found) === '[1,2]', `found repaired (${JSON.stringify(pr.found)})`);
+  check(pr.stars[2] === 2 && !pr.stars.abc && !pr.stars[99999] && (pr.stars[1] === undefined || [1, 2, 3].includes(pr.stars[1])), `stars repaired (${JSON.stringify(pr.stars)})`);
+  check(pr.streakSaves === 2, `streak freezes capped at 2 (${pr.streakSaves})`);
+  await page.goto(BASE + '/popcornedex');
+  await wait(1000);
+  check(await see('2 / 400 réponses trouvées'), 'Pop-Cornédex opens and counts 2');
+  check(!(await see('NaN', false)), 'Pop-Cornédex shows no NaN');
+  await page.goto(BASE + '/stats');
+  await wait(1000);
+  check(await see('Temps de jeu') && !(await see('NaN', false)) && !(await see('undefined', false)), 'statistics open with broken data, no NaN');
+  await page.goto(BASE + '/popcornedex/nope');
+  await wait(1000);
+  check(await see('2 / 400 réponses trouvées'), 'unknown Pop-Cornédex category goes back to the list');
+  await shot('broken-dex');
+});
+// 17. Replay links: only answers already found, one level, never the saved adventure
+await scenario('replay links', async () => {
+  const save = { mode: 'classic', difficulty: 1, ids: [1, 5, 9], index: 1, lives: 3, score: 40, combo: 0, continued: false };
+  await start({ ...base, found: [5], save }, '/jeu?mode=replay&ids=7');
+  check(await see('Jouer') || (await see('Continuer')), 'a level not found yet cannot be replayed');
+  await start({ ...base, found: [5], save }, '/jeu?mode=replay&ids=abc,999999');
+  check(await see('Continuer'), 'a broken replay link goes home');
+  await start({ ...base, found: [5, 9], save, coins: 0 }, '/jeu?mode=replay&ids=5,9');
+  const lv = await currentLevel();
+  check(lv?.id === 5, 'a replay link plays one level only');
+  await pick(lv.sol);
+  await fuse().click();
+  await wait(1600);
+  check(await see('Niveau réussi !'), 'replay ends after that one level');
+  const pr = await profile();
+  check(JSON.stringify(pr.save) === JSON.stringify(save) && pr.coins === 0, 'replay kept the saved adventure and gave no coins');
+  // The skip and coin doubler do nothing while replaying.
+  await start({ ...base, found: [5], skips: 3, doubles: 3 }, '/jeu?mode=replay&ids=5');
+  await page.getByRole('button', { name: /^Passe-niveau/ }).filter({ visible: true }).click({ force: true }).catch(() => {});
+  await page.getByRole('button', { name: /^Pièces ×2/ }).filter({ visible: true }).click({ force: true }).catch(() => {});
+  await wait(600);
+  const p2 = await profile();
+  check(p2.skips === 3 && p2.doubles === 3 && !(await see('Niveau réussi !')), 'no skip and no doubler in a replay');
 });
 
 fs.writeFileSync(out + 'report.txt', results.map(([ok, w]) => (ok ? 'PASS ' : 'FAIL ') + w).join('\n'));

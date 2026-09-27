@@ -1,8 +1,9 @@
 import { router } from 'expo-router';
 import { Alert, Pressable, ScrollView, View } from 'react-native';
 
-import { PencilIcon } from '@/components/icons';
-import { Btn, Card, Emoji, Section, Txt } from '@/components/ui';
+import { ChevronIcon, PencilIcon } from '@/components/icons';
+import { Bar, Btn, Card, Emoji, Section, Tap, Txt } from '@/components/ui';
+import { LEVELS } from '@/game/levels';
 import { CATEGORIES } from '@/game/rules';
 import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
@@ -70,11 +71,31 @@ export default function Profil() {
             </View>
           </Card>
         </View>
-        <View style={{ flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingTop: 12 }}>
+        <View style={{ paddingHorizontal: 16, paddingTop: 12 }}>
+          <Tap
+            onPress={() => router.push('/popcornedex')}
+            tint={p.goldTint}
+            label={`${t('dex')}, ${t('dex_sub', { n: s.found.length, t: LEVELS.length })}`}
+            style={{ minHeight: 60, paddingHorizontal: 12, paddingVertical: 8, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <Emoji size={26}>📖</Emoji>
+            <View style={{ flex: 1, gap: 4 }}>
+              <Txt size={16} weight="heavy">
+                {t('dex')}
+              </Txt>
+              <Bar value={s.found.length / LEVELS.length} height={5} color={p.green} />
+              <Txt size={12} weight="semibold" color={p.muted}>
+                {t('dex_sub', { n: s.found.length, t: LEVELS.length })}
+              </Txt>
+            </View>
+            <ChevronIcon color={p.ink} />
+          </Tap>
+        </View>
+        <View style={{ flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingTop: 10 }}>
           {GAME_CENTER_READY && (
             <Btn variant="soft" label={`🏆 ${t('leaderboard')}`} height={46} size={13} style={{ flex: 1 }} onPress={() => showLeaderboard(t)} />
           )}
           <Btn variant="soft" label={`🎖️ ${t('achievements_btn')}`} height={46} size={13} style={{ flex: 1 }} onPress={() => router.navigate('/trophees')} />
+          <Btn variant="soft" label={`📊 ${t('stats')}`} height={46} size={13} style={{ flex: 1 }} onPress={() => router.push('/stats')} />
         </View>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingHorizontal: 16, paddingTop: 14 }}>
           {stats.map((st) => (

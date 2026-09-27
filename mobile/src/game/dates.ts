@@ -26,10 +26,24 @@ export function nextStreak(lastDay: string | null, today: string, streak: number
   return gap === 1 ? streak + 1 : 1;
 }
 
-/** Streak to display: it is lost once a whole day was skipped. */
-export function currentStreak(lastDay: string | null, today: string, streak: number): number {
+/** Streak to display: it is lost once a whole day was skipped, unless protections cover the missed days. */
+export function currentStreak(lastDay: string | null, today: string, streak: number, saves = 0): number {
   if (!lastDay) return 0;
-  return daysBetween(lastDay, today) <= 1 ? streak : 0;
+  const gap = daysBetween(lastDay, today);
+  return gap <= 1 || gap - 1 <= saves ? streak : 0;
+}
+
+/**
+ * Streak after finishing the daily challenge on `today`, using streak protections for the
+ * days that were missed in between. Returns the new streak and how many protections were used.
+ */
+export function nextStreakWithSaves(lastDay: string | null, today: string, streak: number, saves: number): { streak: number; used: number } {
+  if (!lastDay) return { streak: 1, used: 0 };
+  const gap = daysBetween(lastDay, today);
+  if (gap <= 0) return { streak, used: 0 };
+  if (gap === 1) return { streak: streak + 1, used: 0 };
+  const missed = gap - 1;
+  return missed <= saves ? { streak: streak + 1, used: missed } : { streak: 1, used: 0 };
 }
 
 /** Milliseconds until local midnight. */
