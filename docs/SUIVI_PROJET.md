@@ -55,7 +55,7 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 
 - `cd mobile && npm test` → 48 tests des règles du jeu et de la sauvegarde.
 - `npx tsc --noEmit` (types) et `npx expo lint` (règles de code).
-- `bash tests-e2e/run.sh` → robot complet (172 vérifications) + robot casseur (47 scénarios).
+- `bash tests-e2e/run.sh` → robot complet (217 vérifications) + robot casseur (68 scénarios).
 
 ## Prêt pour l'App Store
 
