@@ -58,13 +58,10 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 
 ## En cours / bloquant ⏳
 
-- **Compte Apple Developer : inscription bloquée.**
-  - Sur le site : « Your enrollment could not be completed ».
-  - Dans l'app Apple Developer : « Enrollment through the Apple Developer app is not available
-    for this Apple Account ».
-  - Conseil donné : ne pas recréer d'identifiant Apple ; vérifier s'il y a une inscription
-    « en cours » sur developer.apple.com/account ; contacter l'assistance
-    (developer.apple.com/contact → Membership and Account → Program Enrollment).
+- **Compte Apple Developer : payé le 27/09/2026 (98,99 €)** avec un nouvel identifiant Apple
+  (le premier était bloqué par Apple). Utiliser ce même identifiant pour TestFlight et App Store Connect.
+  Apple peut mettre jusqu'à 48 h à activer le compte (e-mail « Welcome to the Apple Developer Program »).
+- `mobile/eas.json` est prêt (profil `production`, numéro de build géré par EAS).
 - **À faire par Hugo** :
   - créer son compte gratuit sur expo.dev ;
   - ajouter le jeton `EXPO_TOKEN` dans les réglages de l'environnement (jamais dans le chat) ;
