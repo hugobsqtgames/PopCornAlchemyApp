@@ -9,7 +9,7 @@ import { NO_ADS_PACK } from '@/game/catalog';
 import { useLayout, usePalette, useT } from '@/hooks/use-app';
 import { announce, play } from '@/services/feedback';
 import { disableReminder, enableReminder } from '@/services/reminder';
-import { GAME_CENTER_READY, MONEY_READY, purchase, restorePurchases } from '@/services/store-services';
+import { GAME_CENTER_READY, MONEY_READY, purchase, restorePurchases, showAdPrivacyChoices, useAdPrivacyChoices, useStorePrices } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
 
 const LANG_NAMES = { fr: 'Français', en: 'English', es: 'Español' };
@@ -78,6 +78,8 @@ export default function Reglages() {
   const p = usePalette();
   const t = useT();
   const { insets } = useLayout();
+  const storePrices = useStorePrices();
+  const adPrivacy = useAdPrivacyChoices();
   const s = useProfile();
   const toggle = (key: 'sound' | 'music' | 'haptics' | 'reduceMotion' | 'voice', v: boolean) => {
     s.set({ [key]: v });
@@ -142,10 +144,12 @@ export default function Reglages() {
                     first={!GAME_CENTER_READY}
                     icon="🚫"
                     label={s.noAds ? t('no_ads_owned') : t('remove_ads')}
-                    onPress={s.noAds ? undefined : () => purchase(NO_ADS_PACK.id, t('iap_unavailable'))}
-                    right={s.noAds ? null : <Txt size={15} weight="bold">{NO_ADS_PACK.price}</Txt>}
+                    onPress={s.noAds ? undefined : () => purchase(NO_ADS_PACK.id)}
+                    right={s.noAds ? null : <Txt size={15} weight="bold">{storePrices[NO_ADS_PACK.id] ?? NO_ADS_PACK.price}</Txt>}
                   />
-                  <Row icon="🔄" label={t('restore')} onPress={() => restorePurchases(t('iap_unavailable'))} right={null} />
+                  <Row icon="🔄" label={t('restore')} onPress={() => restorePurchases()} right={null} />
+                  {/* Required by Google's consent rules in Europe: change the ads choice at any time. */}
+                  {adPrivacy && <Row icon="🛡️" label={t('ad_privacy')} onPress={showAdPrivacyChoices} />}
                 </>
               )}
             </Group>

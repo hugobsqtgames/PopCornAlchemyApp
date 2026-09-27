@@ -33,3 +33,16 @@ export const COIN_PACKS = [
 ];
 
 export const NO_ADS_PACK = { id: 'no_ads', coins: 1000, price: '3,99 €' };
+
+/** App Store product ids: the bundle id, then the pack id (e.g. com.hugobsqt.popcornalchemy.coins_500). */
+export const PRODUCT_PREFIX = 'com.hugobsqt.popcornalchemy.';
+export const productId = (packId: string) => PRODUCT_PREFIX + packId;
+export const PRODUCT_IDS = [...COIN_PACKS.map((p) => p.id), NO_ADS_PACK.id].map(productId);
+
+/** What a pack gives, from its App Store id or its short id; null for an unknown product. */
+export function packGoods(id: string): { coins: number; noAds: boolean } | null {
+  const short = id.startsWith(PRODUCT_PREFIX) ? id.slice(PRODUCT_PREFIX.length) : id;
+  if (short === NO_ADS_PACK.id) return { coins: NO_ADS_PACK.coins, noAds: true };
+  const pack = COIN_PACKS.find((p) => p.id === short);
+  return pack ? { coins: pack.coins, noAds: false } : null;
+}

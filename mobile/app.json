@@ -13,7 +13,8 @@
       "supportsTablet": true,
       "buildNumber": "1",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "CFBundleAllowMixedLocalizations": true
       }
     },
     "android": {
@@ -53,7 +54,20 @@
       "expo-localization",
       "expo-screen-orientation",
       "expo-asset",
-      "expo-notifications"
+      "expo-notifications",
+      "expo-iap",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "iosAppId": "ca-app-pub-3940256099942544~1458507309",
+          "androidAppId": "ca-app-pub-3940256099942544~3347511713",
+          "delayAppMeasurementInit": true,
+          "skAdNetworkItems": [
+            "cstr6suwn9.skadnetwork"
+          ]
+        }
+      ],
+      "expo-tracking-transparency"
     ],
     "experiments": {
       "typedRoutes": true,
@@ -65,6 +79,11 @@
         "projectId": "37f058a6-fb03-4d56-97cb-56bbeaf05c20"
       }
     },
-    "owner": "aazerty12"
+    "owner": "aazerty12",
+    "locales": {
+      "fr": "./locales/fr.json",
+      "en": "./locales/en.json",
+      "es": "./locales/es.json"
+    }
   }
 }

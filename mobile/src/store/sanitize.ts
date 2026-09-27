@@ -111,6 +111,7 @@ export function sanitizeProfile(saved: unknown, defaults: ProfileState): Profile
     reminder: bool(p.reminder, d.reminder),
     reminderAsked: bool(p.reminderAsked, d.reminderAsked),
     noAds: bool(p.noAds, d.noAds),
+    purchases: (strings(p.purchases, (x) => x.length > 0 && x.length <= 200) ?? []).slice(-200),
     best,
     stats: cleanStats(p.stats),
     achievements: strings(p.achievements) ?? [],

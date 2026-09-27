@@ -10,7 +10,7 @@ import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
 import { checkAchievements } from '@/services/achievements';
 import { buzz, play } from '@/services/feedback';
-import { MONEY_READY, purchase, showRewardedAd } from '@/services/store-services';
+import { MONEY_READY, purchase, showRewardedAd, useStorePrices } from '@/services/store-services';
 import { useProfile, type Item } from '@/store/profile';
 import { paletteFor } from '@/theme/palettes';
 
@@ -22,6 +22,9 @@ export default function Boutique() {
   const { tabTop, tablet } = useLayout();
   const s = useProfile();
   const [tab, setTab] = useState<Tab>(MONEY_READY ? 'coins' : 'bonus');
+  // Prices in the player's own currency once the App Store answers; ours until then.
+  const storePrices = useStorePrices();
+  const priceOf = (pack: { id: string; price: string }) => storePrices[pack.id] ?? pack.price;
   const cols = tablet ? 4 : 2;
   const cell = { width: `${100 / cols - 2.6}%` as const };
 
@@ -71,9 +74,9 @@ export default function Boutique() {
         {COIN_PACKS.map((pack) => (
           <Tap
             key={pack.id}
-            onPress={() => purchase(pack.id, t('iap_unavailable'))}
+            onPress={() => purchase(pack.id)}
             border={pack.flag === 'best' ? p.action : pack.flag === 'popular' ? p.gold : undefined}
-            label={`${pack.coins} ${pack.price}`}
+            label={`${pack.coins} ${priceOf(pack)}`}
             style={[cell, { height: 128, padding: 10, paddingTop: 12, alignItems: 'center', gap: 4 }]}>
             {pack.flag && (
               <View style={{ position: 'absolute', top: -10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, backgroundColor: pack.flag === 'best' ? p.action : p.gold }}>
@@ -92,14 +95,14 @@ export default function Boutique() {
             </Txt>
             <View style={{ marginTop: 'auto', alignSelf: 'stretch', height: 30, borderRadius: 10, backgroundColor: p.action, alignItems: 'center', justifyContent: 'center' }}>
               <Txt size={15} weight="heavy" color={p.onAction}>
-                {pack.price}
+                {priceOf(pack)}
               </Txt>
             </View>
           </Tap>
         ))}
       </View>
       <Tap
-        onPress={() => !s.noAds && purchase(NO_ADS_PACK.id, t('iap_unavailable'))}
+        onPress={() => !s.noAds && purchase(NO_ADS_PACK.id)}
         label={t('no_ads_pack')}
         style={{ height: 60, paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
         <Emoji size={24}>🚫</Emoji>
@@ -113,7 +116,7 @@ export default function Boutique() {
         </View>
         {!s.noAds && (
           <Txt size={15} weight="heavy">
-            {NO_ADS_PACK.price}
+            {priceOf(NO_ADS_PACK)}
           </Txt>
         )}
       </Tap>

@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { persist, type PersistStorage } from 'zustand/middleware';
 
 import { ACHIEVEMENTS, EMPTY_STATS, newlyUnlocked, type Stats } from '@/game/achievements';
-import type { ThemeId } from '@/game/catalog';
+import { packGoods, type ThemeId } from '@/game/catalog';
 import type { GiftReward } from '@/game/codes';
 import { currentStreak, dayKey, nextStreakWithSaves } from '@/game/dates';
 import { addActivity, canClaimLogin, LOGIN_REWARDS, MAX_STREAK_SAVES, type StarCount } from '@/game/progress';
@@ -45,6 +45,8 @@ export interface ProfileState {
   reminder: boolean;
   reminderAsked: boolean;
   noAds: boolean;
+  /** App Store transactions already paid out, so a replayed one never pays twice (kept on reset). */
+  purchases: string[];
   best: Partial<Record<Mode, number>>;
   stats: Stats;
   achievements: string[];
@@ -103,8 +105,16 @@ interface ProfileActions {
   streak: () => number;
   adsLeft: () => number;
   countAd: () => void;
+  /**
+   * Pays out an App Store purchase once: 'granted', 'duplicate' (already paid, or the
+   * no-ads pack bought again) or 'unknown' (a product this version does not sell).
+   */
+  grantPurchase: (transactionId: string, product: string) => 'granted' | 'duplicate' | 'unknown';
   reset: () => void;
 }
+
+/** Transactions remembered to avoid paying one twice. */
+const MAX_PURCHASES = 200;
 
 const INITIAL: ProfileState = {
   lang: null,
@@ -128,6 +138,7 @@ const INITIAL: ProfileState = {
   reminder: false,
   reminderAsked: false,
   noAds: false,
+  purchases: [],
   best: {},
   stats: EMPTY_STATS,
   achievements: [],
@@ -289,7 +300,21 @@ export const useProfile = create<ProfileState & ProfileActions>()(
           const today = dayKey();
           return { adsDay: today, adsCount: s.adsDay === today ? s.adsCount + 1 : 1 };
         }),
-      // Settings, used gift codes and the rating request survive a reset.
+      grantPurchase: (transactionId, product) => {
+        const s = get();
+        const goods = packGoods(product);
+        if (!goods) return 'unknown';
+        if (s.purchases.includes(transactionId)) return 'duplicate';
+        const purchases = [...s.purchases, transactionId].slice(-MAX_PURCHASES);
+        // The no-ads pack is bought once: restoring it again gives no second 1 000 coins.
+        if (goods.noAds && s.noAds) {
+          set({ purchases });
+          return 'duplicate';
+        }
+        set({ coins: s.coins + goods.coins, noAds: s.noAds || goods.noAds, purchases });
+        return 'granted';
+      },
+      // Settings, purchases, used gift codes and the rating request survive a reset.
       reset: () => {
         const s = get();
         set({
@@ -307,6 +332,9 @@ export const useProfile = create<ProfileState & ProfileActions>()(
           loginDay: s.loginDay,
           loginLast: s.loginLast,
           redeemedCodes: s.redeemedCodes,
+          // Paid for with real money: never lost.
+          noAds: s.noAds,
+          purchases: s.purchases,
           happyMoments: s.happyMoments,
           reviewAskedAt: s.reviewAskedAt,
         });

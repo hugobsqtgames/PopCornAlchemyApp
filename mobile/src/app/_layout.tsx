@@ -19,6 +19,7 @@ import { useLayout, usePalette } from '@/hooks/use-app';
 import { initSounds } from '@/services/feedback';
 import { setTrack, suspendMusic } from '@/services/music';
 import { scheduleReminders } from '@/services/reminder';
+import { startMoney } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -78,6 +79,8 @@ export default function RootLayout() {
   useEffect(() => {
     if (!ready) return;
     scheduleReminders();
+    // Purchases interrupted last time (app closed mid-purchase) are paid out now.
+    startMoney();
     const sub = AppState.addEventListener('change', (st) => st === 'active' && scheduleReminders());
     return () => sub.remove();
   }, [ready]);

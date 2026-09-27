@@ -15,7 +15,7 @@ const state = () => useProfile.getState();
 
 beforeEach(() => {
   state().reset();
-  state().set({ lang: 'fr', tutorialDone: true, coins: 0, dailyLast: null, dailyStreak: 0, adsDay: null, adsCount: 0 });
+  state().set({ lang: 'fr', tutorialDone: true, coins: 0, dailyLast: null, dailyStreak: 0, adsDay: null, adsCount: 0, noAds: false, purchases: [] });
 });
 
 describe('coins and items', () => {
@@ -204,5 +204,40 @@ describe('Pop-Cornédex, calendar and streak protection', () => {
   it('never holds more than 2 protections', () => {
     state().addItem('streakSaves', 5);
     expect(state().streakSaves).toBe(2);
+  });
+});
+
+describe('App Store purchases', () => {
+  it('pays a pack once, by App Store id or short id', () => {
+    const c0 = state().coins;
+    expect(state().grantPurchase('t1', 'com.hugobsqt.popcornalchemy.coins_1200')).toBe('granted');
+    expect(state().coins).toBe(c0 + 1200);
+    // The same transaction replayed at the next launch pays nothing.
+    expect(state().grantPurchase('t1', 'com.hugobsqt.popcornalchemy.coins_1200')).toBe('duplicate');
+    expect(state().grantPurchase('t2', 'coins_500')).toBe('granted');
+    expect(state().coins).toBe(c0 + 1700);
+  });
+
+  it('ignores products this version does not sell', () => {
+    const c0 = state().coins;
+    expect(state().grantPurchase('t3', 'com.hugobsqt.popcornalchemy.mystery')).toBe('unknown');
+    expect(state().coins).toBe(c0);
+  });
+
+  it('gives the no-ads pack coins only once, and keeps it after a reset', () => {
+    const c0 = state().coins;
+    expect(state().grantPurchase('t4', 'com.hugobsqt.popcornalchemy.no_ads')).toBe('granted');
+    expect(state().noAds).toBe(true);
+    expect(state().coins).toBe(c0 + 1000);
+    expect(state().grantPurchase('t5', 'com.hugobsqt.popcornalchemy.no_ads')).toBe('duplicate');
+    expect(state().coins).toBe(c0 + 1000);
+    state().reset();
+    expect(state().noAds).toBe(true);
+    expect(state().purchases).toContain('t4');
+  });
+
+  it('repairs a damaged purchase list', () => {
+    const p = sanitizeProfile({ purchases: ['a', 'a', 3, '', 'x'.repeat(500), 'b'] }, useProfile.getInitialState());
+    expect(p.purchases).toEqual(['a', 'b']);
   });
 });
