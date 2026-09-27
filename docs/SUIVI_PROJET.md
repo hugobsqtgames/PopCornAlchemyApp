@@ -50,12 +50,15 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 - **Achats intégrés et pubs : code prêt mais éteint** (`MONEY_READY = false` dans
   `mobile/src/services/store-services.ts`). Tout est expliqué dans `store/VERSION_1_1.md`.
   ⚠️ **La version 1.0 se construit depuis le commit `b6fe824`** (sans les modules de pub).
+- **Sauvegarde iCloud (1.1)** : même progression sur iPhone et iPad, automatique. Module maison
+  `mobile/modules/cloud-kv`, règles de fusion dans `mobile/src/store/cloud-merge.ts`. Détails dans
+  `store/VERSION_1_1.md`. Pas encore testée sur de vrais appareils.
 - **Classement Game Center** : pas encore codé, caché (`GAME_CENTER_READY`).
 - **Audit de robustesse fait** : sauvegarde abîmée, liens piégés, doubles taps, arrière-plan.
 
 ## Tests
 
-- `cd mobile && npm test` → 48 tests des règles du jeu et de la sauvegarde.
+- `cd mobile && npm test` → 68 tests : règles du jeu, sauvegarde, achats, fusion iCloud.
 - `npx tsc --noEmit` (types) et `npx expo lint` (règles de code).
 - `bash tests-e2e/run.sh` → robot complet (217 vérifications) + robot casseur (68 scénarios)
   + robot « argent » (`money.mjs` : pubs et achats avec l'interrupteur allumé, version web).
@@ -103,8 +106,7 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 3. **Version 1.2** : mode inversé, mode soirée à plusieurs, mascotte, cadres de profil.
    (Déjà faits en avance : étoiles, Pop-Cornédex, cadeau du jour, protection de série, voix
    d'annonceur, statistiques.)
-4. **Version 1.3** : « Crée ton énigme », parrainage, allemand, italien et portugais,
-   sauvegarde iCloud.
+4. **Version 1.3** : « Crée ton énigme », parrainage, allemand, italien et portugais.
 5. **Plus tard** : carte de l'aventure, widget, mode Duel en direct, « Ton année Pop-Corn ».
 
 ## Préférences de Hugo

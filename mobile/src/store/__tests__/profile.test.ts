@@ -233,7 +233,7 @@ describe('App Store purchases', () => {
     expect(state().coins).toBe(c0 + 1000);
     state().reset();
     expect(state().noAds).toBe(true);
-    expect(state().purchases).toContain('t4');
+    expect(state().purchases).toContain('t4#no_ads');
   });
 
   it('repairs a damaged purchase list', () => {

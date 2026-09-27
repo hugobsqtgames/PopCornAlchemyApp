@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { persist, type PersistStorage } from 'zustand/middleware';
 
 import { ACHIEVEMENTS, EMPTY_STATS, newlyUnlocked, type Stats } from '@/game/achievements';
-import { packGoods, type ThemeId } from '@/game/catalog';
+import { packGoods, PRODUCT_PREFIX, type ThemeId } from '@/game/catalog';
 import type { GiftReward } from '@/game/codes';
 import { currentStreak, dayKey, nextStreakWithSaves } from '@/game/dates';
 import { addActivity, canClaimLogin, LOGIN_REWARDS, MAX_STREAK_SAVES, type StarCount } from '@/game/progress';
@@ -45,8 +45,15 @@ export interface ProfileState {
   reminder: boolean;
   reminderAsked: boolean;
   noAds: boolean;
-  /** App Store transactions already paid out, so a replayed one never pays twice (kept on reset). */
+  /**
+   * App Store transactions already paid out, as "transactionId#pack", so a replayed one never
+   * pays twice and iCloud can tell which packs the other device has not seen (kept on reset).
+   */
   purchases: string[];
+  /** When the progress was last reset (0: never). Shared through iCloud so a reset reaches every device. */
+  resetAt: number;
+  /** When this device's shared progress last changed, to know which device played last (iCloud). */
+  changedAt: number;
   best: Partial<Record<Mode, number>>;
   stats: Stats;
   achievements: string[];
@@ -139,6 +146,8 @@ const INITIAL: ProfileState = {
   reminderAsked: false,
   noAds: false,
   purchases: [],
+  resetAt: 0,
+  changedAt: 0,
   best: {},
   stats: EMPTY_STATS,
   achievements: [],
@@ -304,8 +313,8 @@ export const useProfile = create<ProfileState & ProfileActions>()(
         const s = get();
         const goods = packGoods(product);
         if (!goods) return 'unknown';
-        if (s.purchases.includes(transactionId)) return 'duplicate';
-        const purchases = [...s.purchases, transactionId].slice(-MAX_PURCHASES);
+        if (s.purchases.some((p) => p.split('#')[0] === transactionId)) return 'duplicate';
+        const purchases = [...s.purchases, `${transactionId}#${product.replace(PRODUCT_PREFIX, '')}`].slice(-MAX_PURCHASES);
         // The no-ads pack is bought once: restoring it again gives no second 1 000 coins.
         if (goods.noAds && s.noAds) {
           set({ purchases });
@@ -335,6 +344,7 @@ export const useProfile = create<ProfileState & ProfileActions>()(
           // Paid for with real money: never lost.
           noAds: s.noAds,
           purchases: s.purchases,
+          resetAt: Date.now(),
           happyMoments: s.happyMoments,
           reviewAskedAt: s.reviewAskedAt,
         });

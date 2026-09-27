@@ -20,6 +20,7 @@ import { initSounds } from '@/services/feedback';
 import { setTrack, suspendMusic } from '@/services/music';
 import { scheduleReminders } from '@/services/reminder';
 import { startMoney } from '@/services/store-services';
+import { startCloud } from '@/services/cloud';
 import { useProfile } from '@/store/profile';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -81,6 +82,8 @@ export default function RootLayout() {
     scheduleReminders();
     // Purchases interrupted last time (app closed mid-purchase) are paid out now.
     startMoney();
+    // Same progress on every device of the player's iCloud account.
+    startCloud();
     const sub = AppState.addEventListener('change', (st) => st === 'active' && scheduleReminders());
     return () => sub.remove();
   }, [ready]);

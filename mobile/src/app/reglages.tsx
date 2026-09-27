@@ -7,6 +7,7 @@ import { ChevronIcon, InstagramIcon, TikTokIcon, YouTubeIcon } from '@/component
 import { Emoji, Header, Screen, Section, Toggle, Txt, useOnePress } from '@/components/ui';
 import { NO_ADS_PACK } from '@/game/catalog';
 import { useLayout, usePalette, useT } from '@/hooks/use-app';
+import { CLOUD_AVAILABLE } from '@/services/cloud';
 import { announce, play } from '@/services/feedback';
 import { disableReminder, enableReminder } from '@/services/reminder';
 import { GAME_CENTER_READY, MONEY_READY, purchase, restorePurchases, showAdPrivacyChoices, useAdPrivacyChoices, useStorePrices } from '@/services/store-services';
@@ -131,6 +132,8 @@ export default function Reglages() {
 
         <Group style={{ marginTop: 16 }}>
           <Row first icon="🎁" label={t('gift_code')} onPress={() => router.push('/code')} />
+          {/* Automatic: shown so players know their progress follows them to the iPad. */}
+          {CLOUD_AVAILABLE && <Row icon="☁️" label={t('cloud_save')} sub={t('cloud_save_sub')} right={<Txt size={15} weight="bold" color={p.green}>✓</Txt>} />}
         </Group>
 
         {(MONEY_READY || GAME_CENTER_READY) && (

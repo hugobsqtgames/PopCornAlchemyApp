@@ -1,4 +1,4 @@
-# Version 1.1 : pubs et achats intégrés
+# Version 1.1 : pubs, achats intégrés et sauvegarde iCloud
 
 Le code est prêt mais **éteint** : `MONEY_READY = false` dans `mobile/src/services/store-services.ts`.
 Tant qu'il est éteint, aucun bouton payant ni aucune pub n'apparaît.
@@ -27,6 +27,33 @@ cd ../popcorn-1.0/mobile && npm ci && npx eas-cli@latest build --platform ios --
 
 Fichiers : `mobile/src/services/money.native.ts` (App Store + AdMob), `money-config.ts` (identifiants
 AdMob), `store-services.ts` (l'interrupteur), `mobile/src/game/catalog.ts` (packs et prix).
+
+## Sauvegarde iCloud (même progression sur iPhone et iPad)
+
+Toujours active dans la 1.1, rien à régler pour le joueur (Réglages → « ☁️ Sauvegarde iCloud ✓ »).
+
+- Utilise le **stockage clé-valeur iCloud** du compte Apple du joueur : gratuit, sans compte ni
+  serveur à nous. Module maison : `mobile/modules/cloud-kv` (Swift). Envoi 3 s après chaque
+  changement et à la sortie de l'app ; lecture au lancement, au retour dans l'app et dès qu'un
+  autre appareil change quelque chose.
+- Règles de fusion (`mobile/src/store/cloud-merge.ts`, testées) :
+  - s'additionnent : réponses trouvées, meilleures étoiles, trophées, records, statistiques,
+    thèmes/styles/avatars possédés, codes utilisés, achats ;
+  - viennent de l'appareil qui a joué en dernier : pièces, indices, bonus, partie en cours,
+    thème choisi (plus les pièces d'un pack acheté sur l'autre appareil, jamais perdues) ;
+  - suivent la date la plus récente : défi du jour, roue, cadeau du jour (impossible de
+    prendre un cadeau deux fois en changeant d'appareil) ;
+  - un appareil neuf (0 niveau réussi) ne remplace jamais une vraie progression ;
+  - « Réinitialiser » s'applique à tous les appareils, sauf les achats.
+  - Restent propres à chaque appareil : langue, sons, musique, vibrations, animations, voix,
+    rappel.
+- Confidentialité : les données vont dans l'iCloud **du joueur**, nous n'y avons pas accès.
+  Ce n'est pas une « collecte » au sens d'Apple.
+- EAS active tout seul l'option iCloud de l'app chez Apple au premier build (conteneur
+  `iCloud.com.hugobsqt.popcornalchemy`). Si le build se plaint des « capabilities », il suffit
+  de relancer : ça arrive parfois au premier essai.
+- **Pas testable ici** : il faut deux appareils Apple avec le même compte iCloud (iPhone + iPad),
+  via TestFlight.
 
 ## Ce que Hugo doit faire (une seule fois)
 
@@ -63,6 +90,7 @@ AdMob), `store-services.ts` (l'interrupteur), `mobile/src/game/catalog.ts` (pack
 2. Ajouter la liste complète des identifiants SKAdNetwork de Google dans `app.json`.
 3. Passer `MONEY_READY` à `true`, version `1.1.0`, lancer le build EAS → TestFlight.
 4. Tests sur ton iPhone avec le compte Sandbox : chaque pack, sans pub, restaurer, pubs, refuser le suivi.
+   Puis iCloud : jouer sur l'iPhone, ouvrir l'iPad (même compte iCloud), vérifier pièces et niveaux.
 5. Mettre à jour la page de confidentialité et la fiche (ci-dessous), envoyer à Apple.
 
 ## Le jour de l'envoi de la 1.1
