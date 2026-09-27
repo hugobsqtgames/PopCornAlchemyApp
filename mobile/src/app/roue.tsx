@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Animated, Easing, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 import { AdIcon } from '@/components/icons';
 import { Btn, Card, Emoji, Header, Screen, Txt } from '@/components/ui';
 import { dayKey } from '@/game/dates';
-import { openGift, pickSlice, SLICE_DEG, spinRotation, WHEEL, type Prize } from '@/game/wheel';
+import { openGift, pickSlice, SLICE_DEG, spinRotation, tickTimes, WHEEL, type Prize } from '@/game/wheel';
 import { useLayout, usePalette, useReduceMotion, useT } from '@/hooks/use-app';
 import { checkAchievements } from '@/services/achievements';
 import { buzz, play } from '@/services/feedback';
@@ -35,6 +35,8 @@ export default function Roue() {
   const [won, setWon] = useState<{ prize: Prize; icon: string; gift: boolean } | null>(null);
   const rot = useState(() => new Animated.Value(0))[0];
   const total = useRef(0);
+  const ticks = useRef<ReturnType<typeof setTimeout>[]>([]);
+  useEffect(() => () => ticks.current.forEach(clearTimeout), []);
   const size = Math.min(width - 64, height * 0.42, 420);
   const r = size / 2 - 10;
   const colors = [p.gold, p.goldTint, p.actionTint, p.goldTint, p.blueTint, p.goldTint, p.mintTint, p.goldTint];
@@ -53,21 +55,22 @@ export default function Roue() {
     setSpinning(true);
     s.set(bonus ? { wheelBonusLast: today } : { wheelLast: today });
     s.bumpStats({ spins: 1 });
-    const base = total.current - (total.current % 360);
+    // The wheel starts from where it stopped last time.
+    const from = total.current;
+    const base = from - (from % 360);
     total.current = base + spinRotation(i);
-    // One tick each time a slice passes the pointer: fast at first, slowing down with the wheel.
-    let lastSlice = Math.floor(base / SLICE_DEG);
-    const listener = rot.addListener(({ value }) => {
-      const slice = Math.floor((value + SLICE_DEG / 2) / SLICE_DEG);
-      if (slice !== lastSlice) {
-        lastSlice = slice;
+    const duration = still ? 1200 : 4200;
+    // The wheel turns on the native side (smooth at 120 fps). The ticks are scheduled from the
+    // same easing curve, so they slow down with the wheel without listening to every frame.
+    ticks.current.forEach(clearTimeout);
+    ticks.current = tickTimes(from, total.current, duration).map(({ at, strong }) =>
+      setTimeout(() => {
         play('tick');
-        buzz('select');
-      }
-    });
+        if (strong) buzz('select');
+      }, at)
+    );
     play('spin');
-    Animated.timing(rot, { toValue: total.current, duration: still ? 1200 : 4200, easing: Easing.out(Easing.cubic), useNativeDriver: false }).start(() => {
-      rot.removeListener(listener);
+    Animated.timing(rot, { toValue: total.current, duration, easing: Easing.out(Easing.cubic), useNativeDriver: true }).start(() => {
       const slice = WHEEL[i];
       const gift = slice.prize.kind === 'gift';
       const prize = gift ? openGift() : slice.prize;

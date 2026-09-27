@@ -14,6 +14,8 @@ const VOLUME = 0.35;
 const players: Partial<Record<Track, AudioPlayer>> = {};
 let current: Track | null = null;
 let wanted: Track | null = null;
+/** Bumped on every change, so a late rewind never restarts a track that is no longer wanted. */
+let generation = 0;
 
 function player(track: Track): AudioPlayer | undefined {
   if (!players[track]) {
@@ -41,14 +43,17 @@ function apply() {
     }
   }
   current = target;
+  const gen = ++generation;
   if (target) {
     const p = player(target);
-    try {
-      p?.seekTo(0);
-      p?.play();
-    } catch {
-      // Ignore: music is optional.
-    }
+    if (!p) return;
+    // seekTo is asynchronous: playing before it resolves can leave the track silent.
+    p.seekTo(0)
+      .catch(() => {})
+      .then(() => {
+        if (gen === generation && current === target) p.play();
+      })
+      .catch(() => {});
   }
 }
 
@@ -61,6 +66,7 @@ export function setTrack(track: Track | null) {
 /** Pauses everything (app in background) and resumes the wanted track. */
 export function suspendMusic(suspended: boolean) {
   if (suspended) {
+    generation++;
     if (current) players[current]?.pause();
     current = null;
   } else {

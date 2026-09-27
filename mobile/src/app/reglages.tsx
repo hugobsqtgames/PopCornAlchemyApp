@@ -1,10 +1,10 @@
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import type { ReactNode } from 'react';
-import { Alert, Linking, Pressable, ScrollView, Switch, View } from 'react-native';
+import { Alert, Linking, Pressable, ScrollView, View } from 'react-native';
 
 import { ChevronIcon, InstagramIcon, TikTokIcon, YouTubeIcon } from '@/components/icons';
-import { Emoji, Header, Screen, Section, Txt } from '@/components/ui';
+import { Emoji, Header, Screen, Section, Toggle, Txt } from '@/components/ui';
 import { NO_ADS_PACK } from '@/game/catalog';
 import { useLayout, usePalette, useT } from '@/hooks/use-app';
 import { play } from '@/services/feedback';
@@ -94,19 +94,19 @@ export default function Reglages() {
       <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}>
         <Section>{t('sec_game')}</Section>
         <Group>
-          <Row first icon="🔊" label={t('sounds')} right={<Switch value={s.sound} onValueChange={(v) => toggle('sound', v)} trackColor={{ true: p.green }} />} />
-          <Row icon="🎵" label={t('music')} right={<Switch value={s.music} onValueChange={(v) => toggle('music', v)} trackColor={{ true: p.green }} />} />
-          <Row icon="📳" label={t('haptics')} right={<Switch value={s.haptics} onValueChange={(v) => toggle('haptics', v)} trackColor={{ true: p.green }} />} />
+          <Row first icon="🔊" label={t('sounds')} right={<Toggle label={t('sounds')} value={s.sound} onValueChange={(v) => toggle('sound', v)} />} />
+          <Row icon="🎵" label={t('music')} right={<Toggle label={t('music')} value={s.music} onValueChange={(v) => toggle('music', v)} />} />
+          <Row icon="📳" label={t('haptics')} right={<Toggle label={t('haptics')} value={s.haptics} onValueChange={(v) => toggle('haptics', v)} />} />
           <Row
             icon="🎞️"
             label={t('reduce_motion')}
-            right={<Switch value={s.reduceMotion} onValueChange={(v) => toggle('reduceMotion', v)} trackColor={{ true: p.green }} />}
+            right={<Toggle label={t('reduce_motion')} value={s.reduceMotion} onValueChange={(v) => toggle('reduceMotion', v)} />}
           />
           <Row
             icon="⏰"
             label={t('reminder')}
             sub={t('reminder_sub')}
-            right={<Switch value={s.reminder} onValueChange={toggleReminder} trackColor={{ true: p.green }} />}
+            right={<Toggle label={t('reminder')} value={s.reminder} onValueChange={toggleReminder} />}
           />
           <Row
             icon="🌐"

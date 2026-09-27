@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
-import type { ReactNode } from 'react';
-import { Pressable, StyleSheet, Text, View, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
+import { useEffect, useState, type ReactNode } from 'react';
+import { Animated, Pressable, StyleSheet, Text, View, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
 
 import { useLayout, usePalette, useT } from '@/hooks/use-app';
 import { buzz, play } from '@/services/feedback';
@@ -361,5 +361,41 @@ export function Segments<T extends string>({ items, value, onChange }: { items: 
         );
       })}
     </View>
+  );
+}
+
+/**
+ * On/off switch drawn by the game, the same size on every iPhone and iPad
+ * (the system switch changed size in iOS 26 and no longer lines up in rows).
+ */
+export function Toggle({ value, onValueChange, label }: { value: boolean; onValueChange: (v: boolean) => void; label?: string }) {
+  const p = usePalette();
+  const [x] = useState(() => new Animated.Value(value ? 1 : 0));
+  useEffect(() => {
+    Animated.timing(x, { toValue: value ? 1 : 0, duration: 160, useNativeDriver: true }).start();
+  }, [value, x]);
+  return (
+    <Pressable
+      onPress={() => onValueChange(!value)}
+      accessibilityRole="switch"
+      accessibilityLabel={label}
+      accessibilityState={{ checked: value }}
+      hitSlop={8}
+      style={{ width: 50, height: 30, borderRadius: 15, backgroundColor: value ? p.green : p.line2, justifyContent: 'center', paddingHorizontal: 2 }}>
+      <Animated.View
+        style={{
+          width: 26,
+          height: 26,
+          borderRadius: 13,
+          backgroundColor: '#FFFFFF',
+          shadowColor: '#000',
+          shadowOpacity: 0.18,
+          shadowRadius: 2,
+          shadowOffset: { width: 0, height: 1 },
+          elevation: 2,
+          transform: [{ translateX: x.interpolate({ inputRange: [0, 1], outputRange: [0, 20] }) }],
+        }}
+      />
+    </Pressable>
   );
 }

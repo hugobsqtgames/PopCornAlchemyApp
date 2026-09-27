@@ -40,3 +40,22 @@ export function openGift(rng: () => number = Math.random): Prize {
   if (r < 0.67) return { kind: 'hints', amount: 5 };
   return { kind: 'coins', amount: 200 };
 }
+
+/**
+ * When the pointer crosses each slice edge during a spin from `from` to `to` degrees with an
+ * ease-out-cubic curve (value = 1 - (1 - t)³), in ms. Ticks closer than 45 ms are merged,
+ * and only ticks at least 90 ms apart also vibrate.
+ */
+export function tickTimes(from: number, to: number, duration: number): { at: number; strong: boolean }[] {
+  const out: { at: number; strong: boolean }[] = [];
+  let last = -Infinity;
+  for (let k = Math.ceil((from + SLICE_DEG / 2) / SLICE_DEG); k * SLICE_DEG - SLICE_DEG / 2 <= to; k++) {
+    const f = (k * SLICE_DEG - SLICE_DEG / 2 - from) / (to - from);
+    if (f <= 0) continue;
+    const at = Math.round((1 - Math.cbrt(1 - f)) * duration);
+    if (at - last < 45) continue;
+    out.push({ at, strong: at - last >= 90 });
+    last = at;
+  }
+  return out;
+}

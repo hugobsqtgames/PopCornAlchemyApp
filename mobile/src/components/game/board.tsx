@@ -145,19 +145,17 @@ export function Slots({ run, size }: { run: Run; size: number }) {
         const emoji = tile !== undefined ? run.grid[tile] : null;
         const toCenter = ((n - 1) / 2 - i) * (size + gap);
         return (
+          // The animated style is always attached (at rest it changes nothing), and each level gets
+          // new views: a native-driven style that is detached keeps its last values on iOS.
           <Animated.View
-            key={i}
-            style={
-              done && !still
-                ? {
-                    opacity: merge.interpolate({ inputRange: [0, 0.8, 1], outputRange: [1, 1, 0] }),
-                    transform: [
-                      { translateX: merge.interpolate({ inputRange: [0, 1], outputRange: [0, toCenter] }) },
-                      { scale: merge.interpolate({ inputRange: [0, 1], outputRange: [1, 0.6] }) },
-                    ],
-                  }
-                : undefined
-            }>
+            key={`${run.index}-${i}`}
+            style={{
+              opacity: merge.interpolate({ inputRange: [0, 0.8, 1], outputRange: [1, 1, 0] }),
+              transform: [
+                { translateX: merge.interpolate({ inputRange: [0, 1], outputRange: [0, toCenter] }) },
+                { scale: merge.interpolate({ inputRange: [0, 1], outputRange: [1, 0.6] }) },
+              ],
+            }}>
             <Pressable
               disabled={emoji === null}
               onPress={() => run.removePick(i)}

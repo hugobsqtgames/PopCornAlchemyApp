@@ -1,6 +1,6 @@
 import { router, useIsFocused } from 'expo-router';
 import { useState } from 'react';
-import { Modal, Pressable, Switch, View } from 'react-native';
+import { Modal, Pressable, View } from 'react-native';
 
 import type { Run } from '@/hooks/use-run';
 import { canSave } from '@/game/rules';
@@ -9,7 +9,7 @@ import { play } from '@/services/feedback';
 import { useProfile } from '@/store/profile';
 
 import { ChevronIcon, PlayIcon } from '../icons';
-import { Btn, Emoji, Px, Tap, Txt } from '../ui';
+import { Btn, Emoji, Px, Tap, Toggle, Txt } from '../ui';
 
 export function PauseSheet({ run }: { run: Run }) {
   const p = usePalette();
@@ -76,9 +76,9 @@ export function PauseSheet({ run }: { run: Run }) {
           <View style={{ width: 40, height: 5, borderRadius: 3, backgroundColor: p.line2, alignSelf: 'center', marginBottom: 4 }} />
           <Btn label={t('resume')} icon={<PlayIcon color={p.onAction} />} onPress={resume} />
           <View style={{ borderRadius: 18, backgroundColor: p.surface, borderWidth: p.border, borderColor: p.line, overflow: 'hidden' }}>
-            {row('🔊', t('sounds'), <Switch value={sound} onValueChange={(v) => toggle('sound', v)} trackColor={{ true: p.green }} />, undefined, true)}
-            {row('🎵', t('music'), <Switch value={music} onValueChange={(v) => toggle('music', v)} trackColor={{ true: p.green }} />)}
-            {row('📳', t('haptics'), <Switch value={haptics} onValueChange={(v) => toggle('haptics', v)} trackColor={{ true: p.green }} />)}
+            {row('🔊', t('sounds'), <Toggle label={t('sounds')} value={sound} onValueChange={(v) => toggle('sound', v)} />, undefined, true)}
+            {row('🎵', t('music'), <Toggle label={t('music')} value={music} onValueChange={(v) => toggle('music', v)} />)}
+            {row('📳', t('haptics'), <Toggle label={t('haptics')} value={haptics} onValueChange={(v) => toggle('haptics', v)} />)}
             {row('📖', t('rules'), <ChevronIcon color={p.line2} />, () => router.push('/tutoriel'))}
             {row('⚔️', t('challenge_friend'), <ChevronIcon color={p.line2} />, () => router.push('/defier'))}
           </View>

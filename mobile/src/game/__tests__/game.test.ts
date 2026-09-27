@@ -25,7 +25,7 @@ import {
   TIER_SIZE,
 } from '../rules';
 import { checkCode, rewardText } from '../codes';
-import { pickSlice, SLICE_DEG, spinRotation, WHEEL } from '../wheel';
+import { pickSlice, SLICE_DEG, spinRotation, tickTimes, WHEEL } from '../wheel';
 
 describe('levels', () => {
   it('has 400 levels with unique ids and names in 3 languages', () => {
@@ -220,5 +220,16 @@ describe('gift codes', () => {
 
   it('shows the reward in words and emojis', () => {
     expect(rewardText({ coins: 300, hints: 5 })).toBe('300 💰 · 5 💡');
+  });
+});
+
+describe('wheel ticks', () => {
+  it('slow down with the wheel and stay inside the spin', () => {
+    const times = tickTimes(0, spinRotation(3), 4200);
+    expect(times.length).toBeGreaterThan(20);
+    for (let i = 1; i < times.length; i++) expect(times[i].at - times[i - 1].at).toBeGreaterThanOrEqual(45);
+    const gaps = times.slice(1).map((x, i) => x.at - times[i].at);
+    expect(gaps[gaps.length - 1]).toBeGreaterThan(gaps[0]);
+    expect(times[times.length - 1].at).toBeLessThanOrEqual(4200);
   });
 });
