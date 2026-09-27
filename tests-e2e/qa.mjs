@@ -610,7 +610,7 @@ await step('pop-cornedex & replay', async () => {
   await back();
   await back();
   await tap('📊 Statistiques');
-  check(await see('Temps de jeu') && await see('Précision par catégorie'), 'statistics page');
+  check(await see('Temps de jeu') && await see('PRÉCISION PAR CATÉGORIE'), 'statistics page');
   check(!(await see('NaN', false)) && !(await see('undefined', false)), 'statistics show no NaN');
   const p2 = await profile();
   check(p2.stats.playSeconds > 0 && Object.values(p2.activity).length > 0 && p2.bestDay?.levels > 0, `play time and best day recorded (${p2.stats.playSeconds} s, best day ${p2.bestDay?.levels})`);

@@ -16,13 +16,13 @@ function durationText(seconds: number) {
   return `${s} s`;
 }
 
-/** "27 septembre 2026" in the player's language, from a "2026-09-27" day key. */
+/** "27 sept." in the player's language, from a "2026-09-27" day key. */
 function dayText(day: string, lang: string) {
   const [y, m, d] = day.split('-').map(Number);
   try {
-    return new Date(y, m - 1, d).toLocaleDateString(lang, { day: 'numeric', month: 'long', year: 'numeric' });
+    return new Date(y, m - 1, d).toLocaleDateString(lang, { day: 'numeric', month: 'short' });
   } catch {
-    return `${d}/${m}/${y}`;
+    return `${d}/${m}`;
   }
 }
 
@@ -73,7 +73,7 @@ export default function Statistiques() {
                     {b.label}
                   </Txt>
                 </View>
-                <Txt size={17} weight="heavy" lines={2}>
+                <Txt size={17} weight="heavy" lines={3}>
                   {b.value}
                 </Txt>
               </Card>
@@ -85,7 +85,7 @@ export default function Statistiques() {
                 <Txt size={15} weight="heavy" lines={1}>
                   {b.value}
                 </Txt>
-                <Txt size={11} weight="semibold" color={p.muted} center lines={1}>
+                <Txt size={11} weight="semibold" color={p.muted} center lines={2}>
                   {b.label}
                 </Txt>
               </Card>

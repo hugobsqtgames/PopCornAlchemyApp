@@ -269,7 +269,12 @@ await scenario('daily gift spam', async () => {
 });
 // 16. Pop-Cornédex data that makes no sense
 await scenario('broken pop-cornedex data', async () => {
-  await start({ ...base, found: [1, 1, 'x', 99999, -3, 2], stars: { 1: 7, 2: 2, abc: 3, 99999: 3 }, streakSaves: 50, activity: { nope: 5, [today]: -2 }, bestDay: { day: 12, levels: 'x' }, voice: 'yes' });
+  await start({ ...base, found: [1, 1, 'x', 99999, -3, 2], stars: { 1: 7, 2: 2, abc: 3, 99999: 3 }, streakSaves: 50, activity: { nope: 5, [today]: -2 }, bestDay: { day: 12, levels: 'x' }, voice: 'yes' }, '/reglages');
+  // Storage is rewritten on the next change: flip a setting twice.
+  for (let i = 0; i < 2; i++) {
+    await page.getByRole('switch', { name: 'Effets sonores' }).click({ force: true });
+    await wait(550);
+  }
   const pr = await profile();
   check(JSON.stringify(pr.found) === '[1,2]', `found repaired (${JSON.stringify(pr.found)})`);
   check(pr.stars[2] === 2 && !pr.stars.abc && !pr.stars[99999] && (pr.stars[1] === undefined || [1, 2, 3].includes(pr.stars[1])), `stars repaired (${JSON.stringify(pr.stars)})`);
@@ -301,7 +306,8 @@ await scenario('replay links', async () => {
   await wait(1600);
   check(await see('Niveau réussi !'), 'replay ends after that one level');
   const pr = await profile();
-  check(JSON.stringify(pr.save) === JSON.stringify(save) && pr.coins === 0, 'replay kept the saved adventure and gave no coins');
+  const same = (a, b) => JSON.stringify(a, Object.keys(a ?? {}).sort()) === JSON.stringify(b, Object.keys(b ?? {}).sort());
+  check(same(pr.save, save) && pr.coins === 0, `replay kept the saved adventure and gave no coins (${JSON.stringify(pr.save)}, ${pr.coins})`);
   // The skip and coin doubler do nothing while replaying.
   await start({ ...base, found: [5], skips: 3, doubles: 3 }, '/jeu?mode=replay&ids=5');
   await page.getByRole('button', { name: /^Passe-niveau/ }).filter({ visible: true }).click({ force: true }).catch(() => {});
