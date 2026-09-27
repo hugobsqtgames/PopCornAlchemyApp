@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, AppState, Easing } from 'react-native';
 
 import { styleBonus } from '@/game/catalog';
@@ -11,24 +11,36 @@ import {
   CHRONO_PENALTY_SECONDS,
   CHRONO_SECONDS,
   coinsFor,
+  decoysToRemove,
   hasTiers,
   isCorrect,
   isFever,
+  isRelaxed,
   levelById,
   PRICES,
   pointsFor,
+  REVEAL_MS,
   REWARDS,
+  shuffleGrid,
   startLives,
   TIER_SIZE,
   tierOf,
+  ZEN_TRIES,
 } from '@/game/rules';
 import type { Level, RunConfig } from '@/game/types';
+import { useReduceMotion } from '@/hooks/use-app';
 import { checkAchievements } from '@/services/achievements';
 import { buzz, play, playLater, type SoundName } from '@/services/feedback';
+import { enableReminder, scheduleReminders } from '@/services/reminder';
+import { celebrate } from '@/services/review';
 import { submitScore } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
 
-export type Phase = 'play' | 'correct' | 'tier' | 'over' | 'win';
+/** reveal = the answer of a missed or skipped level is on screen. */
+/** Seconds since `start` (a Date.now() value). */
+const secondsSince = (start: number) => (Date.now() - start) / 1000;
+
+export type Phase = 'play' | 'correct' | 'reveal' | 'tier' | 'over' | 'win';
 
 export interface RunResult {
   newRecord: boolean;
@@ -64,9 +76,15 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   const [tierStats, setTierStats] = useState<TierStats>({ bestCombo: 0, flawless: 0, mistakesThisLevel: 0 });
   const [cleared, setCleared] = useState<{ id: number; points: number }[]>([]);
   const [message, setMessage] = useState<{ text: string; key: number } | null>(null);
+  /** The level whose answer is (or was last) shown: on the reveal card and the game over screen. */
+  const [missed, setMissed] = useState<{ level: Level; skipped: boolean } | null>(null);
+  const relaxed = isRelaxed(config.mode);
+  const still = useReduceMotion();
 
   const level: Level | undefined = levelById(config.ids[index]);
-  const grid = useMemo(() => (level ? buildGrid(level) : []), [level]);
+  // The grid lives in state: clues can take tiles off it or shuffle it.
+  const [grid, setGrid] = useState<string[]>(() => (level ? buildGrid(level) : []));
+  const [removed, setRemoved] = useState<number[]>([]);
   const totalTiers = Math.ceil(config.ids.length / TIER_SIZE);
 
   // Speed bonus bar: 1 → 0 over the level's bonus time.
@@ -84,6 +102,8 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
 
   const runBonus = useCallback(
     (from: number) => {
+      // No clock in zen and in the guided level.
+      if (relaxed) return;
       bonus.setValue(from);
       Animated.timing(bonus, {
         toValue: 0,
@@ -94,20 +114,26 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
         if (finished) play('timeup');
       });
     },
-    [bonus, index]
+    [bonus, index, relaxed]
   );
 
   const flash = (text: string) => setMessage({ text, key: Date.now() });
 
   /** Moves to another level and clears what belonged to the previous one. */
-  const goTo = (next: number) => {
-    setIndex(next);
-    setPicked([]);
-    setHinted(null);
-    setHintUsed(false);
-    setTierStats((st) => ({ ...st, mistakesThisLevel: 0 }));
-    setPhase('play');
-  };
+  const goTo = useCallback(
+    (next: number) => {
+      const nextLevel = levelById(config.ids[next]);
+      setIndex(next);
+      setGrid(nextLevel ? buildGrid(nextLevel) : []);
+      setRemoved([]);
+      setPicked([]);
+      setHinted(null);
+      setHintUsed(false);
+      setTierStats((st) => ({ ...st, mistakesThisLevel: 0 }));
+      setPhase('play');
+    },
+    [config.ids]
+  );
 
   /** Chrono seconds live in a ref so the countdown interval always sees the latest value. */
   const addChrono = (delta: number) => {
@@ -146,7 +172,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     (won: boolean, finalScore: number, clearedNow: { id: number; points: number }[]) => {
       const s = profile.getState();
       const mode = config.mode;
-      const newRecord = s.setBest(mode, finalScore);
+      const newRecord = mode !== 'tutorial' && s.setBest(mode, finalScore);
       submitScore(mode, finalScore);
       let rewarded = false;
       let chest = false;
@@ -160,6 +186,9 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
           const r = s.finishDaily();
           rewarded = r.rewarded;
           chest = r.chest;
+          // Tonight's reminder is no longer needed. After the first daily, offer the reminder.
+          if (s.reminderAsked) scheduleReminders();
+          else setTimeout(enableReminder, 1500);
         } else if (mode === 'challenge') {
           rewarded = finalScore > (config.target ?? 0);
         }
@@ -176,6 +205,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       play(won ? 'victory' : 'gameover');
       buzz(won ? 'success' : 'heavy');
       checkAchievements();
+      if (won && mode !== 'tutorial' && (mode !== 'challenge' || rewarded)) celebrate();
     },
     [config, profile]
   );
@@ -214,16 +244,22 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
         setPhase('tier');
         play('victory');
         checkAchievements();
+        celebrate();
         return;
       }
       goTo(index + 1);
     },
-    [config, index, endRun, profile]
+    [config, index, endRun, profile, goTo]
   );
 
   const tapTile = (tile: number) => {
     if (phase !== 'play' || paused || !level) return;
-    if (picked.includes(tile) || picked.length >= level.sol.length) return;
+    if (picked.includes(tile) || removed.includes(tile) || picked.length >= level.sol.length) return;
+    // The guided level only accepts the right emojis.
+    if (config.mode === 'tutorial' && !level.sol.includes(grid[tile])) {
+      buzz('error');
+      return;
+    }
     play('pop');
     buzz('tap');
     setPicked([...picked, tile]);
@@ -239,7 +275,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   const fuse = () => {
     if (!level || phase !== 'play' || paused || picked.length < level.sol.length) return;
     const s = profile.getState();
-    const timeLeft = bonusValue.current;
+    const timeLeft = relaxed ? 0 : bonusValue.current;
     bonus.stopAnimation();
 
     if (isCorrect(picked.map((i) => grid[i]), level.sol)) {
@@ -263,7 +299,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
         flawless: t.flawless + (t.mistakesThisLevel === 0 ? 1 : 0),
         mistakesThisLevel: 0,
       }));
-      setLast({ points, coins, seconds: (Date.now() - levelStart.current) / 1000 });
+      setLast({ points, coins, seconds: secondsSince(levelStart.current) });
       if (config.mode === 'chrono') addChrono(CHRONO_BONUS_SECONDS);
       setPhase('correct');
       // The chime climbs with the combo; reaching 5 starts Fever.
@@ -280,9 +316,11 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     setPicked([]);
     setCombo(0);
     setTierStats((t) => ({ ...t, mistakesThisLevel: t.mistakesThisLevel + 1 }));
-    Animated.sequence(
-      [10, -10, 8, -8, 0].map((v) => Animated.timing(shake, { toValue: v, duration: 50, useNativeDriver: true }))
-    ).start();
+    if (!still) {
+      Animated.sequence(
+        [10, -10, 8, -8, 0].map((v) => Animated.timing(shake, { toValue: v, duration: 50, useNativeDriver: true }))
+      ).start();
+    }
 
     if (config.mode === 'chrono') {
       play('error');
@@ -290,6 +328,14 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       addChrono(-CHRONO_PENALTY_SECONDS);
       if (chronoRef.current <= 0) endRun(false, score, cleared);
       else runBonus(timeLeft);
+      return;
+    }
+    if (relaxed) {
+      // No lives: try again, and after a few tries the answer shows.
+      play('error');
+      buzz('error');
+      const tries = tierStats.mistakesThisLevel + 1;
+      if (tries >= ZEN_TRIES) reveal(level, false, () => advance(score, cleared));
       return;
     }
     if (config.mode !== 'hardcore' && s.useItem('shields')) {
@@ -300,12 +346,19 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       runBonus(timeLeft);
       return;
     }
+    // A life is lost: show the answer, then move on (or end the run).
     play('error');
     buzz('error');
     const left = lives - 1;
     setLives(left);
-    if (left <= 0) endRun(false, score, cleared);
-    else runBonus(timeLeft);
+    reveal(level, false, () => (left <= 0 ? endRun(false, score, cleared) : advance(score, cleared)));
+  };
+
+  /** Shows the answer of `lvl` for a moment, then runs `then`. */
+  const reveal = (lvl: Level, skipped: boolean, then: () => void) => {
+    setMissed({ level: lvl, skipped });
+    setPhase('reveal');
+    setTimeout(then, REVEAL_MS);
   };
 
   const giveHint = () => {
@@ -316,7 +369,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       const k = missing.indexOf(grid[i]);
       if (k >= 0) missing.splice(k, 1);
     }
-    const target = grid.findIndex((e, i) => e === missing[0] && !picked.includes(i));
+    const target = grid.findIndex((e, i) => e === missing[0] && !picked.includes(i) && !removed.includes(i));
     if (target < 0) return;
     if (!s.useItem('hints')) {
       flash('no_hints');
@@ -335,15 +388,40 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     }, 650);
   };
 
-  const skip = () => {
+  /** Cheaper clue: takes 5 wrong emojis off the grid, paid in coins. Once per level. */
+  const removeDecoys = () => {
+    if (!level || phase !== 'play' || paused || removed.length > 0) return false;
+    const s = profile.getState();
+    if (!s.spend(PRICES.removeDecoys)) {
+      flash('no_coins');
+      return false;
+    }
+    const gone = decoysToRemove(grid, level.sol, picked, removed);
+    setRemoved(gone);
+    play('whoosh');
+    buzz('select');
+    return true;
+  };
+
+  /** Free clue: shuffles the tiles, which often makes the answer jump out. */
+  const shuffleTiles = () => {
     if (phase !== 'play' || paused) return;
+    const next = shuffleGrid(grid, picked, removed);
+    setGrid(next.grid);
+    setPicked(next.picked);
+    setRemoved(next.removed);
+    play('whoosh');
+    buzz('tap');
+  };
+
+  const skip = () => {
+    if (!level || phase !== 'play' || paused) return;
     const s = profile.getState();
     if (!s.useItem('skips')) return;
     s.bumpStats({ skipsUsed: 1 });
     bonus.stopAnimation();
     play('powerup');
-    flash('level_skipped');
-    advance(score, cleared);
+    reveal(level, true, () => advance(score, cleared));
   };
 
   const double = () => {
@@ -370,10 +448,11 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     play('powerup');
     setLives(1);
     setResult(null);
-    setPicked([]);
-    if (canSave(config.mode)) profile.getState().set({ save: { ...config, index, lives: 1, score, combo: 0, continued: true } });
-    setPhase('play');
-    runBonus(1);
+    setMissed(null);
+    // The run goes on with the next level: the missed one was already shown.
+    const next = Math.min(index + 1, config.ids.length - 1);
+    goTo(next);
+    if (canSave(config.mode)) profile.getState().set({ save: { ...config, index: next, lives: 1, score, combo: 0, continued: true } });
     return true;
   };
 
@@ -381,6 +460,9 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     config,
     level,
     grid,
+    removed,
+    missed,
+    relaxed,
     index,
     lives,
     score,
@@ -406,6 +488,8 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     removePick,
     fuse,
     giveHint,
+    removeDecoys,
+    shuffleTiles,
     skip,
     double,
     nextTier,

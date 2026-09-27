@@ -1,10 +1,13 @@
 import { router } from 'expo-router';
 import { ScrollView, View } from 'react-native';
 
-import { Badge, Card, Emoji, Header, Screen, Tap, Txt } from '@/components/ui';
+import { Badge, Emoji, Header, Screen, Tap, Txt } from '@/components/ui';
 import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
+
+/** A new value each time, so the same mode can be started twice in a row. */
+const freshKey = () => String(Date.now());
 
 export default function Modes() {
   const p = usePalette();
@@ -12,10 +15,11 @@ export default function Modes() {
   const { insets } = useLayout();
   const best = useProfile((s) => s.best);
 
-  const modes: { id: 'classic' | 'chrono' | 'hardcore'; icon: string; tint: string; tags: string[] }[] = [
+  const modes: { id: 'classic' | 'chrono' | 'hardcore' | 'zen'; icon: string; tint: string; tags: string[] }[] = [
     { id: 'classic', icon: '🧪', tint: p.goldTint, tags: [`❤️ ${t('tag_lives')}`] },
     { id: 'chrono', icon: '⏱️', tint: p.blueTint, tags: [t('tag_chrono')] },
     { id: 'hardcore', icon: '💀', tint: p.actionTint, tags: [`🖤 ${t('tag_1life')}`, `💰 ${t('tag_x2')}`] },
+    { id: 'zen', icon: '🧘', tint: p.mintTint, tags: [t('tag_zen')] },
   ];
 
   return (
@@ -29,7 +33,7 @@ export default function Modes() {
             onPress={() =>
               m.id === 'classic'
                 ? router.push('/categories')
-                : router.push({ pathname: '/jeu', params: { mode: m.id, fresh: String(Date.now()) } })
+                : router.push({ pathname: '/jeu', params: { mode: m.id, fresh: freshKey() } })
             }
             style={{ padding: 14, gap: 12 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
@@ -46,7 +50,7 @@ export default function Modes() {
               </View>
             </View>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-              {[...m.tags, ...(best[m.id] ? [`⭐ ${fmt(best[m.id] ?? 0)}`] : [])].map((tag) => (
+              {[...m.tags, ...(best[m.id] && m.id !== 'zen' ? [`⭐ ${fmt(best[m.id] ?? 0)}`] : [])].map((tag) => (
                 <View key={tag} style={{ height: 26, paddingHorizontal: 9, borderRadius: 8, backgroundColor: p.sunk, justifyContent: 'center' }}>
                   <Txt size={12} weight="bold">
                     {tag}
@@ -56,19 +60,6 @@ export default function Modes() {
             </View>
           </Tap>
         ))}
-        <Card tint="transparent" border={p.line2} style={{ padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12, borderStyle: 'dashed' }}>
-          <Emoji size={22} style={{ opacity: 0.6 }}>
-            ⚔️
-          </Emoji>
-          <View style={{ gap: 2 }}>
-            <Txt size={15} weight="bold" color={p.muted}>
-              {t('duel_soon')}
-            </Txt>
-            <Txt size={13} color={p.muted}>
-              {t('duel_sub')}
-            </Txt>
-          </View>
-        </Card>
       </ScrollView>
     </Screen>
   );

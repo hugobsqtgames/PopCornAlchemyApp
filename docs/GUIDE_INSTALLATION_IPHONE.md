@@ -70,16 +70,20 @@ Tant que le Terminal reste ouvert, tu peux rejouer. Pour arrêter : `Ctrl + C` d
 | L'écran reste blanc | Secoue l'iPhone → *Reload* |
 | Autorisation refusée au premier lancement du Mac | Réglages du Mac → Confidentialité et sécurité → *Autoriser* |
 
-## Ce qui est normal dans cette version de test
+## Ce qui est normal dans cette version
 
-Expo Go ne peut pas charger les vrais services d'Apple et de Google. En attendant :
+- **Les achats, les pubs et le classement** sont cachés : ils arriveront dans la version 1.1, une fois
+  ton compte Apple Developer créé.
+- **La demande de note** (après ta 3ᵉ victoire) peut ne pas s'afficher pendant les tests : Apple ne la
+  montre vraiment qu'une fois l'app sur l'App Store.
+- **Le rappel de 18 h** fonctionne dans Expo Go, mais l'iPhone affichera « Expo Go » au lieu de
+  « Pop-Corn Alchemy » dans la notification.
+- **Le premier niveau guidé** ne s'affiche qu'au tout premier lancement. Pour le revoir :
+  Réglages → « Revoir le tutoriel ».
 
-- **Les pubs** sont simulées : une fenêtre « Publicité » de 3 secondes donne la récompense.
-- **Les achats** (packs de pièces, pack sans pub) affichent un message : ils arrivent avec la version App Store.
-- **Game Center** : le bouton *Classement* montre tes records sur l'appareil.
-
-Tout le reste est réel : les 400 niveaux, les modes, le défi du jour, la roue, la boutique en pièces,
-les trophées, les 3 langues, le mode sombre, l'iPad, les sons et les vibrations.
+Tout le reste est réel : les 400 niveaux, les 6 modes (dont Zen), le défi du jour, la roue, la
+boutique en pièces, les indices, les codes cadeaux, les trophées, les 3 langues, le mode sombre,
+l'iPad, les sons et les vibrations.
 
 ## Mettre à jour après une modification
 
@@ -92,5 +96,6 @@ Pour les pubs, les achats, Game Center puis la publication sur l'App Store, il f
 
 1. Créer ton **compte Apple Developer** (99 €/an) sur https://developer.apple.com/programs/
 2. Créer un compte gratuit sur **https://expo.dev** (le service qui compile l'app dans le cloud).
-3. On branchera ensuite AdMob, les achats intégrés et Game Center, et on générera une version
-   installable via **TestFlight**, puis on l'enverra à Apple.
+3. On générera une version installable via **TestFlight**, puis on l'enverra à Apple
+   (tout est prêt dans `store/` : fiche, images, vérification des règles Apple).
+4. Pour la version 1.1 : les vrais achats, les pubs et Game Center.

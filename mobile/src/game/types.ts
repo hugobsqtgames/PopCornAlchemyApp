@@ -30,8 +30,9 @@ export interface Level {
   name: Record<Lang, string>;
 }
 
-/** classic = adventure through all tiers; category = one category; daily/challenge = fixed list. */
-export type Mode = 'classic' | 'category' | 'chrono' | 'hardcore' | 'daily' | 'challenge';
+/** classic = adventure through all tiers; category = one category; daily/challenge = fixed list;
+ * zen = no clock, no lives; tutorial = the guided first level. */
+export type Mode = 'classic' | 'category' | 'chrono' | 'hardcore' | 'daily' | 'challenge' | 'zen' | 'tutorial';
 
 export interface RunConfig {
   mode: Mode;

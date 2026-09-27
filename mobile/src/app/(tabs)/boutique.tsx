@@ -9,7 +9,7 @@ import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
 import { checkAchievements } from '@/services/achievements';
 import { buzz, play } from '@/services/feedback';
-import { purchase, showRewardedAd } from '@/services/store-services';
+import { MONEY_READY, purchase, showRewardedAd } from '@/services/store-services';
 import { useProfile, type Item } from '@/store/profile';
 import { paletteFor } from '@/theme/palettes';
 
@@ -20,7 +20,7 @@ export default function Boutique() {
   const t = useT();
   const { tabTop, tablet } = useLayout();
   const s = useProfile();
-  const [tab, setTab] = useState<Tab>('coins');
+  const [tab, setTab] = useState<Tab>(MONEY_READY ? 'coins' : 'bonus');
   const cols = tablet ? 4 : 2;
   const cell = { width: `${100 / cols - 2.6}%` as const };
 
@@ -273,7 +273,7 @@ export default function Boutique() {
             value={tab}
             onChange={setTab}
             items={[
-              { id: 'coins', label: t('shop_coins') },
+              ...(MONEY_READY ? [{ id: 'coins' as const, label: t('shop_coins') }] : []),
               { id: 'bonus', label: t('shop_bonus') },
               { id: 'themes', label: t('shop_themes') },
               { id: 'styles', label: t('shop_styles') },

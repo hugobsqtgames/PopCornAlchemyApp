@@ -6,10 +6,10 @@ import { AdIcon } from '@/components/icons';
 import { Btn, Card, Emoji, Header, Screen, Txt } from '@/components/ui';
 import { dayKey } from '@/game/dates';
 import { openGift, pickSlice, SLICE_DEG, spinRotation, WHEEL, type Prize } from '@/game/wheel';
-import { useLayout, usePalette, useT } from '@/hooks/use-app';
+import { useLayout, usePalette, useReduceMotion, useT } from '@/hooks/use-app';
 import { checkAchievements } from '@/services/achievements';
 import { buzz, play } from '@/services/feedback';
-import { showRewardedAd } from '@/services/store-services';
+import { MONEY_READY, showRewardedAd } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
 
 function slicePath(i: number, r: number) {
@@ -30,6 +30,7 @@ export default function Roue() {
   const today = dayKey();
   const freeLeft = s.wheelLast !== today;
   const bonusLeft = s.wheelBonusLast !== today;
+  const still = useReduceMotion();
   const [spinning, setSpinning] = useState(false);
   const [won, setWon] = useState<{ prize: Prize; icon: string; gift: boolean } | null>(null);
   const rot = useState(() => new Animated.Value(0))[0];
@@ -65,7 +66,7 @@ export default function Roue() {
       }
     });
     play('spin');
-    Animated.timing(rot, { toValue: total.current, duration: 4200, easing: Easing.out(Easing.cubic), useNativeDriver: false }).start(() => {
+    Animated.timing(rot, { toValue: total.current, duration: still ? 1200 : 4200, easing: Easing.out(Easing.cubic), useNativeDriver: false }).start(() => {
       rot.removeListener(listener);
       const slice = WHEEL[i];
       const gift = slice.prize.kind === 'gift';
@@ -137,7 +138,7 @@ export default function Roue() {
             </Card>
           ) : (
             <Txt size={15} color={p.muted} center>
-              {freeLeft || bonusLeft ? t('wheel_sub') : t('wheel_used')}
+              {freeLeft || (MONEY_READY && bonusLeft) ? t('wheel_sub') : t('wheel_used')}
             </Txt>
           )}
         </View>
@@ -145,7 +146,7 @@ export default function Roue() {
       <View style={{ paddingHorizontal: 16, paddingBottom: insets.bottom + 16, gap: 6 }}>
         {freeLeft ? (
           <Btn label={t('spin')} disabled={spinning} onPress={() => spin(false)} />
-        ) : (
+        ) : !MONEY_READY ? null : (
           <Btn
             variant="gold"
             label={t('spin_bonus')}

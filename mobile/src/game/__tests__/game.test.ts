@@ -8,17 +8,23 @@ import {
   buildDaily,
   buildGrid,
   buildRun,
+  canSave,
   CATEGORIES,
   coinsFor,
+  decoysToRemove,
   DIFFICULTIES,
   GRID_SIZE,
   isCorrect,
+  isRelaxed,
   levelById,
   levelsOfCategory,
   levelsOfDifficulty,
   pointsFor,
+  shuffleGrid,
+  startLives,
   TIER_SIZE,
 } from '../rules';
+import { checkCode, rewardText } from '../codes';
 import { pickSlice, SLICE_DEG, spinRotation, WHEEL } from '../wheel';
 
 describe('levels', () => {
@@ -168,5 +174,51 @@ describe('achievements', () => {
     const ctx = { stats: { ...EMPTY_STATS, levels: 10, bestCombo: 5 }, coins: 0, streak: 0, themesOwned: 1 };
     expect(newlyUnlocked(ctx, [])).toEqual(['first_fusion', 'level_10', 'combo_5']);
     expect(newlyUnlocked(ctx, ['first_fusion', 'level_10'])).toEqual(['combo_5']);
+  });
+});
+
+describe('clues', () => {
+  const level = LEVELS[0];
+  const grid = buildGrid(level, mulberry32(3));
+
+  it('removes 5 wrong emojis, never the answer or a picked tile', () => {
+    const picked = [grid.findIndex((e) => !level.sol.includes(e))];
+    const gone = decoysToRemove(grid, level.sol, picked, [], 5, mulberry32(4));
+    expect(gone).toHaveLength(5);
+    for (const i of gone) {
+      expect(level.sol).not.toContain(grid[i]);
+      expect(picked).not.toContain(i);
+    }
+  });
+
+  it('shuffling keeps every tile and moves picks with their emoji', () => {
+    const picked = [0, 5];
+    const removed = [7];
+    const next = shuffleGrid(grid, picked, removed, mulberry32(9));
+    expect([...next.grid].sort()).toEqual([...grid].sort());
+    expect(next.picked.map((i) => next.grid[i])).toEqual(picked.map((i) => grid[i]));
+    expect(next.removed.map((i) => next.grid[i])).toEqual(removed.map((i) => grid[i]));
+  });
+});
+
+describe('zen and saves', () => {
+  it('zen has no lives, no hard levels, and never replaces the saved adventure', () => {
+    expect(isRelaxed('zen')).toBe(true);
+    expect(startLives('zen')).toBe(0);
+    expect(canSave('zen')).toBe(false);
+    expect(buildRun('zen').ids.every((id) => levelById(id)!.d < 3)).toBe(true);
+  });
+});
+
+describe('gift codes', () => {
+  it('works once, ignores case and spaces', () => {
+    const r = checkCode(' pop corn-500 ', [], '2026-10-01');
+    expect(r).toEqual({ ok: true, code: 'POPCORN500', reward: { coins: 500 } });
+    expect(checkCode('POPCORN500', ['POPCORN500'], '2026-10-01')).toEqual({ ok: false, reason: 'used' });
+    expect(checkCode('NOPE', [], '2026-10-01')).toEqual({ ok: false, reason: 'unknown' });
+  });
+
+  it('shows the reward in words and emojis', () => {
+    expect(rewardText({ coins: 300, hints: 5 })).toBe('300 💰 · 5 💡');
   });
 });

@@ -4,13 +4,17 @@ import { Share, View } from 'react-native';
 
 import { PRICES, REWARDS } from '@/game/rules';
 import type { Run } from '@/hooks/use-run';
-import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
+import { fmt, useLayout, useLevelName, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
-import { showRewardedAd } from '@/services/store-services';
+import { MONEY_READY, showRewardedAd } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
 
 import { AdIcon, ShareIcon } from '../icons';
 import { Btn, Card, Emoji, Px, Screen, Txt } from '../ui';
+
+import { Confetti } from '../confetti';
+
+import { AnswerEmojis } from './board';
 
 function shareScore(run: Run, t: ReturnType<typeof useT>) {
   Share.share({ message: t('share_score', { s: fmt(run.score), n: run.index + 1 }) }).catch(() => {});
@@ -38,6 +42,7 @@ export function TierView({ run }: { run: Run }) {
   const tier = Math.floor(run.index / 20) + 1;
   return (
     <Screen>
+      <Confetti />
       <View style={{ flex: 1 }} />
       <View style={{ alignItems: 'center', gap: 10, paddingHorizontal: 24 }}>
         <View style={{ width: 96, height: 96, borderRadius: 48, backgroundColor: p.goldTint, alignItems: 'center', justifyContent: 'center' }}>
@@ -86,6 +91,7 @@ export function TierView({ run }: { run: Run }) {
 export function OverView({ run, onReplay }: { run: Run; onReplay: () => void }) {
   const p = usePalette();
   const t = useT();
+  const name = useLevelName();
   const coins = useProfile((s) => s.coins);
   const [busy, setBusy] = useState(false);
   const chrono = run.config.mode === 'chrono';
@@ -109,6 +115,14 @@ export function OverView({ run, onReplay }: { run: Run; onReplay: () => void }) 
         <Txt size={15} color={p.muted} center>
           {chrono ? t('time_over', { n: run.index }) : t('gameover_sub', { n: run.index + 1 })}
         </Txt>
+        {run.missed && !chrono && (
+          <View style={{ alignItems: 'center', gap: 8, marginTop: 4 }}>
+            <Txt size={13} weight="bold" color={p.muted}>
+              {t('answer_was')} · {name(run.missed.level)}
+            </Txt>
+            <AnswerEmojis level={run.missed.level} size={44} />
+          </View>
+        )}
       </View>
       <View style={{ paddingHorizontal: 16, paddingTop: 20 }}>
         <Card style={{ padding: 14, flexDirection: 'row' }}>
@@ -128,9 +142,11 @@ export function OverView({ run, onReplay }: { run: Run; onReplay: () => void }) 
             <Txt size={15} weight="heavy" center>
               {t('continue_q')}
             </Txt>
-            <Btn variant="gold" label={t('watch_ad')} icon={<AdIcon color="#1F1B2D" />} height={52} size={15} disabled={busy} onPress={watchAd} />
+            {MONEY_READY && (
+              <Btn variant="gold" label={t('watch_ad')} icon={<AdIcon color="#1F1B2D" />} height={52} size={15} disabled={busy} onPress={watchAd} />
+            )}
             <Btn
-              variant="soft"
+              variant={MONEY_READY ? 'soft' : 'gold'}
               label={t('or_coins', { n: PRICES.continue })}
               height={44}
               size={14}
@@ -195,8 +211,10 @@ export function WinView({ run }: { run: Run }) {
   if (mode === 'daily' && r?.rewarded) rewards.push(`+${REWARDS.daily.coins} 💰`, `+${REWARDS.daily.hints} 💡`);
   if (r?.chest) rewards.push(t('chest'));
 
+  const party = mode !== 'challenge' || !!r?.rewarded;
   return (
     <Screen>
+      {party && <Confetti />}
       <View style={{ flex: 1 }} />
       <View style={{ alignItems: 'center', gap: 12, paddingHorizontal: 24 }}>
         <View style={{ width: 104, height: 104, borderRadius: 52, backgroundColor: p.gold, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 5, borderColor: p.goldDeep }}>

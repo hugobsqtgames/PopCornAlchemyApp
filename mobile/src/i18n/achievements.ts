@@ -2,7 +2,7 @@
 export const ACHIEVEMENT_TEXT = {
   "fr": {
     "ach_first_fusion": "Première Fusion",
-    "ach_first_fusion_desc": "Réussis ton premier niveau !",
+    "ach_first_fusion_desc": "Réussis ton premier niveau !",
     "ach_combo_5": "Apprenti Combo",
     "ach_combo_5_desc": "Atteins un combo de x5.",
     "ach_combo_10": "Maître Combo",

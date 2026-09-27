@@ -35,6 +35,11 @@ export interface ProfileState {
   sound: boolean;
   music: boolean;
   haptics: boolean;
+  /** Fewer animations, on top of the iPhone's own Reduce Motion setting. */
+  reduceMotion: boolean;
+  /** Daily challenge reminder at 6 pm, and whether the player was already asked for it. */
+  reminder: boolean;
+  reminderAsked: boolean;
   noAds: boolean;
   best: Partial<Record<Mode, number>>;
   stats: Stats;
@@ -51,6 +56,11 @@ export interface ProfileState {
   /** Last levels cleared, used to build a challenge for a friend. */
   lastRun: { ids: number[]; score: number } | null;
   received: ReceivedChallenge[];
+  /** Gift codes already used on this device (kept on reset). */
+  redeemedCodes: string[];
+  /** Wins and cleared tiers, to ask for a rating at a happy moment; last time it was asked. */
+  happyMoments: number;
+  reviewAskedAt: string | null;
 }
 
 interface ProfileActions {
@@ -90,6 +100,9 @@ const INITIAL: ProfileState = {
   sound: true,
   music: true,
   haptics: true,
+  reduceMotion: false,
+  reminder: false,
+  reminderAsked: false,
   noAds: false,
   best: {},
   stats: EMPTY_STATS,
@@ -104,6 +117,9 @@ const INITIAL: ProfileState = {
   save: null,
   lastRun: null,
   received: [],
+  redeemedCodes: [],
+  happyMoments: 0,
+  reviewAskedAt: null,
 };
 
 export const useProfile = create<ProfileState & ProfileActions>()(
@@ -182,7 +198,24 @@ export const useProfile = create<ProfileState & ProfileActions>()(
           const today = dayKey();
           return { adsDay: today, adsCount: s.adsDay === today ? s.adsCount + 1 : 1 };
         }),
-      reset: () => set({ ...INITIAL, lang: get().lang, tutorialDone: true }),
+      // Settings, used gift codes and the rating request survive a reset.
+      reset: () => {
+        const s = get();
+        set({
+          ...INITIAL,
+          lang: s.lang,
+          tutorialDone: true,
+          sound: s.sound,
+          music: s.music,
+          haptics: s.haptics,
+          reduceMotion: s.reduceMotion,
+          reminder: s.reminder,
+          reminderAsked: s.reminderAsked,
+          redeemedCodes: s.redeemedCodes,
+          happyMoments: s.happyMoments,
+          reviewAskedAt: s.reviewAskedAt,
+        });
+      },
     }),
     {
       name: 'popcorn-profile',

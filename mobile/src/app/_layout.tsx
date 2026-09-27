@@ -18,6 +18,7 @@ import { SimulatedAd, Toasts } from '@/components/overlays';
 import { useLayout, usePalette } from '@/hooks/use-app';
 import { initSounds } from '@/services/feedback';
 import { setTrack, suspendMusic } from '@/services/music';
+import { scheduleReminders } from '@/services/reminder';
 import { useProfile } from '@/store/profile';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -63,6 +64,14 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (ready) SplashScreen.hideAsync().catch(() => {});
+  }, [ready]);
+
+  // Keep the next evenings' reminders up to date (language, daily already done…).
+  useEffect(() => {
+    if (!ready) return;
+    scheduleReminders();
+    const sub = AppState.addEventListener('change', (st) => st === 'active' && scheduleReminders());
+    return () => sub.remove();
   }, [ready]);
 
   if (!ready) return <View style={{ flex: 1, backgroundColor: p.bg }} />;

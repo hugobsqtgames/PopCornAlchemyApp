@@ -28,6 +28,13 @@ export async function restorePurchases(unavailableMessage: string): Promise<void
   Alert.alert('', unavailableMessage);
 }
 
+/**
+ * Real ads and in-app purchases are not wired yet. While false, every button that would
+ * need them is hidden: App Review rejects buttons that do nothing.
+ */
+export const MONEY_READY = false;
+
+/** Same for the Game Center leaderboard. */
 export const GAME_CENTER_READY = false;
 
 export function submitScore(_leaderboard: string, _score: number): void {

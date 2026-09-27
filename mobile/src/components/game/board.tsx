@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Animated, Pressable, View, type LayoutChangeEvent } from 'react-native';
+import { Animated, Easing, Pressable, View, type LayoutChangeEvent } from 'react-native';
 
 import { CATEGORIES, GRID_SIZE } from '@/game/rules';
 import type { Run } from '@/hooks/use-run';
-import { fmt, useLevelName, usePalette, useT } from '@/hooks/use-app';
+import { fmt, useLevelName, usePalette, useReduceMotion, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
 
@@ -16,14 +16,16 @@ export function Hud({ run, onPause, big }: { run: Run; onPause: () => void; big?
   const best = useProfile((s) => s.best[run.config.mode] ?? 0);
   const inTier = (run.index % 20) + 1;
   const mode = run.config.mode;
-  const progressLabel =
-    mode === 'chrono'
+  const progressLabel = run.relaxed
+    ? t(`mode_${mode}` as StringKey)
+    : mode === 'chrono'
       ? `${Math.max(0, run.chronoLeft)} s`
       : mode === 'daily' || mode === 'challenge'
         ? `${run.index + 1}/${run.config.ids.length}`
         : `${t('tier')} ${Math.floor(run.index / 20) + 1}`;
-  const progress =
-    mode === 'chrono' ? Math.max(0, run.chronoLeft) / 60 : mode === 'daily' || mode === 'challenge' ? run.index / run.config.ids.length : inTier / 20;
+  const progress = run.relaxed
+    ? 0
+    : mode === 'chrono' ? Math.max(0, run.chronoLeft) / 60 : mode === 'daily' || mode === 'challenge' ? run.index / run.config.ids.length : inTier / 20;
 
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
@@ -38,15 +40,17 @@ export function Hud({ run, onPause, big }: { run: Run; onPause: () => void; big?
             · {progressLabel}
           </Txt>
         </Txt>
-        <Bar value={progress} color={mode === 'chrono' && run.chronoLeft <= 10 ? p.action : p.ink} height={big ? 8 : 6} />
+        {!run.relaxed && <Bar value={progress} color={mode === 'chrono' && run.chronoLeft <= 10 ? p.action : p.ink} height={big ? 8 : 6} />}
       </View>
       <View style={{ alignItems: 'flex-end', gap: 2 }}>
         <Txt size={big ? 22 : 17} weight="heavy" style={{ fontVariant: ['tabular-nums'] }}>
           {fmt(run.score)}
         </Txt>
-        <Txt size={11} weight="semibold" color={p.muted}>
-          {t('record_small', { n: best })}
-        </Txt>
+        {!run.relaxed && (
+          <Txt size={11} weight="semibold" color={p.muted}>
+            {t('record_small', { n: best })}
+          </Txt>
+        )}
       </View>
     </View>
   );
@@ -59,8 +63,8 @@ export function ObjectiveCard({ run, big }: { run: Run; big?: boolean }) {
   if (!run.level) return null;
   const cat = CATEGORIES.find((c) => c.id === run.level?.cat);
   const lifeCount = run.config.mode === 'hardcore' ? 1 : 4;
-  const showLives = run.config.mode !== 'chrono';
-  const done = run.phase === 'correct';
+  const showLives = run.config.mode !== 'chrono' && !run.relaxed;
+  const done = run.phase !== 'play';
   const width = run.bonus.interpolate({ inputRange: [0, 1], outputRange: ['0%', '100%'] });
 
   return (
@@ -111,9 +115,11 @@ export function ObjectiveCard({ run, big }: { run: Run; big?: boolean }) {
       <Txt size={big ? 32 : 22} weight="heavy" center lines={2} style={{ lineHeight: big ? 38 : 26 }}>
         {name(run.level)}
       </Txt>
-      <View style={{ height: big ? 8 : 6, borderRadius: 999, backgroundColor: p.sunk, overflow: 'hidden' }} accessibilityLabel={t('time_up')}>
-        <Animated.View style={{ height: '100%', width: done ? '0%' : width, borderRadius: 999, backgroundColor: p.action }} />
-      </View>
+      {!run.relaxed && (
+        <View style={{ height: big ? 8 : 6, borderRadius: 999, backgroundColor: p.sunk, overflow: 'hidden' }} accessibilityLabel={t('time_up')}>
+          <Animated.View style={{ height: '100%', width: done ? '0%' : width, borderRadius: 999, backgroundColor: p.action }} />
+        </View>
+      )}
     </View>
   );
 }
@@ -121,48 +127,111 @@ export function ObjectiveCard({ run, big }: { run: Run; big?: boolean }) {
 export function Slots({ run, size }: { run: Run; size: number }) {
   const p = usePalette();
   const style = useProfile((s) => s.style);
-  if (!run.level) return null;
+  const still = useReduceMotion();
+  // Fusion: the slots slide together and pop into a burst of pop-corn.
+  const merge = useState(() => new Animated.Value(0))[0];
   const done = run.phase === 'correct';
+  useEffect(() => {
+    merge.setValue(0);
+    if (done && !still) Animated.timing(merge, { toValue: 1, duration: 320, easing: Easing.in(Easing.quad), useNativeDriver: true }).start();
+  }, [done, still, merge]);
+  if (!run.level) return null;
+  const n = run.level.sol.length;
+  const gap = size * 0.2;
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'center', gap: size * 0.2 }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'center', gap }}>
       {run.level.sol.map((_, i) => {
         const tile = run.picked[i];
         const emoji = tile !== undefined ? run.grid[tile] : null;
+        const toCenter = ((n - 1) / 2 - i) * (size + gap);
         return (
-          <Pressable
+          <Animated.View
             key={i}
-            disabled={emoji === null}
-            onPress={() => run.removePick(i)}
-            accessibilityRole="button"
-            accessibilityLabel={emoji ?? `${i + 1}`}
-            style={{
-              width: size,
-              height: size,
-              borderRadius: size * 0.28,
-              borderWidth: 2,
-              borderStyle: emoji ? 'solid' : 'dashed',
-              borderColor: done ? p.green : emoji ? p.ink : p.line2,
-              backgroundColor: done ? p.greenTint : emoji ? p.surface : 'transparent',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            {emoji ? (
-              <Emoji size={size * 0.52}>{emoji}</Emoji>
-            ) : (
-              <Emoji size={size * 0.36} style={{ opacity: 0.18 }}>
-                {style}
-              </Emoji>
-            )}
-          </Pressable>
+            style={
+              done && !still
+                ? {
+                    opacity: merge.interpolate({ inputRange: [0, 0.8, 1], outputRange: [1, 1, 0] }),
+                    transform: [
+                      { translateX: merge.interpolate({ inputRange: [0, 1], outputRange: [0, toCenter] }) },
+                      { scale: merge.interpolate({ inputRange: [0, 1], outputRange: [1, 0.6] }) },
+                    ],
+                  }
+                : undefined
+            }>
+            <Pressable
+              disabled={emoji === null}
+              onPress={() => run.removePick(i)}
+              accessibilityRole="button"
+              accessibilityLabel={emoji ?? `${i + 1}`}
+              style={{
+                width: size,
+                height: size,
+                borderRadius: size * 0.28,
+                borderWidth: 2,
+                borderStyle: emoji ? 'solid' : 'dashed',
+                borderColor: done ? p.green : emoji ? p.ink : p.line2,
+                backgroundColor: done ? p.greenTint : emoji ? p.surface : 'transparent',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              {emoji ? (
+                <Emoji size={size * 0.52}>{emoji}</Emoji>
+              ) : (
+                <Emoji size={size * 0.36} style={{ opacity: 0.18 }}>
+                  {style}
+                </Emoji>
+              )}
+            </Pressable>
+          </Animated.View>
         );
       })}
+      {done && !still && <FusionBurst size={size} style={style} />}
+    </View>
+  );
+}
+
+const BURST = Array.from({ length: 10 }, (_, i) => ({ angle: (i / 10) * Math.PI * 2 + 0.3, far: i % 2 ? 1 : 0.7 }));
+
+/** The pop after a fusion: the player's pop-corn style bursts out of the merged slots. */
+function FusionBurst({ size, style }: { size: number; style: string }) {
+  const t = useState(() => new Animated.Value(0))[0];
+  useEffect(() => {
+    Animated.timing(t, { toValue: 1, duration: 650, delay: 280, easing: Easing.out(Easing.cubic), useNativeDriver: true }).start();
+  }, [t]);
+  const reach = size * 1.6;
+  return (
+    <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
+      <Animated.View
+        style={{
+          position: 'absolute',
+          opacity: t.interpolate({ inputRange: [0, 0.1, 0.7, 1], outputRange: [0, 1, 1, 0] }),
+          transform: [{ scale: t.interpolate({ inputRange: [0, 0.3, 1], outputRange: [0.2, 1.4, 1.1] }) }],
+        }}>
+        <Emoji size={size * 0.8}>{style}</Emoji>
+      </Animated.View>
+      {BURST.map((b, i) => (
+        <Animated.View
+          key={i}
+          style={{
+            position: 'absolute',
+            opacity: t.interpolate({ inputRange: [0, 0.15, 1], outputRange: [0, 1, 0] }),
+            transform: [
+              { translateX: t.interpolate({ inputRange: [0, 1], outputRange: [0, Math.cos(b.angle) * reach * b.far] }) },
+              { translateY: t.interpolate({ inputRange: [0, 1], outputRange: [0, Math.sin(b.angle) * reach * b.far * 0.6] }) },
+              { scale: t.interpolate({ inputRange: [0, 1], outputRange: [0.4, 0.9] }) },
+            ],
+          }}>
+          <Emoji size={size * 0.4}>{i % 3 === 0 ? '✨' : style}</Emoji>
+        </Animated.View>
+      ))}
     </View>
   );
 }
 
 /** The emoji grid. `cols` is 4 on phones, 5 on iPad. Tiles grow to fill the space. */
-export function Grid({ run, cols }: { run: Run; cols: number }) {
+export function Grid({ run, cols, guide }: { run: Run; cols: number; guide?: number }) {
   const p = usePalette();
+  const bounce = useBounce(guide !== undefined);
   const [size, setSize] = useState({ w: 0, h: 0 });
   const rows = GRID_SIZE / cols;
   const gap = size.h > 520 ? 14 : size.h > 380 ? 10 : 7;
@@ -170,7 +239,7 @@ export function Grid({ run, cols }: { run: Run; cols: number }) {
   const tileW = size.w ? (size.w - gap * (cols - 1)) / cols : 0;
   const h = Math.min(tileH, tileW * 1.05);
   const emoji = Math.max(20, Math.min(h * 0.5, tileW * 0.5, 54));
-  const dim = run.phase === 'correct';
+  const dim = run.phase === 'correct' || run.phase === 'reveal';
 
   const onLayout = (e: LayoutChangeEvent) => setSize({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height });
 
@@ -180,7 +249,9 @@ export function Grid({ run, cols }: { run: Run; cols: number }) {
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap, opacity: dim ? 0.3 : 1 }}>
           {run.grid.map((e, i) => {
             const used = run.picked.includes(i);
-            const hint = run.hinted === i;
+            const hint = run.hinted === i || guide === i;
+            const gone = run.removed.includes(i);
+            if (gone) return <View key={`${run.index}-${i}`} style={{ width: tileW, height: h }} />;
             return (
               <Pressable
                 key={`${run.index}-${i}`}
@@ -206,6 +277,11 @@ export function Grid({ run, cols }: { run: Run; cols: number }) {
                 <Emoji size={emoji} style={{ opacity: used ? 0.25 : 1 }}>
                   {e}
                 </Emoji>
+                {guide === i && (
+                  <Animated.View pointerEvents="none" style={{ position: 'absolute', right: -6, bottom: -14, transform: [{ translateY: bounce }] }}>
+                    <Emoji size={30}>👆</Emoji>
+                  </Animated.View>
+                )}
               </Pressable>
             );
           })}
@@ -215,12 +291,31 @@ export function Grid({ run, cols }: { run: Run; cols: number }) {
   );
 }
 
-export function PowerUps({ run, big }: { run: Run; big?: boolean }) {
+/** A small up-and-down loop (the guiding hand), still when animations are reduced. */
+export function useBounce(on: boolean) {
+  const still = useReduceMotion();
+  const y = useState(() => new Animated.Value(0))[0];
+  useEffect(() => {
+    if (!on || still) return;
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(y, { toValue: -8, duration: 380, useNativeDriver: true }),
+        Animated.timing(y, { toValue: 0, duration: 380, useNativeDriver: true }),
+      ])
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [on, still, y]);
+  return y;
+}
+
+export function PowerUps({ run, big, onClues }: { run: Run; big?: boolean; onClues: () => void }) {
   const p = usePalette();
   const t = useT();
   const s = useProfile();
   const items = [
-    { icon: '💡', n: s.hints, on: () => run.giveHint(), gold: true, off: run.hintUsed, label: t('bonus_hints') },
+    // The bulb opens the clue sheet: reveal an emoji, remove wrong ones, shuffle.
+    { icon: '💡', n: s.hints, on: onClues, gold: true, off: run.phase !== 'play', label: t('clues') },
     { icon: '🛡️', n: s.shields, on: undefined, off: run.config.mode === 'hardcore' || run.config.mode === 'chrono', label: t('bonus_shield') },
     { icon: '⏭️', n: s.skips, on: () => run.skip(), off: false, label: t('bonus_skip') },
     { icon: '✨', n: s.doubles, on: () => run.double(), off: run.doubleOn, label: t('bonus_double') },
@@ -229,7 +324,7 @@ export function PowerUps({ run, big }: { run: Run; big?: boolean }) {
   return (
     <View style={{ flexDirection: 'row', gap: 10 }}>
       {items.map((it) => {
-        const disabled = it.n <= 0 || it.off;
+        const disabled = (it.n <= 0 && it.on !== onClues) || it.off;
         return (
           <Pressable
             key={it.icon}
@@ -277,6 +372,9 @@ export function FuseButton({ run, big }: { run: Run; big?: boolean }) {
   const t = useT();
   const style = useProfile((s) => s.style);
   const need = run.level?.sol.length ?? 0;
+  if (run.phase === 'reveal') {
+    return <Btn variant="off" disabled label={t('next_level')} height={big ? 68 : 54} />;
+  }
   if (run.phase === 'correct') {
     return <Btn variant="green" label={t('next_level')} icon={<CheckIcon color="#FFFFFF" size={18} />} height={big ? 68 : 54} />;
   }
@@ -297,13 +395,14 @@ export function FuseButton({ run, big }: { run: Run; big?: boolean }) {
 export function CorrectCard({ run }: { run: Run }) {
   const p = usePalette();
   const t = useT();
+  const still = useReduceMotion();
   const scale = useState(() => new Animated.Value(0.6))[0];
   useEffect(() => {
     if (run.phase === 'correct') {
-      scale.setValue(0.6);
-      Animated.spring(scale, { toValue: 1, useNativeDriver: true, bounciness: 14 }).start();
+      scale.setValue(still ? 1 : 0.6);
+      if (!still) Animated.spring(scale, { toValue: 1, useNativeDriver: true, bounciness: 14 }).start();
     }
-  }, [run.phase, scale]);
+  }, [run.phase, scale, still]);
   if (run.phase !== 'correct') return null;
   return (
     <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
@@ -329,6 +428,69 @@ export function CorrectCard({ run }: { run: Run }) {
           <Chip>⚡ {run.last.seconds.toFixed(1).replace('.', ',')} s</Chip>
         </View>
       </Animated.View>
+    </View>
+  );
+}
+
+/** The answer of a missed or skipped level, shown on the grid for a moment. */
+export function RevealCard({ run }: { run: Run }) {
+  const p = usePalette();
+  const t = useT();
+  const name = useLevelName();
+  const still = useReduceMotion();
+  const scale = useState(() => new Animated.Value(0.6))[0];
+  useEffect(() => {
+    if (run.phase === 'reveal') {
+      scale.setValue(still ? 1 : 0.6);
+      if (!still) Animated.spring(scale, { toValue: 1, useNativeDriver: true, bounciness: 10 }).start();
+    }
+  }, [run.phase, scale, still]);
+  if (run.phase !== 'reveal' || !run.missed) return null;
+  const { level, skipped } = run.missed;
+  return (
+    <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
+      <Animated.View
+        accessibilityLiveRegion="polite"
+        style={{
+          transform: [{ scale }],
+          maxWidth: '100%',
+          paddingVertical: 20,
+          paddingHorizontal: 24,
+          borderRadius: 24,
+          backgroundColor: p.surface,
+          borderWidth: 2,
+          borderColor: skipped ? p.line2 : p.action,
+          borderBottomWidth: 6,
+          alignItems: 'center',
+          gap: 10,
+        }}>
+        <Txt size={20} weight="heavy" color={skipped ? p.ink : p.action}>
+          {skipped ? t('level_skipped') : t('missed_title')}
+        </Txt>
+        <Txt size={13} weight="bold" color={p.muted}>
+          {t('answer_was')}
+        </Txt>
+        <AnswerEmojis level={level} />
+        <Txt size={16} weight="heavy" center lines={2}>
+          {name(level)}
+        </Txt>
+      </Animated.View>
+    </View>
+  );
+}
+
+/** The emojis of an answer, in tiles. */
+export function AnswerEmojis({ level, size = 52 }: { level: { sol: string[] }; size?: number }) {
+  const p = usePalette();
+  return (
+    <View style={{ flexDirection: 'row', gap: 8 }} accessible accessibilityLabel={level.sol.join(' ')}>
+      {level.sol.map((e, i) => (
+        <View
+          key={i}
+          style={{ width: size, height: size, borderRadius: size * 0.28, backgroundColor: p.greenTint, borderWidth: 2, borderColor: p.green, alignItems: 'center', justifyContent: 'center' }}>
+          <Emoji size={size * 0.5}>{e}</Emoji>
+        </View>
+      ))}
     </View>
   );
 }

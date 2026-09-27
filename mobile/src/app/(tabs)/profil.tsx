@@ -7,6 +7,7 @@ import { CATEGORIES } from '@/game/rules';
 import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
 import { showLeaderboard } from '@/services/leaderboard';
+import { GAME_CENTER_READY } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
 
 function titleKey(levels: number): StringKey {
@@ -70,7 +71,9 @@ export default function Profil() {
           </Card>
         </View>
         <View style={{ flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingTop: 12 }}>
-          <Btn variant="soft" label={`🏆 ${t('leaderboard')}`} height={46} size={13} style={{ flex: 1 }} onPress={() => showLeaderboard(t)} />
+          {GAME_CENTER_READY && (
+            <Btn variant="soft" label={`🏆 ${t('leaderboard')}`} height={46} size={13} style={{ flex: 1 }} onPress={() => showLeaderboard(t)} />
+          )}
           <Btn variant="soft" label={`🎖️ ${t('achievements_btn')}`} height={46} size={13} style={{ flex: 1 }} onPress={() => router.navigate('/trophees')} />
         </View>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingHorizontal: 16, paddingTop: 14 }}>

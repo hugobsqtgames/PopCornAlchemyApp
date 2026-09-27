@@ -114,6 +114,18 @@ require('./levels-more').forEach((n, i) =>
   all.push({ id: 251 + i, cat: n[3], sol: split(n[4]), name: n.slice(0, 3), d: n[5], order: 2000 + i })
 );
 
+// Family-friendly answers: no alcohol, tobacco or drug emojis (App Store age rating).
+const SOL_FIX = {
+  Bowling: '🎳👟',
+  'Nouvel An': '🎆🎉🕛',
+  'Saint-Patrick': '☘️🎩🇮🇪',
+  Oktoberfest: '🥨🇩🇪🎪',
+  'Peaky Blinders': '🎩🐴🏭🇬🇧',
+  'James Bond': '🔫⌚🚗🤵🇬🇧',
+  'Bob Marley': '🦁🎸🇯🇲',
+};
+for (const l of all) if (SOL_FIX[l.name[0]]) l.sol = split(SOL_FIX[l.name[0]]);
+
 if (all.length !== 400) throw new Error('Expected 400 levels, got ' + all.length);
 // Easy levels first, then fewer emojis first, then the original order.
 all.sort((a, b) => a.d - b.d || a.sol.length - b.sol.length || a.order - b.order);

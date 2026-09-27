@@ -99,7 +99,7 @@ export default function Langue() {
           label={T.continue}
           onPress={() => {
             set({ lang: pick });
-            if (!tutorialDone) router.replace('/tutoriel');
+            if (!tutorialDone) router.replace({ pathname: '/jeu', params: { mode: 'tutorial' } });
             else if (router.canGoBack()) router.back();
             else router.replace('/');
           }}

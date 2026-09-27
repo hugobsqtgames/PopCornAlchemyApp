@@ -12,15 +12,21 @@ Les limites de caractères d'Apple sont indiquées entre parenthèses et sont to
 | Langue principale | Français |
 | Catégorie principale | Jeux → Jeux de mots (*Word*) |
 | Catégorie secondaire | Jeux → Quiz (*Trivia*) |
-| Prix | Gratuit (avec achats intégrés) |
+| Prix | Gratuit (cette version n'a ni achat intégré ni publicité) |
 | Droits d'auteur | © 2026 Hugo_BSQT |
-| Classification par âge | 4+ (répondre « Aucun » partout ; « Publicités » : oui dès que les pubs seront activées) |
-| URL d'assistance | Une page où l'on peut te contacter (ex. ton profil Instagram ou TikTok @hugo_bsqt) |
-| URL de politique de confidentialité | Obligatoire : à héberger (le texte est déjà dans l'app, Réglages → Confidentialité) |
+| Classification par âge | **9+** : répondre « Rare ou léger » à *Violence de dessin animé ou fantastique* (armes de films et jeux : 🔫 ⚔️) et à *Horreur / peur* (zombies, Dracula, Scream), « Aucun » partout ailleurs. Publicités : non (à changer quand elles seront activées) |
+| URL d'assistance | https://hugobsqtgames.github.io/PopCornAlchemyApp/ |
+| URL de politique de confidentialité | https://hugobsqtgames.github.io/PopCornAlchemyApp/confidentialite.html |
 
-**Confidentialité de l'app (« App Privacy »)** : aujourd'hui, *« Données non collectées »*. Quand les vraies
-pubs et Game Center seront branchés, il faudra déclarer « Identifiants (publicité) » et « Données d'utilisation » :
-je te guiderai à ce moment-là.
+Les deux liens ci-dessus marchent une fois GitHub Pages activé (une seule fois, 1 minute) : sur GitHub, dépôt
+PopCornAlchemyApp → **Settings** → **Pages** → *Source* : « Deploy from a branch » → branche
+`claude/web-to-ios-app-1azlp5`, dossier **`/docs`** → **Save**. Les pages sont dans `docs/`.
+
+**Confidentialité de l'app (« App Privacy »)** : *« Données non collectées »*. Quand les vraies pubs et Game Center
+seront branchés, il faudra déclarer « Identifiants (publicité) » et « Données d'utilisation » : je te guiderai.
+
+**Codes cadeaux** : ils sont dans `mobile/src/game/codes.ts` (POPCORN500, BIENVENUE, TIKTOK). Pour en ajouter un,
+il faut une mise à jour de l'app.
 
 ## Captures d'écran
 
@@ -60,8 +66,12 @@ Réponds vite pour gagner plus de points. Enchaîne 5 bonnes réponses et décle
 📅 UN DÉFI CHAQUE JOUR
 10 niveaux mystère, les mêmes pour tout le monde. Garde ta série de jours et ouvre un coffre tous les 7 jours.
 
+💡 JAMAIS BLOQUÉ
+Révèle un emoji, retire 5 intrus ou mélange la grille. Et si tu rates, la réponse s'affiche : tu apprends à chaque niveau.
+
 🎮 PLUSIEURS MODES
 • Classique : l'aventure palier par palier
+• Zen : sans chrono ni vies, juste pour le plaisir
 • Chrono : un maximum de niveaux en 60 secondes
 • Hardcore : une seule vie, pièces doublées
 • Catégorie : joue seulement ce que tu aimes
@@ -70,7 +80,7 @@ Réponds vite pour gagner plus de points. Enchaîne 5 bonnes réponses et décle
 Envoie tes 5 derniers niveaux et ton score : tes amis doivent faire mieux.
 
 🎡 ET AUSSI
-La roue de la chance quotidienne, des indices, boucliers et passe-niveaux, des thèmes et des styles à débloquer, un arbre de 46 trophées, un mode sombre, et une version pensée pour iPad.
+La roue de la chance quotidienne, un rappel du défi du jour, des boucliers et passe-niveaux, des thèmes et des styles à débloquer, un arbre de 46 trophées, un mode sombre, et une version pensée pour iPad.
 
 Jouable hors ligne, sans compte, en français, anglais et espagnol.
 
@@ -78,7 +88,7 @@ Jouable hors ligne, sans compte, en français, anglais et espagnol.
 emoji,quiz,devinette,film,série,culture,rébus,énigme,trivia,mots,cinéma,pays,logo,marque,sport
 
 **Nouveautés de cette version (4000)**
-Première version de Pop-Corn Alchemy ! 400 niveaux, 16 catégories, 3 difficultés, un défi par jour et la roue de la chance. Bon jeu 🍿
+Première version de Pop-Corn Alchemy ! 400 niveaux, 16 catégories, 3 difficultés, un mode Zen, un défi par jour et la roue de la chance. Bon jeu 🍿
 
 ---
 
@@ -107,8 +117,12 @@ Answer fast to score more. Get 5 right in a row to trigger Fever mode: all your 
 📅 A NEW CHALLENGE EVERY DAY
 10 mystery levels, the same for everyone. Keep your streak going and open a chest every 7 days.
 
+💡 NEVER STUCK
+Reveal an emoji, remove 5 wrong ones or shuffle the grid. And if you miss, the answer is shown: you learn something every level.
+
 🎮 SEVERAL MODES
 • Classic: the adventure, tier by tier
+• Zen: no clock, no lives, just for fun
 • Time attack: as many levels as you can in 60 seconds
 • Hardcore: one life, double coins
 • Category: play only what you love
@@ -117,7 +131,7 @@ Answer fast to score more. Get 5 right in a row to trigger Fever mode: all your 
 Send your last 5 levels and your score: your friends have to beat it.
 
 🎡 AND MORE
-A daily lucky wheel, hints, shields and skips, themes and styles to unlock, a tree of 46 trophies, dark mode, and a layout made for iPad.
+A daily lucky wheel, a daily challenge reminder, shields and skips, themes and styles to unlock, a tree of 46 trophies, dark mode, and a layout made for iPad.
 
 Plays offline, no account needed, in English, French and Spanish.
 
@@ -125,7 +139,7 @@ Plays offline, no account needed, in English, French and Spanish.
 emoji,quiz,guess,movie,trivia,puzzle,riddle,word,film,tv,show,brain,logo,country,pop,culture
 
 **What's New (4000)**
-The first version of Pop-Corn Alchemy! 400 levels, 16 categories, 3 difficulty levels, a daily challenge and the lucky wheel. Have fun 🍿
+The first version of Pop-Corn Alchemy! 400 levels, 16 categories, 3 difficulty levels, a Zen mode, a daily challenge and the lucky wheel. Have fun 🍿
 
 ---
 
@@ -154,8 +168,12 @@ Responde rápido para ganar más puntos. Encadena 5 aciertos y activa el modo Fe
 📅 UN RETO NUEVO CADA DÍA
 10 niveles misteriosos, los mismos para todos. Mantén tu racha y abre un cofre cada 7 días.
 
+💡 NUNCA ATASCADO
+Revela un emoji, quita 5 falsos o mezcla la cuadrícula. Y si fallas, se muestra la respuesta: aprendes en cada nivel.
+
 🎮 VARIOS MODOS
 • Clásico: la aventura, etapa por etapa
+• Zen: sin reloj ni vidas, solo por diversión
 • Contrarreloj: el máximo de niveles en 60 segundos
 • Hardcore: una sola vida, monedas dobles
 • Categoría: juega solo lo que te gusta
@@ -164,7 +182,7 @@ Responde rápido para ganar más puntos. Encadena 5 aciertos y activa el modo Fe
 Envía tus 5 últimos niveles y tu puntuación: tus amigos tendrán que superarla.
 
 🎡 Y ADEMÁS
-La ruleta de la suerte diaria, pistas, escudos y saltos de nivel, temas y estilos para desbloquear, un árbol de 46 trofeos, modo oscuro y una versión pensada para iPad.
+La ruleta de la suerte diaria, un recordatorio del reto diario, escudos y saltos de nivel, temas y estilos para desbloquear, un árbol de 46 trofeos, modo oscuro y una versión pensada para iPad.
 
 Se juega sin conexión, sin cuenta, en español, francés e inglés.
 
@@ -172,4 +190,4 @@ Se juega sin conexión, sin cuenta, en español, francés e inglés.
 emoji,quiz,adivinanza,película,serie,trivia,acertijo,palabras,cine,país,logo,marca,cultura,juego
 
 **Novedades (4000)**
-¡La primera versión de Pop-Corn Alchemy! 400 niveles, 16 categorías, 3 dificultades, un reto diario y la ruleta de la suerte. ¡A jugar! 🍿
+¡La primera versión de Pop-Corn Alchemy! 400 niveles, 16 categorías, 3 dificultades, un modo Zen, un reto diario y la ruleta de la suerte. ¡A jugar! 🍿

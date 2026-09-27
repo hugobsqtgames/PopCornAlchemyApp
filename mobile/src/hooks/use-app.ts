@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import { Platform, useColorScheme, useWindowDimensions } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { AccessibilityInfo, Platform, useColorScheme, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { Level } from '@/game/types';
@@ -59,4 +59,18 @@ export function useLayout() {
     tabTop: insets.top + (tablet || Platform.OS === 'web' ? 64 : 0),
     compact: height < 720,
   };
+}
+
+/** True when the player turned on "Reduce motion" in the game or in the iPhone settings. */
+export function useReduceMotion(): boolean {
+  const mine = useProfile((s) => s.reduceMotion);
+  const [system, setSystem] = useState(false);
+  useEffect(() => {
+    AccessibilityInfo.isReduceMotionEnabled()
+      .then(setSystem)
+      .catch(() => {});
+    const sub = AccessibilityInfo.addEventListener('reduceMotionChanged', setSystem);
+    return () => sub.remove();
+  }, []);
+  return mine || system;
 }

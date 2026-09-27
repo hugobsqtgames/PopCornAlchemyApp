@@ -10,6 +10,14 @@ import { BackIcon } from './icons';
 
 type Weight = keyof Omit<typeof FONTS, 'pixel'>;
 
+/**
+ * How much the iPhone's larger text settings may grow the game's text. Text follows the
+ * player's setting up to +30 %, beyond which the tiles and buttons would overflow.
+ * Emojis are pictures and keep their size.
+ */
+export const MAX_TEXT_SCALE = 1.3;
+const MAX_LABEL_SCALE = 1.2;
+
 interface TxtProps {
   children: ReactNode;
   size?: number;
@@ -25,6 +33,7 @@ export function Txt({ children, size = 15, weight = 'medium', color, center, lin
   return (
     <Text
       numberOfLines={lines}
+      maxFontSizeMultiplier={MAX_TEXT_SCALE}
       style={[
         { fontFamily: FONTS[weight], fontSize: size, color: color ?? p.ink, lineHeight: Math.round(size * 1.3) },
         center && { textAlign: 'center' },
@@ -39,14 +48,18 @@ export function Txt({ children, size = 15, weight = 'medium', color, center, lin
 export function Px({ children, size = 20, color, style }: Omit<TxtProps, 'weight'>) {
   const p = usePalette();
   return (
-    <Text style={[{ fontFamily: FONTS.pixel, fontSize: size, color: color ?? p.ink, lineHeight: size * 1.35 }, style]}>
+    <Text maxFontSizeMultiplier={MAX_LABEL_SCALE} style={[{ fontFamily: FONTS.pixel, fontSize: size, color: color ?? p.ink, lineHeight: size * 1.35 }, style]}>
       {children}
     </Text>
   );
 }
 
 export function Emoji({ children, size = 20, style }: { children: ReactNode; size?: number; style?: StyleProp<TextStyle> }) {
-  return <Text style={[{ fontSize: size, lineHeight: Math.round(size * 1.2) }, style]}>{children}</Text>;
+  return (
+    <Text allowFontScaling={false} style={[{ fontSize: size, lineHeight: Math.round(size * 1.2) }, style]}>
+      {children}
+    </Text>
+  );
 }
 
 export function Logo({ size = 22 }: { size?: number }) {
@@ -130,12 +143,15 @@ export function Btn({ label, onPress, variant = 'action', icon, sub, height = 56
               {icon}
               <Text
                 numberOfLines={1}
+                maxFontSizeMultiplier={MAX_LABEL_SCALE}
                 style={{ fontFamily: FONTS.heavy, fontSize: size, letterSpacing: 0.8, color: c.fg, textTransform: 'uppercase' }}>
                 {label}
               </Text>
             </View>
             {sub ? (
-              <Text style={{ fontFamily: FONTS.semibold, fontSize: 12, color: c.fg, opacity: 0.9, marginTop: 3 }}>{sub}</Text>
+              <Text maxFontSizeMultiplier={MAX_LABEL_SCALE} style={{ fontFamily: FONTS.semibold, fontSize: 12, color: c.fg, opacity: 0.9, marginTop: 3 }}>
+                {sub}
+              </Text>
             ) : null}
           </View>
         </View>

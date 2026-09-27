@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Animated, Pressable, View } from 'react-native';
 
 import { Btn, Card, Emoji, Screen, Txt } from '@/components/ui';
-import { useLayout, usePalette, useT } from '@/hooks/use-app';
+import { useLayout, usePalette, useReduceMotion, useT } from '@/hooks/use-app';
 import { useProfile } from '@/store/profile';
 
 const DEMO = ['🔥', '🚢', '🎸', '👽', '🍕', '🚀', '🧊', '🎲'];
@@ -17,9 +17,11 @@ export default function Tutoriel() {
   const lang = useProfile((s) => s.lang) ?? 'fr';
   const [step, setStep] = useState(0);
   const pulse = useState(() => new Animated.Value(1))[0];
+  const still = useReduceMotion();
 
   // A small looping animation on the right tiles to show what to tap.
   useEffect(() => {
+    if (still) return;
     const loop = Animated.loop(
       Animated.sequence([
         Animated.timing(pulse, { toValue: 1.1, duration: 500, useNativeDriver: true }),
@@ -32,7 +34,7 @@ export default function Tutoriel() {
       loop.stop();
       clearInterval(id);
     };
-  }, [pulse]);
+  }, [pulse, still]);
 
   const finish = () => {
     set({ tutorialDone: true });

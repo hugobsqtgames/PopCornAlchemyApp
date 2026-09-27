@@ -6,7 +6,11 @@ import { Badge, Btn, Emoji, IconBtn, Logo, Pill, Tap, Txt } from '@/components/u
 import { dayKey } from '@/game/dates';
 import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
 import { showLeaderboard } from '@/services/leaderboard';
+import { GAME_CENTER_READY } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
+
+/** A new value each time, so the same mode can be started twice in a row. */
+const freshKey = () => String(Date.now());
 
 export default function Home() {
   const p = usePalette();
@@ -19,7 +23,7 @@ export default function Home() {
   const big = height > 800;
 
   if (!s.lang) return <Redirect href="/langue" />;
-  if (!s.tutorialDone) return <Redirect href="/tutoriel" />;
+  if (!s.tutorialDone) return <Redirect href={{ pathname: '/jeu', params: { mode: 'tutorial' } }} />;
 
   const topBar = (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16, paddingTop: 8 }}>
@@ -126,7 +130,9 @@ export default function Home() {
     { icon: '🎮', label: t('modes'), tint: p.blueTint, go: () => router.push('/modes') },
     { icon: '🎡', label: t('wheel'), tint: p.goldTint, go: () => router.push('/roue'), dot: wheelReady },
     { icon: '⚔️', label: t('challenge_friend'), tint: p.mintTint, go: () => router.push('/defier') },
-    { icon: '🏆', label: t('leaderboard'), tint: p.lilacTint, go: () => showLeaderboard(t) },
+    GAME_CENTER_READY
+      ? { icon: '🏆', label: t('leaderboard'), tint: p.lilacTint, go: () => showLeaderboard(t) }
+      : { icon: '🧘', label: t('mode_zen'), tint: p.lilacTint, go: () => router.push({ pathname: '/jeu', params: { mode: 'zen', fresh: freshKey() } }) },
   ];
   const grid = (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>

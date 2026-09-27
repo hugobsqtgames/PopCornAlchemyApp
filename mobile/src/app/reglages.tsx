@@ -8,7 +8,8 @@ import { Emoji, Header, Screen, Section, Txt } from '@/components/ui';
 import { NO_ADS_PACK } from '@/game/catalog';
 import { useLayout, usePalette, useT } from '@/hooks/use-app';
 import { play } from '@/services/feedback';
-import { purchase, restorePurchases } from '@/services/store-services';
+import { disableReminder, enableReminder } from '@/services/reminder';
+import { GAME_CENTER_READY, MONEY_READY, purchase, restorePurchases } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
 
 const LANG_NAMES = { fr: 'Français', en: 'English', es: 'Español' };
@@ -18,16 +19,30 @@ const SOCIALS = [
   { name: 'YouTube', url: 'https://www.youtube.com/channel/UCUAfM0_WdPb1o-gRWAP8xWg', Icon: YouTubeIcon, tint: 'blueTint' as const },
 ];
 
-function Group({ children }: { children: ReactNode }) {
+function Group({ children, style }: { children: ReactNode; style?: object }) {
   const p = usePalette();
   return (
-    <View style={{ marginHorizontal: 16, borderRadius: 18, backgroundColor: p.surface, borderWidth: p.border, borderColor: p.line, overflow: 'hidden' }}>
+    <View style={{ ...style, marginHorizontal: 16, borderRadius: 18, backgroundColor: p.surface, borderWidth: p.border, borderColor: p.line, overflow: 'hidden' }}>
       {children}
     </View>
   );
 }
 
-function Row({ icon, label, right, onPress, first }: { icon: string; label: string; right?: ReactNode; onPress?: () => void; first?: boolean }) {
+function Row({
+  icon,
+  label,
+  sub,
+  right,
+  onPress,
+  first,
+}: {
+  icon: string;
+  label: string;
+  sub?: string;
+  right?: ReactNode;
+  onPress?: () => void;
+  first?: boolean;
+}) {
   const p = usePalette();
   return (
     <Pressable
@@ -45,9 +60,14 @@ function Row({ icon, label, right, onPress, first }: { icon: string; label: stri
         backgroundColor: pressed ? p.sunk : 'transparent',
       })}>
       <Emoji size={18}>{icon}</Emoji>
-      <Txt size={16} style={{ flex: 1 }}>
-        {label}
-      </Txt>
+      <View style={{ flex: 1, paddingVertical: sub ? 8 : 0 }}>
+        <Txt size={16}>{label}</Txt>
+        {sub && (
+          <Txt size={12} color={p.muted}>
+            {sub}
+          </Txt>
+        )}
+      </View>
       {right ?? (onPress ? <ChevronIcon color={p.line2} /> : null)}
     </Pressable>
   );
@@ -58,9 +78,14 @@ export default function Reglages() {
   const t = useT();
   const { insets } = useLayout();
   const s = useProfile();
-  const toggle = (key: 'sound' | 'music' | 'haptics', v: boolean) => {
+  const toggle = (key: 'sound' | 'music' | 'haptics' | 'reduceMotion', v: boolean) => {
     s.set({ [key]: v });
     play('toggle');
+  };
+  const toggleReminder = async (v: boolean) => {
+    play('toggle');
+    if (!v) return disableReminder();
+    if (!(await enableReminder())) Alert.alert(t('reminder'), t('notif_denied'));
   };
 
   return (
@@ -72,6 +97,17 @@ export default function Reglages() {
           <Row first icon="🔊" label={t('sounds')} right={<Switch value={s.sound} onValueChange={(v) => toggle('sound', v)} trackColor={{ true: p.green }} />} />
           <Row icon="🎵" label={t('music')} right={<Switch value={s.music} onValueChange={(v) => toggle('music', v)} trackColor={{ true: p.green }} />} />
           <Row icon="📳" label={t('haptics')} right={<Switch value={s.haptics} onValueChange={(v) => toggle('haptics', v)} trackColor={{ true: p.green }} />} />
+          <Row
+            icon="🎞️"
+            label={t('reduce_motion')}
+            right={<Switch value={s.reduceMotion} onValueChange={(v) => toggle('reduceMotion', v)} trackColor={{ true: p.green }} />}
+          />
+          <Row
+            icon="⏰"
+            label={t('reminder')}
+            sub={t('reminder_sub')}
+            right={<Switch value={s.reminder} onValueChange={toggleReminder} trackColor={{ true: p.green }} />}
+          />
           <Row
             icon="🌐"
             label={t('language')}
@@ -87,17 +123,30 @@ export default function Reglages() {
           />
         </Group>
 
-        <Section>{t('sec_account')}</Section>
-        <Group>
-          <Row first icon="🎮" label={t('game_center')} right={<Txt size={14} color={p.muted}>{t('gc_soon')}</Txt>} />
-          <Row
-            icon="🚫"
-            label={s.noAds ? t('no_ads_owned') : t('remove_ads')}
-            onPress={s.noAds ? undefined : () => purchase(NO_ADS_PACK.id, t('iap_unavailable'))}
-            right={s.noAds ? null : <Txt size={15} weight="bold">{NO_ADS_PACK.price}</Txt>}
-          />
-          <Row icon="🔄" label={t('restore')} onPress={() => restorePurchases(t('iap_unavailable'))} right={null} />
+        <Group style={{ marginTop: 16 }}>
+          <Row first icon="🎁" label={t('gift_code')} onPress={() => router.push('/code')} />
         </Group>
+
+        {(MONEY_READY || GAME_CENTER_READY) && (
+          <>
+            <Section>{t('sec_account')}</Section>
+            <Group>
+              {GAME_CENTER_READY && <Row first icon="🎮" label={t('game_center')} />}
+              {MONEY_READY && (
+                <>
+                  <Row
+                    first={!GAME_CENTER_READY}
+                    icon="🚫"
+                    label={s.noAds ? t('no_ads_owned') : t('remove_ads')}
+                    onPress={s.noAds ? undefined : () => purchase(NO_ADS_PACK.id, t('iap_unavailable'))}
+                    right={s.noAds ? null : <Txt size={15} weight="bold">{NO_ADS_PACK.price}</Txt>}
+                  />
+                  <Row icon="🔄" label={t('restore')} onPress={() => restorePurchases(t('iap_unavailable'))} right={null} />
+                </>
+              )}
+            </Group>
+          </>
+        )}
 
         <Section>{t('follow')}</Section>
         <Group>
@@ -117,7 +166,8 @@ export default function Reglages() {
 
         <Section>{t('sec_help')}</Section>
         <Group>
-          <Row first icon="📖" label={t('replay_tuto')} onPress={() => router.push('/tutoriel')} />
+          <Row first icon="📖" label={t('rules')} onPress={() => router.push('/tutoriel')} />
+          <Row icon="👆" label={t('replay_tuto')} onPress={() => router.push({ pathname: '/jeu', params: { mode: 'tutorial', fresh: String(Date.now()) } })} />
           <Row icon="🔒" label={t('privacy')} onPress={() => router.push({ pathname: '/texte', params: { doc: 'privacy' } })} />
           <Row icon="📄" label={t('legal')} onPress={() => router.push({ pathname: '/texte', params: { doc: 'legal' } })} />
         </Group>

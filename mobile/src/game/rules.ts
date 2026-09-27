@@ -11,6 +11,12 @@ export const CHRONO_SECONDS = 60;
 export const CHRONO_BONUS_SECONDS = 3;
 export const CHRONO_PENALTY_SECONDS = 5;
 export const FEVER_COMBO = 5;
+/** How long the answer stays on screen after a missed or skipped level. */
+export const REVEAL_MS = 2200;
+/** Zen has no lives: the answer shows after this many wrong tries on the same level. */
+export const ZEN_TRIES = 3;
+/** Decoys taken off the grid by the cheaper clue. */
+export const DECOYS_REMOVED = 5;
 
 export const PRICES = {
   hints5: 100,
@@ -19,6 +25,8 @@ export const PRICES = {
   double: 250,
   avatar: 200,
   continue: 150,
+  /** Taking 5 wrong emojis off the grid, paid in coins during a level. */
+  removeDecoys: 15,
 } as const;
 
 export const REWARDS = {
@@ -89,6 +97,33 @@ export function buildGrid(level: Level, rng: () => number = Math.random): string
   return shuffle([...level.sol, ...decoys], rng);
 }
 
+/** Picks `count` decoys to take off the grid: never part of the answer, picked, or already gone. */
+export function decoysToRemove(
+  grid: readonly string[],
+  solution: readonly string[],
+  picked: readonly number[],
+  removed: readonly number[],
+  count = DECOYS_REMOVED,
+  rng: () => number = Math.random
+): number[] {
+  const candidates = grid
+    .map((e, i) => i)
+    .filter((i) => !solution.includes(grid[i]) && !picked.includes(i) && !removed.includes(i));
+  return shuffle(candidates, rng).slice(0, count);
+}
+
+/** Shuffles the tiles; picked and removed tiles follow their emoji to its new place. */
+export function shuffleGrid(
+  grid: readonly string[],
+  picked: readonly number[],
+  removed: readonly number[],
+  rng: () => number = Math.random
+): { grid: string[]; picked: number[]; removed: number[] } {
+  const order = shuffle(grid.map((_, i) => i), rng);
+  const where = (old: number) => order.indexOf(old);
+  return { grid: order.map((i) => grid[i]), picked: picked.map(where), removed: removed.map(where) };
+}
+
 /** True when the picked emojis are exactly the solution, in any order. */
 export function isCorrect(picked: string[], solution: string[]): boolean {
   if (picked.length !== solution.length) return false;
@@ -99,7 +134,7 @@ export function isCorrect(picked: string[], solution: string[]): boolean {
 
 /** Level ids for a new run, in play order. */
 export function buildRun(
-  mode: Exclude<Mode, 'daily' | 'challenge'>,
+  mode: Exclude<Mode, 'daily' | 'challenge' | 'tutorial'>,
   options: { category?: Category; difficulty?: Difficulty } = {},
   rng: () => number = Math.random
 ): RunConfig {
@@ -109,8 +144,8 @@ export function buildRun(
     const ids = DIFFICULTIES.flatMap((d) => shuffle(levelsOfCategory(category).filter((l) => l.d === d), rng).map((l) => l.id));
     return { mode, category, ids };
   }
-  if (mode === 'chrono') {
-    // Against the clock: easy and medium levels only.
+  if (mode === 'chrono' || mode === 'zen') {
+    // Against the clock, or just relaxing: easy and medium levels only.
     return { mode, ids: shuffle(LEVELS.filter((l) => l.d < 3), rng).map((l) => l.id) };
   }
   if (mode === 'classic' && difficulty) {
@@ -129,13 +164,19 @@ export function buildDaily(seed: number): RunConfig {
 
 export function startLives(mode: Mode): number {
   if (mode === 'hardcore') return 1;
-  if (mode === 'chrono') return 0;
+  if (mode === 'chrono' || isRelaxed(mode)) return 0;
   return LIVES;
+}
+
+/** Zen and the guided first level: no clock and no lives. */
+export function isRelaxed(mode: Mode): boolean {
+  return mode === 'zen' || mode === 'tutorial';
 }
 
 /**
  * Runs that can be left and resumed from the home screen. Chrono (the clock would restart),
- * the daily challenge and friend challenges always start over.
+ * the daily challenge, friend challenges and zen always start over, so they never
+ * replace the saved adventure.
  */
 export function canSave(mode: Mode): boolean {
   return mode === 'classic' || mode === 'category' || mode === 'hardcore';
