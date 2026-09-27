@@ -2,7 +2,6 @@ import { router } from 'expo-router';
 import { ScrollView, View } from 'react-native';
 
 import { Stars } from '@/components/game/board';
-import { ChevronIcon } from '@/components/icons';
 import { Badge, Bar, Card, Emoji, Header, Screen, Tap, Txt } from '@/components/ui';
 import { LEVELS } from '@/game/levels';
 import { CATEGORIES, levelsOfCategory } from '@/game/rules';
@@ -62,10 +61,10 @@ export default function PopCornedex() {
                     </Txt>
                     <Bar value={done.length / levels.length} height={5} color={full ? p.green : p.ink} />
                     <Txt size={11} weight="semibold" color={full ? p.green : p.muted} lines={1}>
-                      {done.length}/{levels.length} · {three} ★★★
+                      {done.length}/{levels.length}
+                      {three ? ` · ${three} ★★★` : ''}
                     </Txt>
                   </View>
-                  <ChevronIcon color={p.muted} />
                 </Tap>
               );
             })}
