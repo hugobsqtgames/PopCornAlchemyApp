@@ -30,14 +30,14 @@ il faut une mise à jour de l'app.
 
 ## Captures d'écran
 
-Dans `store/screenshots/` : 6 images par langue et par appareil, déjà aux tailles demandées par Apple.
+Dans `store/screenshots/` : 7 images par langue et par appareil, déjà aux tailles demandées par Apple.
 
 | Dossier | Taille | Où les mettre |
 |---|---|---|
 | `fr/iphone-6.9/`, `en/…`, `es/…` | 1320 × 2868 | iPhone 6,9 pouces (sert aussi pour tous les autres iPhone) |
 | `fr/ipad-13/`, `en/…`, `es/…` | 2064 × 2752 | iPad 13 pouces |
 
-Glisse-les dans l'ordre 01 → 06. Pour les refaire après un changement : `store/outils/screenshots.mjs`.
+Glisse-les dans l'ordre 01 → 07. Pour les refaire après un changement : `store/outils/screenshots.mjs`.
 
 ---
 

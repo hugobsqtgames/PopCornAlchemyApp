@@ -78,7 +78,7 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 
 - `store/FICHE_APP_STORE.md` : nom, sous-titre, description, mots-clés, nouveautés, en FR, EN
   et ES, avec les limites de caractères d'Apple respectées.
-- `store/screenshots/` : 6 images par langue, iPhone 6,9 pouces et iPad 13 pouces.
+- `store/screenshots/` : 7 images par langue, iPhone 6,9 pouces et iPad 13 pouces.
 - `store/VERIFICATION_APPLE.md` : les règles d'Apple vérifiées une par une.
   - Âge : **9+** (violence de dessin animé et horreur « rares ou légères »).
   - Confidentialité : « Données non collectées ».
