@@ -112,8 +112,8 @@ function adventureIds(d) {
   for (let i = 0; i < levels.length; i += 20) ids.push(...shuffle(levels.slice(i, i + 20), rng).map((l) => l.id));
   return ids;
 }
-// A believable player: the first 23 levels of the easy map, some movies, a few others.
-const PASSED = 23;
+// A believable player: the first 64 levels of the easy map, some movies, a few others.
+const PASSED = 64;
 const movies = LEVELS.filter((l) => l.cat === 'movie').slice(0, 20).map((l) => l.id);
 const FOUND = [...new Set([...adventureIds(1).slice(0, PASSED), ...movies, ...LEVELS.filter((_, i) => i % 9 === 0).map((l) => l.id)])];
 const STARS = Object.fromEntries(FOUND.map((id, i) => [id, i % 5 === 2 ? 2 : i % 7 === 3 ? 1 : 3]));
