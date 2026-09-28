@@ -29,6 +29,14 @@ describe.each(Object.entries(PACKS))('language %s', (lang, pack) => {
     for (const l of LEVELS) expect([l.id, (pack.levels[String(l.id)] ?? '').trim().length > 0]).toEqual([l.id, true]);
     for (const n of worldNames) expect([n, (pack.worlds[n] ?? '').trim().length > 0]).toEqual([n, true]);
   });
+  it('never gives two levels the same answer', () => {
+    const seen = new Map<string, number>();
+    for (const [id, name] of Object.entries(pack.levels)) {
+      const key = name.toLocaleLowerCase(lang);
+      expect([id, seen.get(key) ?? null]).toEqual([id, null]);
+      seen.set(key, Number(id));
+    }
+  });
   it('names and describes every trophy', () => {
     for (const key of Object.keys(ACHIEVEMENT_TEXT.en)) expect([key, (pack.achievements[key] ?? '').trim().length > 0]).toEqual([key, true]);
   });

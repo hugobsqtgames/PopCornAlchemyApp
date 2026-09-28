@@ -8,17 +8,21 @@ const locales = (...codes: (string | null)[]) => (getLocales as jest.Mock<typeof
 
 describe('phone language', () => {
   it('speaks the phone language when the app knows it', () => {
-    locales('es');
-    expect(deviceLang()).toBe('es');
-    locales('fr');
-    expect(deviceLang()).toBe('fr');
+    for (const code of ['fr', 'en', 'es', 'de', 'it', 'pt', 'nl', 'pl', 'tr', 'ru', 'ja', 'ko', 'zh']) {
+      locales(code);
+      expect(deviceLang()).toBe(code);
+    }
   });
   it('takes the first known language in the phone order', () => {
-    locales('de', 'fr', 'en');
+    locales('sv', 'fr', 'en');
     expect(deviceLang()).toBe('fr');
+    locales('de', 'fr');
+    expect(deviceLang()).toBe('de');
   });
   it('falls back to English for any other language', () => {
-    locales('ja');
+    locales('ar');
+    expect(deviceLang()).toBe('en');
+    locales('sv');
     expect(deviceLang()).toBe('en');
     locales();
     expect(deviceLang()).toBe('en');
