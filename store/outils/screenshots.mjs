@@ -86,9 +86,37 @@ const yesterday = (() => {
   d.setDate(d.getDate() - 1);
   return dayKey(d);
 })();
-// Answers found so far, with their stars: most easy levels, a few others (Pop-Cornédex, map).
-const FOUND = LEVELS.filter((l, i) => l.d === 1 || i % 3 === 0).map((l) => l.id);
-const STARS = Object.fromEntries(FOUND.map((id, i) => [id, i % 4 === 1 ? 2 : 3]));
+// The map order of the app (rules.ts adventureIds): same seeded shuffle inside each tier of 20.
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function shuffle(items, rng) {
+  const out = [...items];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+function adventureIds(d) {
+  const levels = LEVELS.filter((l) => l.d === d);
+  const rng = mulberry32(1000 + d);
+  const ids = [];
+  for (let i = 0; i < levels.length; i += 20) ids.push(...shuffle(levels.slice(i, i + 20), rng).map((l) => l.id));
+  return ids;
+}
+// A believable player: the first 23 levels of the easy map, some movies, a few others.
+const PASSED = 23;
+const movies = LEVELS.filter((l) => l.cat === 'movie').slice(0, 20).map((l) => l.id);
+const FOUND = [...new Set([...adventureIds(1).slice(0, PASSED), ...movies, ...LEVELS.filter((_, i) => i % 9 === 0).map((l) => l.id)])];
+const STARS = Object.fromEntries(FOUND.map((id, i) => [id, i % 5 === 2 ? 2 : i % 7 === 3 ? 1 : 3]));
 
 function profile(lang, extra = {}) {
   return {
@@ -120,7 +148,7 @@ function profile(lang, extra = {}) {
     loginDay: 3,
     found: FOUND,
     stars: STARS,
-    adventure: { 1: 23, 2: 4, 3: 0 },
+    adventure: { 1: PASSED, 2: 0, 3: 0 },
     ...extra,
   };
 }
