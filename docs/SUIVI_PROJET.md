@@ -50,6 +50,11 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
   La progression est gardée niveau par niveau : un game over ne renvoie plus au niveau 1.
   Toucher un niveau passé → sa fiche (réponse, étoiles) et « Rejouer ». Le mode Catégorie
   reste libre (niveaux mélangés).
+- **21 mondes sur la carte** (`mobile/src/game/worlds.ts`, dessins dans
+  `mobile/src/components/world-deco.tsx`) : un monde par palier, jamais deux fois le même
+  (Facile « Le tour du monde » 10, Moyen « Le voyage extraordinaire » 7, Difficile « Les légendes » 4).
+  Couleur du sol, petits décors au bord du chemin, panneau d'entrée, écran « Les mondes »,
+  annonce « Nouveau monde débloqué ! » en fin de palier.
 - **Popi, la mascotte** (`mobile/src/components/mascot.tsx`, dessin vectoriel, 7 humeurs) :
   dans la carte du niveau (réagit : content, aux anges, en feu en Fever, triste après une
   erreur, surpris), carte réponse, palier, game over, victoire, pause (endormi), accueil, carte.
