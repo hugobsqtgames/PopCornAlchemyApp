@@ -4,7 +4,7 @@ import { ScrollView, View } from 'react-native';
 
 import { ChevronIcon } from '@/components/icons';
 import { Badge, Bar, Emoji, Header, Screen, Section, Tap, Txt } from '@/components/ui';
-import { adventureIds, CATEGORIES, DIFFICULTIES, levelsOfCategory, levelsOfDifficulty, TIER_SIZE } from '@/game/rules';
+import { adventureIds, CATEGORIES, DIFFICULTIES, levelsOfCategory, levelsOfDifficulty } from '@/game/rules';
 import type { Category, Difficulty } from '@/game/types';
 import { useLayout, usePalette, useT } from '@/hooks/use-app';
 import { useProfile } from '@/store/profile';
@@ -71,7 +71,7 @@ export default function Categories() {
                     </Txt>
                   ) : (
                     <Txt size={13} weight="semibold" color={p.muted} lines={2}>
-                      {`${t(`diff_${d}_sub`)} · ${t('adventure_sub', { n, t: Math.ceil(n / TIER_SIZE) })}`}
+                      {t(`diff_${d}_sub`)}
                     </Txt>
                   )}
                 </View>

@@ -45,6 +45,15 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
   donc utilisable dans une app payante).
 - **Statistiques** (Profil → Statistiques) : temps de jeu, précision, catégorie préférée,
   meilleur jour, étoiles, précision par catégorie.
+- **Carte de l'aventure** (Nouvelle partie → Aventure Facile/Moyen/Difficile) : un chemin de
+  niveaux par palier, ordre fixe par difficulté (`adventureIds` dans `mobile/src/game/rules.ts`).
+  La progression est gardée niveau par niveau : un game over ne renvoie plus au niveau 1.
+  Toucher un niveau passé → sa fiche (réponse, étoiles) et « Rejouer ». Le mode Catégorie
+  reste libre (niveaux mélangés).
+- **Popi, la mascotte** (`mobile/src/components/mascot.tsx`, dessin vectoriel, 7 humeurs) :
+  dans la carte du niveau (réagit : content, aux anges, en feu en Fever, triste après une
+  erreur, surpris), carte réponse, palier, game over, victoire, pause (endormi), accueil, carte.
+  Maquettes : https://claude.ai/artifact/96Jqd2TaYSKaGZpfVbd5Sb
 - **Autres** : roue quotidienne, boutique (thèmes, styles, avatars, bonus), 46 trophées,
   mode sombre, iPad, gros texte jusqu'à +30 %, musique et sons.
 - **Achats intégrés et pubs : code prêt mais éteint** (`MONEY_READY = false` dans
@@ -103,7 +112,8 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 2. **Version 1.1** : vrais achats et pubs (code prêt, voir `store/VERSION_1_1.md` pour ce que Hugo
    doit créer chez Apple et Google), puis pack de bienvenue à 0,99 €, Game Center, missions du
    jour, énigme impossible du jour.
-3. **Version 1.2** : mode inversé, mode soirée à plusieurs, mascotte, cadres de profil.
+3. **Version 1.2** : mode inversé, mode soirée à plusieurs, cadres de profil, animations
+   de Popi plus poussées (clignement des yeux…).
    (Déjà faits en avance : étoiles, Pop-Cornédex, cadeau du jour, protection de série, voix
    d'annonceur, statistiques.)
 4. **Version 1.3** : « Crée ton énigme », parrainage, allemand, italien et portugais.

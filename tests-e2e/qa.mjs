@@ -641,6 +641,8 @@ await step('adventure map', async () => {
   await page.waitForTimeout(700);
   check(await see('✓ Palier 1 terminé'), 'finished tier shows as done on the map');
   check(await see('À toi de jouer !'), 'Popi shows the level to play');
+  const node = await page.getByRole('button', { name: /^(Jouer le niveau|Continuer · niveau) \d+$/ }).first().boundingBox();
+  check(!!node && node.y > 60 && node.y < 560, `the map opens on the current level (y ${Math.round(node?.y ?? -1)})`);
   await shot('carte-progression');
   // A level already passed opens its sheet and can be replayed.
   await page.getByRole('button', { name: /^Niveau 1, / }).filter({ visible: true }).first().click();

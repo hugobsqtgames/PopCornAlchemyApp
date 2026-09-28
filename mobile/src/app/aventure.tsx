@@ -61,8 +61,8 @@ export default function Aventure() {
   const ids = useMemo(() => (d ? adventureIds(d) : []), [d]);
   const map = useMemo(() => layoutMap(ids.length, width), [ids.length, width]);
   const scroller = useRef<ScrollView>(null);
-  const [viewport, setViewport] = useState(0);
-  const scrolled = useRef(false);
+  // Scrolled to the current level once both the screen and the path have a size.
+  const sized = useRef({ viewport: 0, content: false, done: false });
 
   if (!d) return <Redirect href="/categories" />;
 
@@ -75,13 +75,21 @@ export default function Aventure() {
   const currentLevel = current >= 0 ? levelById(ids[current]) : undefined;
 
   // Once the path is laid out, show the current level in the middle of the screen.
-  const onContent = () => {
-    if (scrolled.current || !viewport) return;
-    scrolled.current = true;
+  const showCurrent = () => {
+    const s = sized.current;
+    if (s.done || !s.viewport || !s.content) return;
+    s.done = true;
     const target = current >= 0 ? map.pos[current].y : 0;
-    scroller.current?.scrollTo({ y: Math.max(0, target - viewport / 2), animated: false });
+    scroller.current?.scrollTo({ y: Math.max(0, target - s.viewport / 2), animated: false });
   };
-  const onViewport = (e: LayoutChangeEvent) => setViewport(e.nativeEvent.layout.height);
+  const onViewport = (e: LayoutChangeEvent) => {
+    sized.current.viewport = e.nativeEvent.layout.height;
+    showCurrent();
+  };
+  const onContent = () => {
+    sized.current.content = true;
+    showCurrent();
+  };
 
   const play = () => {
     if (resumable !== null) router.push({ pathname: '/jeu', params: { resume: '1' } });
