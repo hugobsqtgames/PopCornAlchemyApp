@@ -31,10 +31,18 @@ interface TxtProps {
 }
 
 /** Rough width of a text in em, for `fit`: wide characters for Chinese, Japanese and Korean. */
-function textEm(text: string) {
+export function textEm(text: string) {
+  // Measured on Rubik ExtraBold, plus 5 % of margin for the other weights.
   let w = 0;
-  for (const c of text) w += /[\u2E80-\u9FFF\uAC00-\uD7AF\uFF00-\uFFEF]/.test(c) ? 1 : c === c.toUpperCase() && c !== c.toLowerCase() ? 0.75 : 0.64;
-  return w;
+  for (const c of text) {
+    if (/[⺀-鿿가-힯＀-￯]/.test(c)) w += 1;
+    else if (c === ' ') w += 0.2;
+    else if (/[Ѐ-ӿ]/.test(c)) w += c === c.toUpperCase() ? 0.78 : 0.68;
+    else if (c !== c.toLowerCase()) w += 0.7;
+    else if (c === c.toUpperCase()) w += 0.45; // digits and punctuation
+    else w += 0.6;
+  }
+  return w * 1.05;
 }
 
 /**

@@ -110,7 +110,7 @@ export default function Jeu() {
       <View style={{ width: 420, gap: 22 }}>
         {top}
         <View style={{ height: 6 }} />
-        <ObjectiveCard run={run} big />
+        <ObjectiveCard run={run} big wide />
         <Slots run={run} size={slotSize} />
         {tutorial && <GuideBubble run={run} />}
         <View style={{ flex: 1 }} />

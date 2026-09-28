@@ -367,7 +367,8 @@
   "world_levels": "poziomy {a}–{b}",
   "world_hint": "Każdy ukończony świat otwiera następny, z nową scenerią!",
   "streak_line_few": "Seria: {n} dni",
-  "streak_title_few": "Seria: {n} dni"
+  "streak_title_few": "Seria: {n} dni",
+  "pts_gain": "+{n} pkt"
  },
  "levels": {
   "1": "Titanic",

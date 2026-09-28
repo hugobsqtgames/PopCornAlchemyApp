@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # End-to-end checks on the web build: every screen and mode (qa.mjs), then attempts to break
-# the app (chaos.mjs), then ads and purchases with the money switch on (money.mjs). 
+# the app (chaos.mjs), then ads and purchases with the money switch on (money.mjs), then
+# beta-tester flows in every language, size and theme (beta.mjs).
 # Needs Playwright with Chromium. Usage: bash tests-e2e/run.sh
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
@@ -21,3 +22,4 @@ sleep 1
 node "$here/qa.mjs"
 node "$here/chaos.mjs"
 node "$here/money.mjs"
+node "$here/beta.mjs"

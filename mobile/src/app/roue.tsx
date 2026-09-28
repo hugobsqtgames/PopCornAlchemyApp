@@ -138,7 +138,7 @@ export default function Roue() {
           {won ? (
             <Card tint={p.goldTint} style={{ paddingVertical: 12, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
               <Emoji size={24}>{won.icon}</Emoji>
-              <Txt size={16} weight="heavy">
+              <Txt size={16} weight="heavy" style={{ flexShrink: 1 }}>
                 {won.gift ? `${t('gift_title')} ` : `${t('you_won')} `}
                 {prizeText(won.prize)}
               </Txt>

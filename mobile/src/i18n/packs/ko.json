@@ -359,7 +359,8 @@
   "prize_hints_one": "힌트 {n}개",
   "challenge_levels_one": "{n}레벨",
   "streak_saves_one": "🧊 연속 기록 보호 {n}개",
-  "st_best_day_value_one": "{d}에 {n}레벨"
+  "st_best_day_value_one": "{d}에 {n}레벨",
+  "pts_gain": "+{n}점"
  },
  "levels": {
   "1": "타이타닉",

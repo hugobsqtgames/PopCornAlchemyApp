@@ -359,7 +359,8 @@
   "world_done": "Geschafft · ★ {s} / {t}",
   "world_current": "Läuft · {n} / {t}",
   "world_levels": "Levels {a} bis {b}",
-  "world_hint": "Jede geschaffte Welt öffnet die nächste, mit neuer Landschaft!"
+  "world_hint": "Jede geschaffte Welt öffnet die nächste, mit neuer Landschaft!",
+  "pts_gain": "+{n} Pkt."
  },
  "levels": {
   "1": "Titanic",

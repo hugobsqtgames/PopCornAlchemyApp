@@ -90,10 +90,14 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 
 ## Tests
 
-- `cd mobile && npm test` → 68 tests : règles du jeu, sauvegarde, achats, fusion iCloud.
+- `cd mobile && npm test` → 129 tests : règles du jeu, sauvegarde, achats, fusion iCloud, langues.
 - `npx tsc --noEmit` (types) et `npx expo lint` (règles de code).
-- `bash tests-e2e/run.sh` → robot complet (217 vérifications) + robot casseur (68 scénarios)
-  + robot « argent » (`money.mjs` : pubs et achats avec l'interrupteur allumé, version web).
+- `bash tests-e2e/run.sh` → robot complet (248 vérifications) + robot casseur (75 scénarios)
+  + robot « argent » (`money.mjs`, 13) + robot « bêta-testeur » (`beta.mjs`, 88 : fin de monde,
+  victoire finale, game over, pause, indices, iPad, mode sombre, les 13 langues, réponses
+  les plus longues sur petit iPhone, toute la carte).
+- Bêta-test du 28/09/2026 : 690 vues d'écran (tailles × thèmes × langues) sans erreur ni texte
+  coupé après corrections.
 
 ## Prêt pour l'App Store
 
@@ -112,9 +116,8 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 
 ## En cours / bloquant ⏳
 
-- **Compte Apple Developer : payé le 27/09/2026 (98,99 €)** avec un nouvel identifiant Apple
-  (le premier était bloqué par Apple). Utiliser ce même identifiant pour TestFlight et App Store Connect.
-  Apple peut mettre jusqu'à 48 h à activer le compte (e-mail « Welcome to the Apple Developer Program »).
+- **Compte Apple Developer : validé** (payé le 27/09/2026, 98,99 €) avec un nouvel identifiant
+  Apple. Utiliser ce même identifiant pour TestFlight et App Store Connect.
 - `mobile/eas.json` est prêt (profil `production`, numéro de build géré par EAS).
 - **Expo** : compte `aazerty12`, projet `@aazerty12/popcorn-alchemy` relié (projectId dans `app.json`).
   Le jeton `EXPO_TOKEN` est dans les variables d'environnement de la session et fonctionne.

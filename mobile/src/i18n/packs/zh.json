@@ -359,7 +359,8 @@
   "prize_hints_one": "{n}个提示",
   "challenge_levels_one": "{n}关",
   "streak_saves_one": "🧊 {n}个连续保护",
-  "st_best_day_value_one": "{d} 通过{n}关"
+  "st_best_day_value_one": "{d} 通过{n}关",
+  "pts_gain": "+{n}分"
  },
  "levels": {
   "1": "泰坦尼克号",

@@ -3,13 +3,13 @@ import { Animated, Easing, Pressable, View, type LayoutChangeEvent } from 'react
 
 import { CATEGORIES, GRID_SIZE } from '@/game/rules';
 import type { Run } from '@/hooks/use-run';
-import { fmt, useLevelName, usePalette, useReduceMotion, useT } from '@/hooks/use-app';
+import { fmt, fmt1, useLayout, useLevelName, usePalette, useReduceMotion, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
 
 import { CheckIcon, PauseIcon } from '../icons';
 import { Popi, type Mood } from '../mascot';
-import { Bar, Btn, Emoji, IconBtn, Px, Txt } from '../ui';
+import { Bar, Btn, Emoji, IconBtn, Px, textEm, Txt } from '../ui';
 
 export function Hud({ run, onPause, big }: { run: Run; onPause: () => void; big?: boolean }) {
   const p = usePalette();
@@ -78,16 +78,64 @@ export function runMood(run: Run): Mood {
   }
 }
 
-export function ObjectiveCard({ run, big }: { run: Run; big?: boolean }) {
+/** How many lines `words` take at `size` in `room` points, breaking between words like the text does. */
+function linesAt(words: string[], size: number, room: number, gap = textEm(' ')) {
+  let lines = 1;
+  let used = 0;
+  for (const w of words) {
+    const width = textEm(w) * size;
+    const space = used ? gap * size : 0;
+    if (used && used + space + width > room) {
+      lines++;
+      used = width;
+    } else used += space + width;
+  }
+  return lines;
+}
+
+/** Font size for an answer on at most two lines of `room` points (never under 70 %), and the text to show. */
+function nameLayout(text: string, base: number, room: number) {
+  // Chinese and Japanese have no spaces and break anywhere: every character is its own "word".
+  if (/[⺀-鿿가-힯＀-￯]/.test(text) && !/\s/.test(text)) {
+    const chars = [...text];
+    // A short name would break in the middle of the word: keep it on one line when it fits.
+    for (let size = base; size > base * 0.7; size -= 0.5) if (linesAt(chars, size, room, 0) === 1) return { size, text };
+    // Too long: two lines, cut after the "・" between words when there is one.
+    const parts = text.match(/[^・]+・?|・/g) ?? [text];
+    if (parts.length > 1) {
+      for (let size = base; size > base * 0.7; size -= 0.5) {
+        if (linesAt(parts, size, room, 0) > 2) continue;
+        // As many words as fit on the first line, the rest on the second.
+        let first = 1;
+        while (first < parts.length - 1 && linesAt(parts.slice(0, first + 1), size, room, 0) === 1) first++;
+        return { size, text: `${parts.slice(0, first).join('')}\n${parts.slice(first).join('')}` };
+      }
+    }
+    for (let size = base; size > base * 0.7; size -= 0.5) if (linesAt(chars, size, room, 0) <= 2) return { size, text };
+    return { size: base * 0.7, text };
+  }
+  const words = text.split(/\s+/);
+  for (let size = base; size > base * 0.7; size -= 0.5) {
+    if (linesAt(words, size, room) <= 2 && Math.max(...words.map(textEm)) * size <= room) return { size, text };
+  }
+  return { size: base * 0.7, text };
+}
+
+export function ObjectiveCard({ run, big, wide }: { run: Run; big?: boolean; wide?: boolean }) {
   const p = usePalette();
   const t = useT();
   const name = useLevelName();
+  const { width, tablet } = useLayout();
   if (!run.level) return null;
   const cat = CATEGORIES.find((c) => c.id === run.level?.cat);
   const lifeCount = run.config.mode === 'hardcore' ? 1 : 4;
   const showLives = run.config.mode !== 'chrono' && !run.relaxed && !run.practice;
   const done = run.phase !== 'play';
   const popi = big ? 64 : 44;
+  // Width left for the answer: the card, minus its padding, Popi and the spacer on the other side.
+  const card = wide ? 420 : Math.min(width - 32, tablet ? 680 - 32 : 600 - 32);
+  const nameRoom = card - (big ? 44 : 28) - 2 * popi - 16;
+  const answer = nameLayout(name(run.level), big ? 32 : 22, nameRoom);
 
   return (
     <View
@@ -136,8 +184,9 @@ export function ObjectiveCard({ run, big }: { run: Run; big?: boolean }) {
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
         <Popi mood={runMood(run)} size={popi} />
-        <Txt size={big ? 32 : 22} weight="heavy" center lines={2} style={{ lineHeight: big ? 38 : 26, flex: 1 }}>
-          {name(run.level)}
+        {/* Long answers (some languages) get a smaller font so they always fit on two lines. */}
+        <Txt size={answer.size} weight="heavy" center lines={2} style={{ flex: 1 }}>
+          {answer.text}
         </Txt>
         {/* Same width as Popi, so the name stays centred. */}
         <View style={{ width: popi }} />
@@ -456,9 +505,9 @@ export function CorrectCard({ run }: { run: Run }) {
         </Px>
         {run.last.stars !== null && <Stars n={run.last.stars} size={30} />}
         <View style={{ flexDirection: 'row', gap: 8 }}>
-          <Chip>+{run.last.points} pts</Chip>
+          <Chip>{t('pts_gain', { n: run.last.points })}</Chip>
           {!run.practice && <Chip>+{run.last.coins} 💰</Chip>}
-          <Chip>⚡ {run.last.seconds.toFixed(1).replace('.', ',')} s</Chip>
+          <Chip>⚡ {fmt1(run.last.seconds)} s</Chip>
         </View>
         {run.last.first && (
           <Txt size={14} weight="bold" color={p.muted}>

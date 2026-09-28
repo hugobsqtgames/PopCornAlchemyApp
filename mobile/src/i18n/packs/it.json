@@ -359,7 +359,8 @@
   "world_done": "Finito · ★ {s} / {t}",
   "world_current": "In corso · {n} / {t}",
   "world_levels": "livelli da {a} a {b}",
-  "world_hint": "Ogni mondo finito apre il successivo, con un nuovo scenario!"
+  "world_hint": "Ogni mondo finito apre il successivo, con un nuovo scenario!",
+  "pts_gain": "+{n} pt"
  },
  "levels": {
   "1": "Titanic",

@@ -12,11 +12,23 @@ import { paletteFor } from '@/theme/palettes';
 
 export type TFunction = (key: StringKey, vars?: Record<string, string | number>) => string;
 
-/** Formats a number the French way: 12 450. */
+/** Thousands separator of each language (French, Polish, Russian: a narrow space). */
+const GROUP: Partial<Record<Lang, string>> = { en: ',', ja: ',', ko: ',', zh: ',', es: '.', de: '.', it: '.', pt: '.', nl: '.', tr: '.' };
+/** Languages that write decimals with a dot (the others use a comma). */
+const DOT = new Set<Lang>(['en', 'ja', 'ko', 'zh']);
+const current = () => langOf(useProfile.getState().lang);
+
+/** A whole number in the player's language: 12 450, 12,450 or 12.450. */
 export function fmt(n: number): string {
   return Math.round(n)
     .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    .replace(/\B(?=(\d{3})+(?!\d))/g, GROUP[current()] ?? ' ');
+}
+
+/** A number with one decimal in the player's language: 2,1 or 2.1. */
+export function fmt1(n: number): string {
+  const s = n.toFixed(1);
+  return DOT.has(current()) ? s : s.replace('.', ',');
 }
 
 /** The language in use: the player's choice, or the phone's. */

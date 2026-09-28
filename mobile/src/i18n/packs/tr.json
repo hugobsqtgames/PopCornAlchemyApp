@@ -359,7 +359,8 @@
   "prize_hints_one": "{n} ipucu",
   "challenge_levels_one": "{n} SEVİYE",
   "streak_saves_one": "🧊 {n} seri koruyucu",
-  "st_best_day_value_one": "{d}: {n} seviye"
+  "st_best_day_value_one": "{d}: {n} seviye",
+  "pts_gain": "+{n} puan"
  },
  "levels": {
   "1": "Titanic",

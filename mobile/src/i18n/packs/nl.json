@@ -359,7 +359,8 @@
   "world_done": "Klaar · ★ {s} / {t}",
   "world_current": "Bezig · {n} / {t}",
   "world_levels": "levels {a} tot {b}",
-  "world_hint": "Elke voltooide wereld opent de volgende, met een nieuw decor!"
+  "world_hint": "Elke voltooide wereld opent de volgende, met een nieuw decor!",
+  "pts_gain": "+{n} pnt"
  },
  "levels": {
   "1": "Titanic",

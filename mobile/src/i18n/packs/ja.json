@@ -359,7 +359,8 @@
   "prize_hints_one": "ヒント{n}個",
   "challenge_levels_one": "{n}レベル",
   "streak_saves_one": "🧊 連続記録キーパー {n}個",
-  "st_best_day_value_one": "{d}に{n}レベル"
+  "st_best_day_value_one": "{d}に{n}レベル",
+  "pts_gain": "+{n}点"
  },
  "levels": {
   "1": "タイタニック",

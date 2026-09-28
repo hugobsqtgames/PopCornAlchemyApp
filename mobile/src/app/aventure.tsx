@@ -19,7 +19,7 @@ import { worldName } from '@/i18n/names';
 
 /** Height of one level on the path, and of the "Tier N" banner at the start of each tier. */
 const ROW = 84;
-const BANNER = 64;
+const BANNER = 84;
 const PAD = 48;
 const POPI = 56;
 
