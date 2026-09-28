@@ -4,6 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { Lang, Level } from '@/game/types';
 import { langOf } from '@/i18n/device';
+import { pluralForm } from '@/i18n/langs';
+import { levelName } from '@/i18n/names';
 import { STRINGS, type StringKey } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
 import { paletteFor } from '@/theme/palettes';
@@ -26,9 +28,10 @@ export function useT(): TFunction {
   const lang = useLang();
   return useCallback(
     (key, vars) => {
-      // "{n}" strings have a "_one" variant for the singular.
-      const one = vars?.n === 1 ? (`${key}_one` as StringKey) : null;
-      let s: string = (one && STRINGS[lang][one]) || (STRINGS[lang][key] ?? STRINGS.fr[key] ?? key);
+      // "{n}" strings have a "_one" variant for the singular (and "_few" in Russian and Polish).
+      const form = typeof vars?.n === 'number' ? pluralForm(lang, vars.n) : null;
+      const table = STRINGS[lang];
+      let s: string = (form && table[`${key}_${form}`]) || (table[key] ?? STRINGS.en[key] ?? key);
       if (vars) for (const [k, v] of Object.entries(vars)) s = s.replaceAll(`{${k}}`, typeof v === 'number' ? fmt(v) : v);
       return s;
     },
@@ -38,7 +41,7 @@ export function useT(): TFunction {
 
 export function useLevelName(): (level: Level) => string {
   const lang = useLang();
-  return useCallback((level) => level.name[lang], [lang]);
+  return useCallback((level) => levelName(level, lang), [lang]);
 }
 
 export function usePalette() {

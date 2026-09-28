@@ -1,3 +1,16 @@
+import dePack from './packs/de.json';
+import itPack from './packs/it.json';
+import ptPack from './packs/pt.json';
+import nlPack from './packs/nl.json';
+import plPack from './packs/pl.json';
+import trPack from './packs/tr.json';
+import ruPack from './packs/ru.json';
+import jaPack from './packs/ja.json';
+import koPack from './packs/ko.json';
+import zhPack from './packs/zh.json';
+
+import type { BaseLang, Lang } from '@/game/types';
+
 const fr = {
   back: 'Retour',
   ok: 'OK',
@@ -1115,4 +1128,43 @@ const es: Record<StringKey, string> = {
   world_hint: "Cada mundo que terminas abre el siguiente, ¡con un decorado nuevo!",
 };
 
-export const STRINGS = { fr, en, es };
+/**
+ * The languages added after launch: their interface texts, level answers (by level id) and world
+ * names (by English name). Plural variants (`_one`, `_few`) may be added beyond the French keys.
+ */
+export interface LangPack {
+  strings: Record<StringKey, string> & Record<string, string>;
+  levels: Record<string, string>;
+  worlds: Record<string, string>;
+  /** Trophy names and descriptions, same keys as `ACHIEVEMENT_TEXT`. */
+  achievements: Record<string, string>;
+}
+
+export const PACKS = {
+  de: dePack as unknown as LangPack,
+  it: itPack as unknown as LangPack,
+  pt: ptPack as unknown as LangPack,
+  nl: nlPack as unknown as LangPack,
+  pl: plPack as unknown as LangPack,
+  tr: trPack as unknown as LangPack,
+  ru: ruPack as unknown as LangPack,
+  ja: jaPack as unknown as LangPack,
+  ko: koPack as unknown as LangPack,
+  zh: zhPack as unknown as LangPack,
+} satisfies Record<Exclude<Lang, BaseLang>, LangPack>;
+
+export const STRINGS: Record<Lang, Record<StringKey, string> & Partial<Record<string, string>>> = {
+  fr,
+  en,
+  es,
+  de: PACKS.de.strings,
+  it: PACKS.it.strings,
+  pt: PACKS.pt.strings,
+  nl: PACKS.nl.strings,
+  pl: PACKS.pl.strings,
+  tr: PACKS.tr.strings,
+  ru: PACKS.ru.strings,
+  ja: PACKS.ja.strings,
+  ko: PACKS.ko.strings,
+  zh: PACKS.zh.strings,
+};

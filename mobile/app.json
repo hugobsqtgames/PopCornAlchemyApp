@@ -57,7 +57,17 @@
             "ios": [
               "en",
               "fr",
-              "es"
+              "es",
+              "de",
+              "it",
+              "pt-BR",
+              "nl",
+              "pl",
+              "tr",
+              "ru",
+              "ja",
+              "ko",
+              "zh-Hans"
             ]
           }
         }
@@ -78,9 +88,19 @@
     },
     "owner": "aazerty12",
     "locales": {
-      "fr": "./locales/fr.json",
       "en": "./locales/en.json",
-      "es": "./locales/es.json"
+      "fr": "./locales/fr.json",
+      "es": "./locales/es.json",
+      "de": "./locales/de.json",
+      "it": "./locales/it.json",
+      "pt-BR": "./locales/pt-BR.json",
+      "nl": "./locales/nl.json",
+      "pl": "./locales/pl.json",
+      "tr": "./locales/tr.json",
+      "ru": "./locales/ru.json",
+      "ja": "./locales/ja.json",
+      "ko": "./locales/ko.json",
+      "zh-Hans": "./locales/zh-Hans.json"
     }
   }
 }

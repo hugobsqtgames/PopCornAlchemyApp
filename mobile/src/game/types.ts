@@ -1,4 +1,7 @@
-export type Lang = 'fr' | 'en' | 'es';
+/** The three languages the game was written in: every level and world has its name in these. */
+export type BaseLang = 'fr' | 'en' | 'es';
+/** Every language the app speaks. */
+export type Lang = BaseLang | 'de' | 'it' | 'pt' | 'nl' | 'pl' | 'tr' | 'ru' | 'ja' | 'ko' | 'zh';
 
 export type Category =
   | 'movie'
@@ -27,7 +30,7 @@ export interface Level {
   d: Difficulty;
   /** Emojis to combine; order does not matter, duplicates do. */
   sol: string[];
-  name: Record<Lang, string>;
+  name: Record<BaseLang, string>;
 }
 
 /** classic = adventure through all tiers; category = one category; daily/challenge = fixed list;

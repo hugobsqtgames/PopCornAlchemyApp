@@ -2,11 +2,14 @@ import { getLocales } from 'expo-localization';
 
 import type { Lang } from '@/game/types';
 
-const SPOKEN: readonly Lang[] = ['fr', 'en', 'es'];
+import { LANG_IDS } from './langs';
+
+const SPOKEN: readonly Lang[] = LANG_IDS;
 
 /**
  * The language the app speaks when the player has not picked one: the first of the phone's
  * languages the app knows, in the phone's order of preference, and English for everyone else.
+ * (Chinese is simplified Chinese for every script and region.)
  */
 export function deviceLang(): Lang {
   try {

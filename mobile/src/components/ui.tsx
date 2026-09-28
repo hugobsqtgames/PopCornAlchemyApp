@@ -61,8 +61,13 @@ export function Txt({ children, size = 15, weight = 'medium', color, center, lin
 /** Pixel font: logo and big moments only. */
 export function Px({ children, size = 20, color, style }: Omit<TxtProps, 'weight'>) {
   const p = usePalette();
+  // The pixel font has Latin and Cyrillic letters only: Japanese, Korean and Chinese use the
+  // bold font (the iPhone draws those characters with its own system font).
+  const latin = typeof children !== 'string' || !/[\u2E80-\u9FFF\uAC00-\uD7AF\uF900-\uFAFF\uFF00-\uFFEF]/.test(children);
   return (
-    <Text maxFontSizeMultiplier={MAX_LABEL_SCALE} style={[{ fontFamily: FONTS.pixel, fontSize: size, color: color ?? p.ink, lineHeight: size * 1.35 }, style]}>
+    <Text
+      maxFontSizeMultiplier={MAX_LABEL_SCALE}
+      style={[{ fontFamily: latin ? FONTS.pixel : FONTS.heavy, fontSize: latin ? size : size * 1.1, color: color ?? p.ink, lineHeight: size * 1.35 }, style]}>
       {children}
     </Text>
   );

@@ -1,23 +1,18 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 
 import { CheckIcon } from '@/components/icons';
-import { Btn, Emoji, Logo, Screen, Txt } from '@/components/ui';
+import { Btn, Emoji, Header, Screen, Txt } from '@/components/ui';
 import type { Lang } from '@/game/types';
 import { useLayout, usePalette } from '@/hooks/use-app';
 import { deviceLang } from '@/i18n/device';
+import { LANG_NAMES, LANGS } from '@/i18n/langs';
 import { STRINGS } from '@/i18n/strings';
 import { buzz } from '@/services/feedback';
 import { useProfile } from '@/store/profile';
 
-const LANGS: { id: Lang; flag: string; name: string }[] = [
-  { id: 'fr', flag: '🇫🇷', name: 'Français' },
-  { id: 'en', flag: '🇬🇧', name: 'English' },
-  { id: 'es', flag: '🇪🇸', name: 'Español' },
-];
-
-
+/** Settings › Language: the phone's language (default) or one picked by hand. */
 export default function Langue() {
   const p = usePalette();
   const { insets } = useLayout();
@@ -29,27 +24,14 @@ export default function Langue() {
   const phone = deviceLang();
   const T = STRINGS[pick ?? phone];
   const options: { id: Lang | null; flag: string; name: string; sub?: string }[] = [
-    { id: null, flag: '📱', name: T.lang_auto, sub: LANGS.find((l) => l.id === phone)?.name },
+    { id: null, flag: '📱', name: T.lang_auto, sub: LANG_NAMES[phone] },
     ...LANGS,
   ];
 
   return (
     <Screen>
-      <View style={{ flex: 1 }} />
-      <View style={{ alignItems: 'center' }}>
-        <View style={{ width: 80, height: 80, borderRadius: 22, backgroundColor: p.gold, alignItems: 'center', justifyContent: 'center', marginBottom: 20, borderBottomWidth: 5, borderColor: p.goldDeep }}>
-          <Emoji size={44}>🍿</Emoji>
-        </View>
-        <Logo size={18} />
-      </View>
-      <View style={{ flex: 1 }} />
-      <View style={{ paddingHorizontal: 16, gap: 10 }}>
-        <Txt size={22} weight="heavy" center>
-          {T.lang_title}
-        </Txt>
-        <Txt size={14} weight="semibold" color={p.muted} center style={{ marginBottom: 8 }}>
-          {T.lang_sub}
-        </Txt>
+      <Header title={T.lang_title} />
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 10 }}>
         <View accessibilityRole="radiogroup" style={{ gap: 10 }}>
           {options.map((l) => {
             const on = l.id === pick;
@@ -58,14 +40,16 @@ export default function Langue() {
                 key={l.id ?? 'auto'}
                 accessibilityRole="radio"
                 accessibilityState={{ checked: on }}
+                accessibilityLabel={l.sub ? `${l.name}, ${l.sub}` : l.name}
                 onPress={() => {
                   buzz('select');
                   setPick(l.id);
                 }}
                 style={{
-                  height: 60,
+                  minHeight: 60,
                   borderRadius: 18,
                   paddingHorizontal: 16,
+                  paddingVertical: 8,
                   flexDirection: 'row',
                   alignItems: 'center',
                   gap: 14,
@@ -101,9 +85,8 @@ export default function Langue() {
             );
           })}
         </View>
-      </View>
-      <View style={{ flex: 1 }} />
-      <View style={{ paddingHorizontal: 16, paddingBottom: insets.bottom + 16 }}>
+      </ScrollView>
+      <View style={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: insets.bottom + 16 }}>
         <Btn
           label={T.continue}
           onPress={() => {

@@ -12,6 +12,7 @@ import { useLayout, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
 import { langOf } from '@/i18n/device';
+import { worldName } from '@/i18n/names';
 
 /** The worlds of one adventure: done, the current one, and the ones still to discover. */
 export default function Mondes() {
@@ -43,7 +44,7 @@ export default function Mondes() {
             const current = !done && passed >= start;
             const locked = !done && !current;
             const got = ids.slice(start, end).reduce((sum, id) => sum + (stars[id] ?? 0), 0);
-            const name = `${tier + 1} · ${world.name[lang]}`;
+            const name = `${tier + 1} · ${worldName(world, lang)}`;
             const status = done
               ? t('world_done', { s: got, t: (end - start) * 3 })
               : current

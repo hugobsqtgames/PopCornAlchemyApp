@@ -1,4 +1,4 @@
-import type { Difficulty, Lang } from './types';
+import type { BaseLang, Difficulty } from './types';
 
 /** Small drawings placed along the path (see components/world-deco.tsx). */
 export type Deco =
@@ -79,7 +79,7 @@ export interface Scene {
 }
 
 export interface World {
-  name: Record<Lang, string>;
+  name: Record<BaseLang, string>;
   /** Ground colour of the map in this world. */
   bg: string;
   /** Night worlds: light text and a softer trail. */

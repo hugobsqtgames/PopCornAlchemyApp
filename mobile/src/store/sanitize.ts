@@ -11,6 +11,7 @@ import { adventureIds, levelById } from '@/game/rules';
 import type { Lang, Mode, RunSave } from '@/game/types';
 
 import type { ProfileState, ReceivedChallenge } from './profile';
+import { LANG_IDS } from '@/i18n/langs';
 
 type Raw = Record<string, unknown>;
 
@@ -24,7 +25,7 @@ const strings = (v: unknown, ok: (s: string) => boolean = () => true) =>
 const levelIds = (v: unknown, max: number) =>
   Array.isArray(v) ? v.filter((x): x is number => typeof x === 'number' && !!levelById(x)).slice(0, max) : [];
 
-const LANGS: Lang[] = ['fr', 'en', 'es'];
+const LANGS: Lang[] = LANG_IDS;
 const THEME_IDS = THEMES.map((t) => t.id) as ThemeId[];
 const MODES: Mode[] = ['classic', 'category', 'chrono', 'hardcore', 'daily', 'challenge', 'zen', 'tutorial', 'replay'];
 

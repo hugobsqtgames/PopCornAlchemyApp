@@ -1,9 +1,10 @@
+import { describe, expect, it, jest } from '@jest/globals';
 import { getLocales } from 'expo-localization';
 
 import { deviceLang, langOf } from '../device';
 
 jest.mock('expo-localization', () => ({ getLocales: jest.fn() }));
-const locales = (...codes: (string | null)[]) => (getLocales as jest.Mock).mockReturnValue(codes.map((languageCode) => ({ languageCode })));
+const locales = (...codes: (string | null)[]) => (getLocales as jest.Mock<typeof getLocales>).mockReturnValue(codes.map((languageCode) => ({ languageCode })) as ReturnType<typeof getLocales>);
 
 describe('phone language', () => {
   it('speaks the phone language when the app knows it', () => {
@@ -25,7 +26,7 @@ describe('phone language', () => {
     expect(deviceLang()).toBe('en');
   });
   it('falls back to English when the phone gives no locale', () => {
-    (getLocales as jest.Mock).mockImplementation(() => {
+    (getLocales as jest.Mock<typeof getLocales>).mockImplementation(() => {
       throw new Error('no locales');
     });
     expect(deviceLang()).toBe('en');

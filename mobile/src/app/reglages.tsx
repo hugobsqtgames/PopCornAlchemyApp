@@ -13,8 +13,8 @@ import { disableReminder, enableReminder } from '@/services/reminder';
 import { GAME_CENTER_READY, MONEY_READY, purchase, restorePurchases, showAdPrivacyChoices, useAdPrivacyChoices, useStorePrices } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
 import { deviceLang } from '@/i18n/device';
+import { LANG_NAMES } from '@/i18n/langs';
 
-const LANG_NAMES = { fr: 'Français', en: 'English', es: 'Español' };
 const SOCIALS = [
   { name: 'TikTok', url: 'https://www.tiktok.com/@hugo_bsqt', Icon: TikTokIcon, tint: 'actionTint' as const },
   { name: 'Instagram', url: 'https://www.instagram.com/hugo_bsqt/', Icon: InstagramIcon, tint: 'goldTint' as const },

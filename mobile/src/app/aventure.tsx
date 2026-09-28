@@ -15,6 +15,7 @@ import { useLayout, useLevelName, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
 import { langOf } from '@/i18n/device';
+import { worldName } from '@/i18n/names';
 
 /** Height of one level on the path, and of the "Tier N" banner at the start of each tier. */
 const ROW = 84;
@@ -154,7 +155,7 @@ export default function Aventure() {
         />
         <View style={{ paddingHorizontal: 16, paddingTop: 6, paddingBottom: 8, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <Txt size={13} weight="bold" color={p.muted} lines={2} style={{ flex: 1 }}>
-            {t('map_world', { n: tierOfCurrent + 1, name: worldOf(d, tierOfCurrent).name[lang] })}
+            {t('map_world', { n: tierOfCurrent + 1, name: worldName(worldOf(d, tierOfCurrent), lang) })}
           </Txt>
           <Tap
             onPress={() => router.push({ pathname: '/mondes', params: { diff: String(d) } })}
@@ -205,7 +206,7 @@ export default function Aventure() {
               const end = Math.min(total, (tier + 1) * TIER_SIZE);
               const complete = passed >= end;
               const world = worldOf(d, tier);
-              const label = t('map_world', { n: tier + 1, name: world.name[lang] });
+              const label = t('map_world', { n: tier + 1, name: worldName(world, lang) });
               return (
                 <View
                   key={tier}
@@ -229,7 +230,7 @@ export default function Aventure() {
                     {`${complete ? '✓ ' : ''}${t('map_world_n', { n: tier + 1 }).toUpperCase()}`}
                   </Txt>
                   <Txt size={15} weight="heavy" color={world.signText} lines={1}>
-                    {world.name[lang]}
+                    {worldName(world, lang)}
                   </Txt>
                 </View>
               );

@@ -10,6 +10,7 @@ import type { StringKey } from '@/i18n/strings';
 import { MONEY_READY, showRewardedAd } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
 import { langOf } from '@/i18n/device';
+import { worldName } from '@/i18n/names';
 
 import { AdIcon, ShareIcon } from '../icons';
 import { Btn, Card, Emoji, Px, Screen, Txt } from '../ui';
@@ -89,7 +90,7 @@ export function TierView({ run }: { run: Run }) {
                 {t('world_unlocked').toUpperCase()}
               </Txt>
               <Txt size={17} weight="heavy" color={next.dark ? '#FFFFFF' : p.ink} lines={2}>
-                {next.name[lang]}
+                {worldName(next, lang)}
               </Txt>
             </View>
           </View>
