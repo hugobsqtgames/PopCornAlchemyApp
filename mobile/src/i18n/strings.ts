@@ -18,6 +18,7 @@ const fr = {
   tab_profile: 'Profil',
 
   lang_title: 'Choisis ta langue',
+  lang_auto: 'Langue du téléphone',
   lang_sub: 'Choose your language · Elige tu idioma',
   continue: 'Continuer',
 
@@ -402,6 +403,7 @@ const en: Record<StringKey, string> = {
   tab_trophies: 'Trophies',
   tab_profile: 'Profile',
   lang_title: 'Choose your language',
+  lang_auto: 'Phone language',
   lang_sub: 'Choisis ta langue · Elige tu idioma',
   continue: 'Continue',
   tuto_label: 'HOW TO PLAY',
@@ -766,6 +768,7 @@ const es: Record<StringKey, string> = {
   tab_trophies: 'Trofeos',
   tab_profile: 'Perfil',
   lang_title: 'Elige tu idioma',
+  lang_auto: 'Idioma del teléfono',
   lang_sub: 'Choisis ta langue · Choose your language',
   continue: 'Continuar',
   tuto_label: 'CÓMO JUGAR',

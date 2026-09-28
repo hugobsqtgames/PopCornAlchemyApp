@@ -55,6 +55,11 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
   (Facile « Le tour du monde » 10, Moyen « Le voyage extraordinaire » 7, Difficile « Les légendes » 4).
   Couleur du sol, panneau d'entrée, écran « Les mondes », annonce « Nouveau monde débloqué ! »
   en fin de palier.
+- **Langue automatique** (`mobile/src/i18n/device.ts`) : plus d'écran de langue au premier lancement,
+  l'app parle la langue du téléphone (la première connue dans l'ordre du téléphone : français, anglais
+  ou espagnol ; anglais pour toutes les autres). Réglages → Langue permet de choisir à la main ou de
+  revenir à « Langue du téléphone ». iOS connaît les 3 langues (`supportedLocales` et `locales` dans
+  `app.json`) : elles apparaissent sur l'App Store et dans le réglage de langue par app de l'iPhone.
 - **Décors peints** (`mobile/src/components/world-scene.tsx`) : chaque monde a un vrai paysage
   sur les deux bords (collines, mer, forêt, immeubles, montagnes, rideaux, planètes, récifs, lave…),
   une texture au sol, un chemin dessiné entre les niveaux et des groupes de petits dessins.

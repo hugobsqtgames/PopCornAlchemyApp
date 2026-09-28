@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { AccessibilityInfo, AppState, Platform, useColorScheme, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import type { Level } from '@/game/types';
+import type { Lang, Level } from '@/game/types';
+import { langOf } from '@/i18n/device';
 import { STRINGS, type StringKey } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
 import { paletteFor } from '@/theme/palettes';
@@ -16,8 +17,13 @@ export function fmt(n: number): string {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 }
 
+/** The language in use: the player's choice, or the phone's. */
+export function useLang(): Lang {
+  return langOf(useProfile((s) => s.lang));
+}
+
 export function useT(): TFunction {
-  const lang = useProfile((s) => s.lang) ?? 'fr';
+  const lang = useLang();
   return useCallback(
     (key, vars) => {
       // "{n}" strings have a "_one" variant for the singular.
@@ -31,7 +37,7 @@ export function useT(): TFunction {
 }
 
 export function useLevelName(): (level: Level) => string {
-  const lang = useProfile((s) => s.lang) ?? 'fr';
+  const lang = useLang();
   return useCallback((level) => level.name[lang], [lang]);
 }
 

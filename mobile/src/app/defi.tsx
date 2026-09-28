@@ -6,13 +6,14 @@ import { Btn, Card, Emoji, Header, Screen, Txt } from '@/components/ui';
 import { dayKey, daysBetween, msUntilTomorrow } from '@/game/dates';
 import { useLayout, useNow, usePalette, useT } from '@/hooks/use-app';
 import { useProfile } from '@/store/profile';
+import { langOf } from '@/i18n/device';
 
 export default function Defi() {
   const p = usePalette();
   const t = useT();
   const { insets } = useLayout();
   const s = useProfile();
-  const lang = s.lang ?? 'fr';
+  const lang = langOf(s.lang);
   const now = useNow();
   const today = dayKey(now);
   const streak = s.streak();

@@ -16,6 +16,7 @@ import { rewardText } from '@/game/codes';
 import { STRINGS } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
 import { useUi } from '@/store/ui';
+import { langOf } from '@/i18n/device';
 
 import { buzz, play } from './feedback';
 import type { MoneyBackend } from './money-types';
@@ -35,7 +36,7 @@ let loaded: Promise<MoneyBackend> | null = null;
 /** The native modules are loaded only when they exist: importing them in Expo Go would crash. */
 const backend = () => (loaded ??= import('./money').then((m) => m.backend));
 
-const text = () => STRINGS[useProfile.getState().lang ?? 'fr'];
+const text = () => STRINGS[langOf(useProfile.getState().lang)];
 
 /** At launch: pays out purchases that were interrupted (app closed during the purchase…). */
 export function startMoney() {

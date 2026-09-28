@@ -1,4 +1,3 @@
-import { getLocales } from 'expo-localization';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
@@ -7,6 +6,7 @@ import { CheckIcon } from '@/components/icons';
 import { Btn, Emoji, Logo, Screen, Txt } from '@/components/ui';
 import type { Lang } from '@/game/types';
 import { useLayout, usePalette } from '@/hooks/use-app';
+import { deviceLang } from '@/i18n/device';
 import { STRINGS } from '@/i18n/strings';
 import { buzz } from '@/services/feedback';
 import { useProfile } from '@/store/profile';
@@ -17,10 +17,6 @@ const LANGS: { id: Lang; flag: string; name: string }[] = [
   { id: 'es', flag: '🇪🇸', name: 'Español' },
 ];
 
-function deviceLang(): Lang {
-  const code = getLocales()[0]?.languageCode;
-  return code === 'en' || code === 'es' ? code : 'fr';
-}
 
 export default function Langue() {
   const p = usePalette();
@@ -28,8 +24,14 @@ export default function Langue() {
   const current = useProfile((s) => s.lang);
   const tutorialDone = useProfile((s) => s.tutorialDone);
   const set = useProfile((s) => s.set);
-  const [pick, setPick] = useState<Lang>(current ?? deviceLang());
-  const T = STRINGS[pick];
+  // null: follow the phone's language.
+  const [pick, setPick] = useState<Lang | null>(current);
+  const phone = deviceLang();
+  const T = STRINGS[pick ?? phone];
+  const options: { id: Lang | null; flag: string; name: string; sub?: string }[] = [
+    { id: null, flag: '📱', name: T.lang_auto, sub: LANGS.find((l) => l.id === phone)?.name },
+    ...LANGS,
+  ];
 
   return (
     <Screen>
@@ -49,11 +51,11 @@ export default function Langue() {
           {T.lang_sub}
         </Txt>
         <View accessibilityRole="radiogroup" style={{ gap: 10 }}>
-          {LANGS.map((l) => {
+          {options.map((l) => {
             const on = l.id === pick;
             return (
               <Pressable
-                key={l.id}
+                key={l.id ?? 'auto'}
                 accessibilityRole="radio"
                 accessibilityState={{ checked: on }}
                 onPress={() => {
@@ -72,9 +74,16 @@ export default function Langue() {
                   borderColor: on ? p.action : p.line,
                 }}>
                 <Emoji size={28}>{l.flag}</Emoji>
-                <Txt size={17} weight="bold" style={{ flex: 1 }}>
-                  {l.name}
-                </Txt>
+                <View style={{ flex: 1 }}>
+                  <Txt size={17} weight="bold">
+                    {l.name}
+                  </Txt>
+                  {l.sub ? (
+                    <Txt size={13} weight="semibold" color={p.muted}>
+                      {l.sub}
+                    </Txt>
+                  ) : null}
+                </View>
                 <View
                   style={{
                     width: 24,

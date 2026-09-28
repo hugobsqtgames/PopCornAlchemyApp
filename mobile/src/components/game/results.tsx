@@ -9,6 +9,7 @@ import { fmt, useLayout, useLevelName, usePalette, useT } from '@/hooks/use-app'
 import type { StringKey } from '@/i18n/strings';
 import { MONEY_READY, showRewardedAd } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
+import { langOf } from '@/i18n/device';
 
 import { AdIcon, ShareIcon } from '../icons';
 import { Btn, Card, Emoji, Px, Screen, Txt } from '../ui';
@@ -43,7 +44,7 @@ export function TierView({ run }: { run: Run }) {
   const p = usePalette();
   const t = useT();
   const tier = Math.floor(run.index / 20) + 1;
-  const lang = useProfile((s) => s.lang) ?? 'fr';
+  const lang = langOf(useProfile((s) => s.lang));
   // On the adventure map, the next tier is a new world.
   const d = run.config.adventure ? run.config.difficulty : undefined;
   const next = d && tier < WORLDS[d].length ? WORLDS[d][tier] : null;

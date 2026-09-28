@@ -9,6 +9,7 @@ import { Platform } from 'react-native';
 import { dayKey } from '@/game/dates';
 import { STRINGS } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
+import { langOf } from '@/i18n/device';
 
 const WEB = Platform.OS === 'web';
 const HOUR = 18;
@@ -63,7 +64,7 @@ async function reschedule() {
       useProfile.getState().set({ reminder: false });
       return;
     }
-    const text = STRINGS[s.lang ?? 'fr'];
+    const text = STRINGS[langOf(s.lang)];
     const now = new Date();
     for (let i = 0; i <= DAYS; i++) {
       const at = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i, HOUR, 0, 0);

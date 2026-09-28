@@ -69,7 +69,7 @@ async function pick(emojis) {
 // 1. Storage that is not JSON at all
 await scenario('corrupted storage (not JSON)', async () => {
   await start('{"state": {"coins": 12, broken');
-  check(await see('Choisis ta langue') || (await see('Choose your language')) || (await see('Jouer')), 'app opens with unreadable storage');
+  check((await see('Jouer')) || (await see('Play')) || (await see('Titanic', false)), 'app opens with unreadable storage');
   await shot('corrupt-json');
 });
 // 2. Wrong types everywhere

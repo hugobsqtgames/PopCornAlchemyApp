@@ -5,6 +5,7 @@ import { Animated, Pressable, View } from 'react-native';
 import { Btn, Card, Emoji, Screen, Txt } from '@/components/ui';
 import { useLayout, usePalette, useReduceMotion, useT } from '@/hooks/use-app';
 import { useProfile } from '@/store/profile';
+import { langOf } from '@/i18n/device';
 
 const DEMO = ['🔥', '🚢', '🎸', '👽', '🍕', '🚀', '🧊', '🎲'];
 const RIGHT = new Set(['🚢', '🧊']);
@@ -14,7 +15,7 @@ export default function Tutoriel() {
   const t = useT();
   const { insets } = useLayout();
   const set = useProfile((s) => s.set);
-  const lang = useProfile((s) => s.lang) ?? 'fr';
+  const lang = langOf(useProfile((s) => s.lang));
   const [step, setStep] = useState(0);
   const pulse = useState(() => new Animated.Value(1))[0];
   const still = useReduceMotion();

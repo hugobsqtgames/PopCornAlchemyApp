@@ -17,7 +17,7 @@ const passes = [];
 const check = (ok, what) => (ok ? passes : failures).push(what);
 
 const browser = await chromium.launch();
-const ctx = await browser.newContext({ viewport: { width: 375, height: 667 } });
+const ctx = await browser.newContext({ viewport: { width: 375, height: 667 }, locale: 'en-US' });
 await ctx.addInitScript(() => {
   window.__sounds = [];
 });
@@ -145,16 +145,29 @@ async function step(name, fn, fresh = true) {
   }
 }
 
+// ───────────────────────── Phone languages on first launch
+for (const [locale, text, what] of [
+  ['es-ES', 'con emojis. ¡Toca', 'Spanish phone: the app starts in Spanish'],
+  ['fr-FR', 'avec des emojis. Touche', 'French phone: the app starts in French'],
+  ['de-DE', 'with emojis. Tap', 'German phone: the app starts in English'],
+  [['de-CH', 'fr-CH'], 'avec des emojis. Touche', 'Swiss phone (German, then French): the app starts in French'],
+]) {
+  const other = await browser.newContext({ viewport: { width: 375, height: 667 }, locale: Array.isArray(locale) ? locale[0] : locale });
+  if (Array.isArray(locale)) await other.addInitScript((langs) => Object.defineProperty(navigator, 'languages', { get: () => langs }), locale);
+  const pg = await other.newPage();
+  await pg.goto(BASE);
+  await pg.waitForTimeout(1500);
+  check((await pg.getByText(text, { exact: false }).count()) > 0, what);
+  await other.close();
+}
+
 // ───────────────────────── First launch & languages
 await page.goto(BASE);
 await page.waitForTimeout(1500);
 await step('first launch', async () => {
-  await shot('langue');
-  await tap('English');
-  check(await see('Choose your language'), 'language screen previews the picked language');
-  await tap('Continue');
-  await page.waitForTimeout(800);
-  check(await see('Guess “Titanic” with emojis. Tap 🚢!'), 'first launch opens the guided level in English');
+  // No language screen: the app speaks the phone's language (here English) from the start.
+  check(!(await see('Choose your language')), 'no language screen on first launch');
+  check(await see('Guess “Titanic” with emojis. Tap 🚢!'), 'first launch opens the guided level in the phone language (English)');
   await shot('niveau-guide');
   const wrongTile = page.locator('[role="button"][aria-label="🔥"]').filter({ visible: true });
   if (await wrongTile.count()) await wrongTile.first().click();
@@ -184,12 +197,19 @@ await step('first launch', async () => {
   check(!(await see("Today's gift")), 'one gift a day: no calendar after a restart');
   check(await see('Play'), 'home in English after the guided level');
   check((await profile()).tutorialDone === true, 'guided level marks the tutorial as done');
+  check((await profile()).lang === null, 'the language follows the phone until the player picks one');
   await btn('Settings');
   await tap('Language');
   await tap('Español');
   await tap('Continuar');
   check(await see('Ajustes'), 'settings switched to Spanish');
   await tap('Idioma');
+  check(await see('Idioma del teléfono'), 'the language screen offers the phone language');
+  await tap('Idioma del teléfono');
+  await tap('Continue');
+  check(await see('Settings') && (await see('Phone language · English')), 'back to the phone language (English)');
+  check((await profile()).lang === null, 'phone language is stored as automatic');
+  await tap('Language');
   await tap('Français');
   await tap('Continuer');
   check(await see('Réglages'), 'settings back in French');

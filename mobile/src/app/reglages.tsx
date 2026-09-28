@@ -12,6 +12,7 @@ import { announce, play } from '@/services/feedback';
 import { disableReminder, enableReminder } from '@/services/reminder';
 import { GAME_CENTER_READY, MONEY_READY, purchase, restorePurchases, showAdPrivacyChoices, useAdPrivacyChoices, useStorePrices } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
+import { deviceLang } from '@/i18n/device';
 
 const LANG_NAMES = { fr: 'Français', en: 'English', es: 'Español' };
 const SOCIALS = [
@@ -122,7 +123,7 @@ export default function Reglages() {
             right={
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                 <Txt size={15} color={p.muted}>
-                  {LANG_NAMES[s.lang ?? 'fr']}
+                  {s.lang ? LANG_NAMES[s.lang] : `${t('lang_auto')} · ${LANG_NAMES[deviceLang()]}`}
                 </Txt>
                 <ChevronIcon color={p.line2} />
               </View>

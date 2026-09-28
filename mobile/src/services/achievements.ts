@@ -3,6 +3,7 @@ import { ACHIEVEMENT_TEXT } from '@/i18n/achievements';
 import { STRINGS } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
 import { useUi } from '@/store/ui';
+import { langOf } from '@/i18n/device';
 
 import { play } from './feedback';
 
@@ -20,7 +21,7 @@ export function achievementText(id: string, lang: 'fr' | 'en' | 'es') {
 export function checkAchievements() {
   const fresh = useProfile.getState().checkAchievements();
   if (!fresh.length) return;
-  const lang = useProfile.getState().lang ?? 'fr';
+  const lang = langOf(useProfile.getState().lang);
   play('win');
   for (const id of fresh) {
     const a = ACHIEVEMENTS.find((x) => x.id === id);

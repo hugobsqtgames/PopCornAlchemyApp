@@ -8,6 +8,7 @@ import { useLayout, usePalette, useT } from '@/hooks/use-app';
 import { achievementText } from '@/services/achievements';
 import { buzz } from '@/services/feedback';
 import { useProfile } from '@/store/profile';
+import { langOf } from '@/i18n/device';
 
 const STEP = 76;
 const NODE = 52;
@@ -27,7 +28,7 @@ export default function Trophees() {
   const t = useT();
   const { tabTop } = useLayout();
   const unlocked = useProfile((s) => s.achievements);
-  const lang = useProfile((s) => s.lang) ?? 'fr';
+  const lang = langOf(useProfile((s) => s.lang));
   const [filter, setFilter] = useState<Filter>('all');
   const [selected, setSelected] = useState<string | null>(null);
   const sel = ACHIEVEMENTS.find((a) => a.id === selected);

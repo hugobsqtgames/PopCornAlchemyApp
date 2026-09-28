@@ -7,6 +7,7 @@ import { categoryStats, favoriteCategory, formatDuration } from '@/game/progress
 import { CATEGORIES } from '@/game/rules';
 import { fmt, useLayout, usePalette, useT } from '@/hooks/use-app';
 import { useProfile } from '@/store/profile';
+import { langOf } from '@/i18n/device';
 
 /** "2 h 05", "12 min", "45 s". */
 function durationText(seconds: number) {
@@ -33,7 +34,7 @@ export default function Statistiques() {
   const t = useT();
   const { insets, tablet } = useLayout();
   const s = useProfile();
-  const lang = s.lang ?? 'fr';
+  const lang = langOf(s.lang);
   const perCat = categoryStats(s.stats);
   const wins = perCat.reduce((a, c) => a + c.wins, 0);
   const tries = perCat.reduce((a, c) => a + c.tries, 0);

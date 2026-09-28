@@ -11,6 +11,7 @@ import { WORLDS } from '@/game/worlds';
 import { useLayout, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
+import { langOf } from '@/i18n/device';
 
 /** The worlds of one adventure: done, the current one, and the ones still to discover. */
 export default function Mondes() {
@@ -21,7 +22,7 @@ export default function Mondes() {
   const d: Difficulty | null = raw === 1 || raw === 2 || raw === 3 ? raw : null;
   const passed = useProfile((s) => (d ? s.adventure[d] : 0));
   const stars = useProfile((s) => s.stars);
-  const lang = useProfile((s) => s.lang) ?? 'fr';
+  const lang = langOf(useProfile((s) => s.lang));
   if (!d) return <Redirect href="/categories" />;
 
   const ids = adventureIds(d);

@@ -10,6 +10,7 @@ import { fmt, useLayout, useNow, usePalette, useT } from '@/hooks/use-app';
 import { showLeaderboard } from '@/services/leaderboard';
 import { GAME_CENTER_READY } from '@/services/store-services';
 import { useProfile } from '@/store/profile';
+import { langOf } from '@/i18n/device';
 
 /** A new value each time, so the same mode can be started twice in a row. */
 const freshKey = () => String(Date.now());
@@ -25,7 +26,6 @@ export default function Home() {
   const bestAll = Math.max(0, ...Object.values(s.best).map((v) => v ?? 0));
   const big = height > 800;
 
-  if (!s.lang) return <Redirect href="/langue" />;
   if (!s.tutorialDone) return <Redirect href={{ pathname: '/jeu', params: { mode: 'tutorial' } }} />;
 
   const topBar = (
@@ -94,7 +94,7 @@ export default function Home() {
     <Tap onPress={() => router.push('/defi')} label={t('daily')} style={{ height: big || wide ? 84 : 70, paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
       <View style={{ width: 48, height: 48, borderRadius: 14, backgroundColor: p.actionTint, alignItems: 'center', justifyContent: 'center' }}>
         <Txt size={10} weight="heavy" color={p.action}>
-          {now.toLocaleDateString(s.lang, { month: 'short' }).replace('.', '').toUpperCase()}
+          {now.toLocaleDateString(langOf(s.lang), { month: 'short' }).replace('.', '').toUpperCase()}
         </Txt>
         <Txt size={18} weight="heavy" style={{ lineHeight: 20 }}>
           {now.getDate()}

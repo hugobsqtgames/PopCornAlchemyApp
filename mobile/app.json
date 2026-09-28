@@ -50,7 +50,18 @@
           "enableBackgroundRecording": false
         }
       ],
-      "expo-localization",
+      [
+        "expo-localization",
+        {
+          "supportedLocales": {
+            "ios": [
+              "en",
+              "fr",
+              "es"
+            ]
+          }
+        }
+      ],
       "expo-screen-orientation",
       "expo-asset",
       "expo-notifications"
@@ -65,6 +76,11 @@
         "projectId": "37f058a6-fb03-4d56-97cb-56bbeaf05c20"
       }
     },
-    "owner": "aazerty12"
+    "owner": "aazerty12",
+    "locales": {
+      "fr": "./locales/fr.json",
+      "en": "./locales/en.json",
+      "es": "./locales/es.json"
+    }
   }
 }

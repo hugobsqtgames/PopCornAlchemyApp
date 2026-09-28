@@ -14,6 +14,7 @@ import { WORLDS, worldOf } from '@/game/worlds';
 import { useLayout, useLevelName, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
+import { langOf } from '@/i18n/device';
 
 /** Height of one level on the path, and of the "Tier N" banner at the start of each tier. */
 const ROW = 84;
@@ -65,7 +66,7 @@ export default function Aventure() {
   const stars = useProfile((s) => s.stars);
   const found = useProfile((s) => s.found);
   const save = useProfile((s) => s.save);
-  const lang = useProfile((s) => s.lang) ?? 'fr';
+  const lang = langOf(useProfile((s) => s.lang));
   const [open, setOpen] = useState<number | null>(null);
   const width = Math.min(screenWidth, tablet ? 640 : 600);
   // The entrance sign of a world: wide enough for the longest names.
