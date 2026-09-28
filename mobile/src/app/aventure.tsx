@@ -145,157 +145,156 @@ export default function Aventure() {
       </View>
 
       <ScrollView ref={scroller} onLayout={onViewport} onContentSizeChange={onContent} style={{ flex: 1, backgroundColor: worldOf(d, 0).bg }} contentContainerStyle={{ alignItems: 'center' }}>
-        <View style={{ width, height: map.height }}>
-          {/* Each tier is a world: its ground, drawn edge to edge. */}
+        {/* Each tier is a world: its ground, drawn from edge to edge of the screen. */}
+        <View style={{ width: screenWidth, height: map.height }}>
           {map.sections.map(({ tier, top, bottom }) => (
-            <View
-              key={`ground-${tier}`}
-              style={{ position: 'absolute', left: -(screenWidth - width) / 2, width: screenWidth, top, height: bottom - top, backgroundColor: worldOf(d, tier).bg }}
-            />
+            <View key={`ground-${tier}`} style={{ position: 'absolute', left: 0, width: screenWidth, top, height: bottom - top, backgroundColor: worldOf(d, tier).bg }} />
           ))}
-          {map.decos.map(({ i, x, y }) => {
-            const world = worldOf(d, Math.floor(i / TIER_SIZE));
-            return (
-              <View key={`deco-${i}`} pointerEvents="none" style={{ position: 'absolute', left: x, top: y }}>
-                <WorldDeco kind={world.decos[i % 2]} size={i % 4 < 2 ? DECO : DECO - 8} />
-              </View>
-            );
-          })}
-          {/* The trail: small dots between levels, gold where the player went. */}
-          {map.pos.slice(0, -1).map((a, i) => {
-            const b = map.pos[i + 1];
-            const done = i + 1 <= passed;
-            const road = worldOf(d, Math.floor((i + 1) / TIER_SIZE)).road;
-            return [1, 2].map((k) => (
-              <View
-                key={`${i}-${k}`}
-                style={{
-                  position: 'absolute',
-                  left: a.x + ((b.x - a.x) * k) / 3 - 5,
-                  top: a.y + ((b.y - a.y) * k) / 3 - 5,
-                  width: 10,
-                  height: 10,
-                  borderRadius: 5,
-                  backgroundColor: done ? p.gold : road,
-                }}
-              />
-            ));
-          })}
-
-          {/* The entrance sign of each world, under its first level. */}
-          {map.banners.map(({ tier, y }) => {
-            const end = Math.min(total, (tier + 1) * TIER_SIZE);
-            const complete = passed >= end;
-            const world = worldOf(d, tier);
-            const label = t('map_world', { n: tier + 1, name: world.name[lang] });
-            return (
-              <View
-                key={tier}
-                accessible
-                accessibilityLabel={complete ? `${label}, ${t('map_tier_done', { n: tier + 1 })}` : label}
-                style={{
-                  position: 'absolute',
-                  left: width / 2 - 130,
-                  top: y + (BANNER - 44) / 2,
-                  width: 260,
-                  height: 44,
-                  borderRadius: 10,
-                  backgroundColor: world.sign,
-                  borderBottomWidth: 4,
-                  borderBottomColor: 'rgba(0,0,0,0.25)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  paddingHorizontal: 10,
-                }}>
-                <Txt size={13} weight="heavy" color={world.signText} lines={1} style={{ letterSpacing: 0.4 }}>
-                  {`${complete ? '✓ ' : ''}${label.toUpperCase()}`}
-                </Txt>
-              </View>
-            );
-          })}
-
-          {map.pos.map(({ x, y }, i) => {
-            const id = ids[i];
-            const isCurrent = i === current;
-            const isPassed = i < passed;
-            const n = stars[id] ?? 0;
-            const size = isCurrent ? 72 : isPassed ? 56 : 48;
-            if (isCurrent) {
+          <View style={{ position: 'absolute', left: (screenWidth - width) / 2, top: 0, width, height: map.height }}>
+            {map.decos.map(({ i, x, y }) => {
+              const world = worldOf(d, Math.floor(i / TIER_SIZE));
               return (
-                <View key={id} style={{ position: 'absolute', left: x - 48, top: y - 48, width: 96, height: 96, alignItems: 'center', justifyContent: 'center' }}>
-                  <View style={{ position: 'absolute', width: 96, height: 96, borderRadius: 48, backgroundColor: p.gold, opacity: 0.28 }} />
+                <View key={`deco-${i}`} pointerEvents="none" style={{ position: 'absolute', left: x, top: y }}>
+                  <WorldDeco kind={world.decos[i % 2]} size={i % 4 < 2 ? DECO : DECO - 8} />
+                </View>
+              );
+            })}
+            {/* The trail: small dots between levels, gold where the player went. */}
+            {map.pos.slice(0, -1).map((a, i) => {
+              const b = map.pos[i + 1];
+              const done = i + 1 <= passed;
+              const road = worldOf(d, Math.floor((i + 1) / TIER_SIZE)).road;
+              return [1, 2].map((k) => (
+                <View
+                  key={`${i}-${k}`}
+                  style={{
+                    position: 'absolute',
+                    left: a.x + ((b.x - a.x) * k) / 3 - 5,
+                    top: a.y + ((b.y - a.y) * k) / 3 - 5,
+                    width: 10,
+                    height: 10,
+                    borderRadius: 5,
+                    backgroundColor: done ? p.gold : road,
+                  }}
+                />
+              ));
+            })}
+
+            {/* The entrance sign of each world, under its first level. */}
+            {map.banners.map(({ tier, y }) => {
+              const end = Math.min(total, (tier + 1) * TIER_SIZE);
+              const complete = passed >= end;
+              const world = worldOf(d, tier);
+              const label = t('map_world', { n: tier + 1, name: world.name[lang] });
+              return (
+                <View
+                  key={tier}
+                  accessible
+                  accessibilityLabel={complete ? `${label}, ${t('map_tier_done', { n: tier + 1 })}` : label}
+                  style={{
+                    position: 'absolute',
+                    left: width / 2 - 130,
+                    top: y + (BANNER - 44) / 2,
+                    width: 260,
+                    height: 44,
+                    borderRadius: 10,
+                    backgroundColor: world.sign,
+                    borderBottomWidth: 4,
+                    borderBottomColor: 'rgba(0,0,0,0.25)',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingHorizontal: 10,
+                  }}>
+                  <Txt size={13} weight="heavy" color={world.signText} lines={1} style={{ letterSpacing: 0.4 }}>
+                    {`${complete ? '✓ ' : ''}${label.toUpperCase()}`}
+                  </Txt>
+                </View>
+              );
+            })}
+
+            {map.pos.map(({ x, y }, i) => {
+              const id = ids[i];
+              const isCurrent = i === current;
+              const isPassed = i < passed;
+              const n = stars[id] ?? 0;
+              const size = isCurrent ? 72 : isPassed ? 56 : 48;
+              if (isCurrent) {
+                return (
+                  <View key={id} style={{ position: 'absolute', left: x - 48, top: y - 48, width: 96, height: 96, alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ position: 'absolute', width: 96, height: 96, borderRadius: 48, backgroundColor: p.gold, opacity: 0.28 }} />
+                    <Pressable
+                      onPress={play}
+                      accessibilityRole="button"
+                      accessibilityLabel={t('map_play', { n: i + 1 })}
+                      style={({ pressed }) => ({
+                        width: size,
+                        height: size,
+                        borderRadius: size / 2,
+                        backgroundColor: p.gold,
+                        borderWidth: 4,
+                        borderColor: '#FFFFFF',
+                        borderBottomWidth: pressed ? 4 : 8,
+                        borderBottomColor: p.goldDeep,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      })}>
+                      <Txt size={24} weight="heavy" color="#1F1B2D">
+                        {i + 1}
+                      </Txt>
+                    </Pressable>
+                  </View>
+                );
+              }
+              return (
+                <View key={id} style={{ position: 'absolute', left: x - 40, top: y - size / 2, width: 80, alignItems: 'center', gap: 2 }}>
                   <Pressable
-                    onPress={play}
+                    disabled={!isPassed}
+                    onPress={() => setOpen(i)}
                     accessibilityRole="button"
-                    accessibilityLabel={t('map_play', { n: i + 1 })}
-                    style={({ pressed }) => ({
+                    accessibilityState={{ disabled: !isPassed }}
+                    accessibilityLabel={
+                      !isPassed ? t('map_locked', { n: i + 1 }) : n ? t('map_node_done', { n: i + 1, s: n }) : t('map_node_missed', { n: i + 1 })
+                    }
+                    style={{
                       width: size,
                       height: size,
                       borderRadius: size / 2,
-                      backgroundColor: p.gold,
-                      borderWidth: 4,
-                      borderColor: '#FFFFFF',
-                      borderBottomWidth: pressed ? 4 : 8,
-                      borderBottomColor: p.goldDeep,
+                      backgroundColor: isPassed ? p.surface : p.sunk,
+                      borderWidth: isPassed ? 3 : 2,
+                      borderStyle: isPassed ? 'solid' : 'dashed',
+                      borderColor: isPassed ? (n ? p.green : p.line2) : p.line2,
                       alignItems: 'center',
                       justifyContent: 'center',
-                    })}>
-                    <Txt size={24} weight="heavy" color="#1F1B2D">
+                    }}>
+                    <Txt size={isPassed ? 18 : 15} weight="heavy" color={isPassed ? p.ink : p.muted}>
                       {i + 1}
                     </Txt>
                   </Pressable>
+                  {isPassed && n > 0 && <Stars n={n} size={12} />}
                 </View>
               );
-            }
-            return (
-              <View key={id} style={{ position: 'absolute', left: x - 40, top: y - size / 2, width: 80, alignItems: 'center', gap: 2 }}>
-                <Pressable
-                  disabled={!isPassed}
-                  onPress={() => setOpen(i)}
-                  accessibilityRole="button"
-                  accessibilityState={{ disabled: !isPassed }}
-                  accessibilityLabel={
-                    !isPassed ? t('map_locked', { n: i + 1 }) : n ? t('map_node_done', { n: i + 1, s: n }) : t('map_node_missed', { n: i + 1 })
-                  }
-                  style={{
-                    width: size,
-                    height: size,
-                    borderRadius: size / 2,
-                    backgroundColor: isPassed ? p.surface : p.sunk,
-                    borderWidth: isPassed ? 3 : 2,
-                    borderStyle: isPassed ? 'solid' : 'dashed',
-                    borderColor: isPassed ? (n ? p.green : p.line2) : p.line2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Txt size={isPassed ? 18 : 15} weight="heavy" color={isPassed ? p.ink : p.muted}>
-                    {i + 1}
-                  </Txt>
-                </Pressable>
-                {isPassed && n > 0 && <Stars n={n} size={12} />}
-              </View>
-            );
-          })}
+            })}
 
-          {current >= 0 && (
-            <View
-              pointerEvents="none"
-              style={{
-                position: 'absolute',
-                top: map.pos[current].y - 60,
-                left: map.pos[current].x < width / 2 ? map.pos[current].x + 44 : map.pos[current].x - 44 - 130,
-                width: 130,
-                alignItems: 'center',
-                gap: 2,
-              }}>
-              <View style={{ paddingHorizontal: 10, paddingVertical: 5, borderRadius: 12, backgroundColor: p.surface, borderWidth: p.border, borderColor: p.line }}>
-                <Txt size={12} weight="bold">
-                  {t('map_here')}
-                </Txt>
+            {current >= 0 && (
+              <View
+                pointerEvents="none"
+                style={{
+                  position: 'absolute',
+                  top: map.pos[current].y - 60,
+                  left: map.pos[current].x < width / 2 ? map.pos[current].x + 44 : map.pos[current].x - 44 - 130,
+                  width: 130,
+                  alignItems: 'center',
+                  gap: 2,
+                }}>
+                <View style={{ paddingHorizontal: 10, paddingVertical: 5, borderRadius: 12, backgroundColor: p.surface, borderWidth: p.border, borderColor: p.line }}>
+                  <Txt size={12} weight="bold">
+                    {t('map_here')}
+                  </Txt>
+                </View>
+                <Popi mood="happy" size={POPI} />
               </View>
-              <Popi mood="happy" size={POPI} />
-            </View>
-          )}
+            )}
+          </View>
         </View>
       </ScrollView>
 
