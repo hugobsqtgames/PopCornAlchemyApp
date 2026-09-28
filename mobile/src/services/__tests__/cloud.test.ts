@@ -8,7 +8,6 @@ import { CLOUD_KEY, createCloudSync, type KeyValueStore } from '../cloud';
 jest.mock('@react-native-async-storage/async-storage', () =>
   jest.requireActual('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
-jest.mock('../../../modules/cloud-kv', () => null);
 
 /** A fake iCloud: one value per key, and a log of what was written. */
 function fakeCloud(initial: Record<string, string> = {}) {

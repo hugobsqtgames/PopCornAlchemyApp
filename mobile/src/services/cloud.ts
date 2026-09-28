@@ -7,7 +7,7 @@
  */
 import { AppState } from 'react-native';
 
-import CloudKv from '../../modules/cloud-kv';
+import { requireOptionalNativeModule } from 'expo';
 import { mergeProfiles, sharedPart, type SharedProfile } from '@/store/cloud-merge';
 import { useProfile } from '@/store/profile';
 import { sanitizeProfile } from '@/store/sanitize';
@@ -145,6 +145,12 @@ export function createCloudSync(kv: KeyValueStore, now: () => number = Date.now)
 
   return { start, pull, push };
 }
+
+/** The native iCloud module (modules/cloud-kv); null in Expo Go, on the web, or in a build without it. */
+interface CloudKvModule extends KeyValueStore {
+  addListener(event: 'onChange', listener: () => void): { remove(): void };
+}
+const CloudKv = requireOptionalNativeModule<CloudKvModule>('CloudKv');
 
 /** Whether this build can sync with iCloud (a real iOS build). */
 export const CLOUD_AVAILABLE = !!CloudKv;
