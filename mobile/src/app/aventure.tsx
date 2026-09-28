@@ -1,17 +1,16 @@
 import { Redirect, router, useLocalSearchParams } from 'expo-router';
 import { useMemo, useRef, useState } from 'react';
-import { Modal, Pressable, ScrollView, View, type LayoutChangeEvent } from 'react-native';
+import { Modal, Pressable, ScrollView, View, type LayoutChangeEvent, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 
 import { AnswerEmojis, Stars } from '@/components/game/board';
 import { PlayIcon } from '@/components/icons';
 import { Popi } from '@/components/mascot';
 import { Btn, Header, Screen, Tap, Txt } from '@/components/ui';
-import { WorldDeco } from '@/components/world-deco';
+import { buildScene, SceneStrip, STRIP } from '@/components/world-scene';
 import { one } from '@/game/links';
-import { mulberry32 } from '@/game/random';
 import { adventureIds, levelById, TIER_SIZE } from '@/game/rules';
 import type { Difficulty } from '@/game/types';
-import { worldOf } from '@/game/worlds';
+import { WORLDS, worldOf } from '@/game/worlds';
 import { useLayout, useLevelName, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
@@ -29,40 +28,19 @@ interface MapLayout {
   banners: { tier: number; y: number }[];
   /** The ground of each tier's world, from its top to the bottom of its banner. */
   sections: { tier: number; top: number; bottom: number }[];
-  /** Scenery scattered over the whole screen width, clear of the path (screen coordinates). */
-  decos: { key: string; tier: number; kind: 0 | 1; size: number; x: number; y: number }[];
   height: number;
 }
 
-/** How close a drawing may come to a level (centre to centre) and to the trail. */
-const NODE_GAP = 62;
-const TRAIL_GAP = 40;
-
-/** Distance from point (x, y) to the segment a-b. */
-function toSegment(x: number, y: number, a: { x: number; y: number }, b: { x: number; y: number }) {
-  const dx = b.x - a.x;
-  const dy = b.y - a.y;
-  const k = Math.max(0, Math.min(1, ((x - a.x) * dx + (y - a.y) * dy) / (dx * dx + dy * dy || 1)));
-  return Math.hypot(x - a.x - k * dx, y - a.y - k * dy);
-}
-
-/**
- * Lays the path out from the top (last level) down to level 1, winding left and right, in a
- * column of `width` centred on a screen of `full` width. The scenery is scattered over the
- * whole screen, always the same for a given size (seeded), and never on the path.
- */
-function layoutMap(total: number, width: number, full: number): MapLayout {
+/** Lays the path out from the top (last level) down to level 1, winding left and right. */
+function layoutMap(total: number, width: number): MapLayout {
   const pos: MapLayout['pos'] = new Array(total);
-  const rows: { i: number; top: number }[] = [];
   const banners: MapLayout['banners'] = [];
   const sections: MapLayout['sections'] = [];
   const swing = Math.max(0, width / 2 - 70);
-  const shift = (full - width) / 2;
   let y = PAD;
   let top = 0;
   for (let i = total - 1; i >= 0; i--) {
     pos[i] = { x: width / 2 + swing * Math.sin(i * 0.75), y: y + ROW / 2 };
-    rows.push({ i, top: y });
     y += ROW;
     if (i % TIER_SIZE === 0) {
       banners.push({ tier: i / TIER_SIZE, y });
@@ -72,29 +50,7 @@ function layoutMap(total: number, width: number, full: number): MapLayout {
     }
   }
 
-  const decos: MapLayout['decos'] = [];
-  const rng = mulberry32(total * 7919 + Math.round(full));
-  const tries = Math.max(3, Math.round(full / 260));
-  for (const { i, top: rowTop } of rows) {
-    const here = { x: pos[i].x + shift, y: pos[i].y };
-    const near = [pos[i + 1], pos[i - 1]].filter(Boolean).map((q) => ({ x: q.x + shift, y: q.y }));
-    const placed: { x: number; y: number; r: number }[] = [];
-    for (let k = 0; k < tries; k++) {
-      const size = 30 + Math.round(rng() * 16);
-      const x = 6 + rng() * (full - size - 12);
-      const top = rowTop + 4 + rng() * (ROW - size - 8);
-      const cx = x + size / 2;
-      const cy = top + size / 2;
-      const clear =
-        Math.hypot(cx - here.x, cy - here.y) > NODE_GAP &&
-        near.every((q) => Math.hypot(cx - q.x, cy - q.y) > NODE_GAP && toSegment(cx, cy, here, q) > TRAIL_GAP) &&
-        placed.every((o) => Math.hypot(cx - o.x, cy - o.y) > (size / 2 + o.r) * 2);
-      if (!clear) continue;
-      placed.push({ x: cx, y: cy, r: size / 2 });
-      decos.push({ key: `${i}-${k}`, tier: Math.floor(i / TIER_SIZE), kind: rng() < 0.5 ? 0 : 1, size, x, y: top });
-    }
-  }
-  return { pos, banners, sections, decos, height: y + PAD };
+  return { pos, banners, sections, height: y + PAD };
 }
 
 /** The adventure map of one difficulty: the path of levels, what is done and what is left. */
@@ -102,7 +58,7 @@ export default function Aventure() {
   const p = usePalette();
   const t = useT();
   const name = useLevelName();
-  const { insets, tablet, width: screenWidth } = useLayout();
+  const { insets, tablet, width: screenWidth, height: screenHeight } = useLayout();
   const raw = Number(one(useLocalSearchParams<{ diff?: string }>().diff));
   const d: Difficulty | null = raw === 1 || raw === 2 || raw === 3 ? raw : null;
   const passed = useProfile((s) => (d ? s.adventure[d] : 0));
@@ -113,7 +69,15 @@ export default function Aventure() {
   const [open, setOpen] = useState<number | null>(null);
   const width = Math.min(screenWidth, tablet ? 640 : 600);
   const ids = useMemo(() => (d ? adventureIds(d) : []), [d]);
-  const map = useMemo(() => layoutMap(ids.length, width, screenWidth), [ids.length, width, screenWidth]);
+  const map = useMemo(() => layoutMap(ids.length, width), [ids.length, width]);
+  // The painted landscape, in screen coordinates (the path column is centred).
+  const scene = useMemo(() => {
+    if (!d) return null;
+    const shift = (screenWidth - width) / 2;
+    return buildScene(WORLDS[d], map.sections, map.pos.map((q) => ({ x: q.x + shift, y: q.y })), screenWidth, map.height);
+  }, [d, map, screenWidth, width]);
+  // Only the strips of landscape near the screen are drawn.
+  const [band, setBand] = useState(0);
   const scroller = useRef<ScrollView>(null);
   // Scrolled to the current level once both the screen and the path have a size.
   const sized = useRef({ viewport: 0, content: false, done: false });
@@ -133,7 +97,9 @@ export default function Aventure() {
     if (s.done || !s.viewport || !s.content) return;
     s.done = true;
     const target = current >= 0 ? map.pos[current].y : 0;
-    scroller.current?.scrollTo({ y: Math.max(0, target - s.viewport / 2), animated: false });
+    const y = Math.max(0, target - s.viewport / 2);
+    scroller.current?.scrollTo({ y, animated: false });
+    setBand(Math.floor(y / STRIP));
   };
   const onViewport = (e: LayoutChangeEvent) => {
     sized.current.viewport = e.nativeEvent.layout.height;
@@ -145,12 +111,18 @@ export default function Aventure() {
   };
 
   // Nothing drawn under Popi and the "your turn" bubble, next to the current level.
-  const nearPopi = (x: number, y: number, size: number) => {
-    if (current < 0) return false;
-    const node = map.pos[current];
-    const left = (screenWidth - width) / 2 + (node.x < width / 2 ? node.x + 36 : node.x - 44 - 138);
-    return x + size > left && x < left + 146 && y + size > node.y - 66 && y < node.y + 40;
-  };
+  const avoid =
+    current >= 0
+      ? {
+          x: (screenWidth - width) / 2 + (map.pos[current].x < width / 2 ? map.pos[current].x + 36 : map.pos[current].x - 44 - 138),
+          y: map.pos[current].y - 66,
+          w: 146,
+          h: 106,
+        }
+      : undefined;
+  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => setBand(Math.floor(e.nativeEvent.contentOffset.y / STRIP));
+  const first = Math.max(0, band - 2);
+  const last = Math.min(scene ? scene.strips.length - 1 : -1, band + Math.ceil(screenHeight / STRIP) + 1);
 
   const play = () => {
     if (resumable !== null) router.push({ pathname: '/jeu', params: { resume: '1' } });
@@ -192,19 +164,17 @@ export default function Aventure() {
         </View>
       </View>
 
-      <ScrollView ref={scroller} onLayout={onViewport} onContentSizeChange={onContent} style={{ flex: 1, backgroundColor: worldOf(d, 0).bg }} contentContainerStyle={{ alignItems: 'center' }}>
+      <ScrollView ref={scroller} onLayout={onViewport} onContentSizeChange={onContent} onScroll={onScroll} scrollEventThrottle={32} style={{ flex: 1, backgroundColor: worldOf(d, 0).bg }} contentContainerStyle={{ alignItems: 'center' }}>
         {/* Each tier is a world: its ground, drawn from edge to edge of the screen. */}
         <View style={{ width: screenWidth, height: map.height }}>
           {map.sections.map(({ tier, top, bottom }) => (
             <View key={`ground-${tier}`} style={{ position: 'absolute', left: 0, width: screenWidth, top, height: bottom - top, backgroundColor: worldOf(d, tier).bg }} />
           ))}
-          {map.decos.map(({ key, tier, kind, size, x, y }) =>
-            nearPopi(x, y, size) ? null : (
-              <View key={`deco-${key}`} pointerEvents="none" style={{ position: 'absolute', left: x, top: y }}>
-                <WorldDeco kind={worldOf(d, tier).decos[kind]} size={size} />
-              </View>
-            ),
-          )}
+          {scene
+            ? Array.from({ length: Math.max(0, last - first + 1) }, (_, n) => (
+                <SceneStrip key={first + n} scene={scene} k={first + n} worlds={WORLDS[d]} full={screenWidth} avoid={avoid} />
+              ))
+            : null}
           <View style={{ position: 'absolute', left: (screenWidth - width) / 2, top: 0, width, height: map.height }}>
             {/* The trail: small dots between levels, gold where the player went. */}
             {map.pos.slice(0, -1).map((a, i) => {

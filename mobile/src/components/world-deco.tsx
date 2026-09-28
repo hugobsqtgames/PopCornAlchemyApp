@@ -3,7 +3,7 @@ import Svg, { Circle, Ellipse, G, Line, Path, Rect } from 'react-native-svg';
 import type { Deco } from '@/game/worlds';
 
 /** One small drawing of a world's scenery, on a 48 × 48 grid. Decorative only. */
-function Shapes({ kind }: { kind: Deco }) {
+export function DecoShapes({ kind }: { kind: Deco }) {
   switch (kind) {
     case 'corn':
       return (
@@ -387,7 +387,7 @@ function Shapes({ kind }: { kind: Deco }) {
 export function WorldDeco({ kind, size = 48 }: { kind: Deco; size?: number }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 48 48" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-      <Shapes kind={kind} />
+      <DecoShapes kind={kind} />
     </Svg>
   );
 }
