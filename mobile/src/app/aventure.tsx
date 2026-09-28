@@ -116,32 +116,35 @@ export default function Aventure() {
   const openFound = openLevel ? found.includes(openLevel.id) : false;
 
   return (
-    <Screen>
-      <Header
-        title={`${t('adventure')} ${t(`diff_${d}` as StringKey)}`}
-        right={
-          <View style={{ height: 36, paddingHorizontal: 12, borderRadius: 18, backgroundColor: p.goldTint, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <Txt size={15} weight="heavy" color={p.goldDeep}>
-              ★
-            </Txt>
-            <Txt size={15} weight="heavy">
-              {`${got} / ${total * 3}`}
-            </Txt>
-          </View>
-        }
-      />
-      <View style={{ paddingHorizontal: 16, paddingTop: 6, paddingBottom: 8, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-        <Txt size={13} weight="bold" color={p.muted} lines={1} style={{ flex: 1 }}>
-          {t('map_world', { n: tierOfCurrent + 1, name: worldOf(d, tierOfCurrent).name[lang] })}
-        </Txt>
-        <Tap
-          onPress={() => router.push({ pathname: '/mondes', params: { diff: String(d) } })}
-          label={t('worlds_link')}
-          style={{ height: 32, paddingHorizontal: 12, borderRadius: 16, justifyContent: 'center' }}>
-          <Txt size={13} weight="heavy">
-            {`${t('worlds_link')} ›`}
+    <Screen style={{ maxWidth: '100%' }}>
+      {/* The map spans the whole screen on iPad; the header keeps the usual column. */}
+      <View style={{ width: '100%', maxWidth: tablet ? 640 : undefined, alignSelf: 'center' }}>
+        <Header
+          title={`${t('adventure')} ${t(`diff_${d}` as StringKey)}`}
+          right={
+            <View style={{ height: 36, paddingHorizontal: 12, borderRadius: 18, backgroundColor: p.goldTint, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <Txt size={15} weight="heavy" color={p.goldDeep}>
+                ★
+              </Txt>
+              <Txt size={15} weight="heavy">
+                {`${got} / ${total * 3}`}
+              </Txt>
+            </View>
+          }
+        />
+        <View style={{ paddingHorizontal: 16, paddingTop: 6, paddingBottom: 8, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Txt size={13} weight="bold" color={p.muted} lines={1} style={{ flex: 1 }}>
+            {t('map_world', { n: tierOfCurrent + 1, name: worldOf(d, tierOfCurrent).name[lang] })}
           </Txt>
-        </Tap>
+          <Tap
+            onPress={() => router.push({ pathname: '/mondes', params: { diff: String(d) } })}
+            label={t('worlds_link')}
+            style={{ height: 32, paddingHorizontal: 12, borderRadius: 16, justifyContent: 'center' }}>
+            <Txt size={13} weight="heavy">
+              {`${t('worlds_link')} ›`}
+            </Txt>
+          </Tap>
+        </View>
       </View>
 
       <ScrollView ref={scroller} onLayout={onViewport} onContentSizeChange={onContent} style={{ flex: 1, backgroundColor: worldOf(d, 0).bg }} contentContainerStyle={{ alignItems: 'center' }}>
