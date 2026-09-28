@@ -641,7 +641,7 @@ await step('adventure map', async () => {
   await btn('Aventure Facile');
   await page.waitForTimeout(700);
   check(await see('✓ MONDE 1 · LE CHAMP DE MAÏS'), 'finished world shows as done on its sign');
-  check(await see('Monde 2 · La Plage Caramel · 21–40'), 'the map says which world the player is in');
+  check(await see('Monde 2 · La Plage Caramel'), 'the map says which world the player is in');
   check(await see('À toi de jouer !'), 'Popi shows the level to play');
   const node = await page.getByRole('button', { name: /^(Jouer le niveau|Continuer · niveau) \d+$/ }).first().boundingBox();
   check(!!node && node.y > 60 && node.y < 560, `the map opens on the current level (y ${Math.round(node?.y ?? -1)})`);

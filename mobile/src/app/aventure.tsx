@@ -47,8 +47,8 @@ function layoutMap(total: number, width: number): MapLayout {
   for (let i = total - 1; i >= 0; i--) {
     const side = Math.sin(i * 0.75);
     pos[i] = { x: width / 2 + swing * side, y: y + ROW / 2 };
-    // Every other level, a drawing on the free side (never under the path).
-    if (i % 2 === 0) decos.push({ i, x: side > 0 ? 4 : width - DECO - 4, y: y + ROW / 2 - DECO / 2 });
+    // A drawing next to every level, on the side the path is not.
+    decos.push({ i, x: side > 0 ? 4 : width - DECO - 4, y: y + ROW / 2 - DECO / 2 });
     y += ROW;
     if (i % TIER_SIZE === 0) {
       banners.push({ tier: i / TIER_SIZE, y });
@@ -87,7 +87,6 @@ export default function Aventure() {
   const current = passed < total ? passed : -1;
   const got = ids.reduce((sum, id) => sum + (stars[id] ?? 0), 0);
   const tierOfCurrent = Math.floor((current < 0 ? total - 1 : current) / TIER_SIZE);
-  const tierEnd = Math.min(total, (tierOfCurrent + 1) * TIER_SIZE);
   const resumable = save?.adventure && save.difficulty === d ? save.index : null;
   const currentLevel = current >= 0 ? levelById(ids[current]) : undefined;
 
@@ -133,7 +132,7 @@ export default function Aventure() {
       />
       <View style={{ paddingHorizontal: 16, paddingTop: 6, paddingBottom: 8, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
         <Txt size={13} weight="bold" color={p.muted} lines={1} style={{ flex: 1 }}>
-          {`${t('map_world', { n: tierOfCurrent + 1, name: worldOf(d, tierOfCurrent).name[lang] })} · ${tierOfCurrent * TIER_SIZE + 1}–${tierEnd}`}
+          {t('map_world', { n: tierOfCurrent + 1, name: worldOf(d, tierOfCurrent).name[lang] })}
         </Txt>
         <Tap
           onPress={() => router.push({ pathname: '/mondes', params: { diff: String(d) } })}
@@ -158,7 +157,7 @@ export default function Aventure() {
             const world = worldOf(d, Math.floor(i / TIER_SIZE));
             return (
               <View key={`deco-${i}`} pointerEvents="none" style={{ position: 'absolute', left: x, top: y }}>
-                <WorldDeco kind={world.decos[(i / 2) % 2]} size={DECO} />
+                <WorldDeco kind={world.decos[i % 2]} size={i % 4 < 2 ? DECO : DECO - 8} />
               </View>
             );
           })}
