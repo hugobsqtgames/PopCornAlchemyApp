@@ -351,9 +351,11 @@ await step('classic run', async () => {
   await miss();
   const missedLevel = await currentLevel();
   const revealed = await miss();
-  check(revealed, 'a lost life shows the answer');
-  check((await currentLevel()).id !== missedLevel.id, 'after the answer, the next level starts');
+  check(!revealed, 'a lost life does not show the answer');
+  check(await see('Raté !', false), 'a lost life says "Raté !"');
+  check((await currentLevel()).id === missedLevel.id, 'after a lost life, the same level stays to try again');
   check((await hearts()) === lives0 - 1, 'mistake without shield costs a life');
+  check((await profile()).save?.lives === lives0 - 1, 'the lost life is saved at once');
   check((await sounds()).includes('error'), 'mistake plays error');
   await shot('vie-perdue');
 

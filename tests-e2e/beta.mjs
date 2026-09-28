@@ -159,6 +159,31 @@ await flow('game over then continue with coins', async () => {
   check(await see('GAME OVER') && !(await see('Continuer avec 1 vie ?')), 'only one continue per run');
 });
 
+await flow('a miss keeps the same level', async () => {
+  await start({ shields: 0 }, '/jeu?mode=classic&diff=1&fresh=1');
+  const first = await currentLevel();
+  for (let i = 1; i <= 3; i++) {
+    await wrong();
+    check((await currentLevel())?.id === first.id, `miss ${i}: still the same level`);
+    check(!(await see('La réponse était', false)), `miss ${i}: the answer stays hidden`);
+    check((await profile()).save?.index === 0 && (await profile()).save?.lives === 4 - i, `miss ${i}: one life less, saved on this level`);
+  }
+  await shot('miss-same-level');
+  await wrong();
+  check(await see('GAME OVER'), 'the last life ends the run');
+  check(await see('La réponse était', false), 'the answer shows on the game over screen');
+});
+
+await flow('found after a miss', async () => {
+  await start({ shields: 0 }, '/jeu?mode=classic&diff=1&fresh=1');
+  const first = await currentLevel();
+  await wrong();
+  const lv = await solve();
+  check(lv.id === first.id, 'the missed level can still be found');
+  check((await currentLevel())?.id !== first.id, 'finding it goes to the next level');
+  check((await profile()).stars?.[first.id] < 3, 'a miss costs a star');
+});
+
 await flow('pause sheet', async () => {
   await start({}, '/jeu?mode=classic&diff=1&fresh=1');
   await page.getByRole('button', { name: /pause/i }).filter({ visible: true }).first().click();

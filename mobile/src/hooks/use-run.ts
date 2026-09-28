@@ -442,17 +442,22 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       runBonus(timeLeft);
       return;
     }
-    // A life is lost: show the answer, then move on (or end the run).
+    // A life is lost and the player tries the same level again. The answer only shows when
+    // the last life is gone, just before the game over.
     play('error');
     buzz('error');
     const left = lives - 1;
     setLives(left);
+    if (left > 0) {
+      // Saved right away, so closing the app does not give the life back.
+      saveAt(index, left, score, 0);
+      flash('missed_title');
+      runBonus(timeLeft);
+      return;
+    }
     busy.current = true;
-    // Saved right away, so closing the app during the answer does not give the life back.
-    if (left <= 0) {
-      if (canSave(config.mode)) s.set({ save: null });
-    } else if (index < config.ids.length - 1 && !isTierEnd(index)) saveAt(index + 1, left, score, 0);
-    reveal(level, false, () => (left <= 0 ? endRun(false, score, cleared) : advance(score, cleared)));
+    if (canSave(config.mode)) s.set({ save: null });
+    reveal(level, false, () => endRun(false, score, cleared));
   };
 
   /** Shows the answer of `lvl` for a moment, then runs `then`. */

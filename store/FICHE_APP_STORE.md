@@ -71,7 +71,7 @@ Réponds vite pour gagner plus de points. Enchaîne 5 bonnes réponses et décle
 10 niveaux mystère, les mêmes pour tout le monde. Garde ta série de jours et ouvre un coffre tous les 7 jours.
 
 💡 JAMAIS BLOQUÉ
-Révèle un emoji, retire 5 intrus ou mélange la grille. Et si tu rates, la réponse s'affiche : tu apprends à chaque niveau.
+Révèle un emoji, retire 5 intrus ou mélange la grille. Et si tu rates, tu perds une vie et tu retentes le même niveau jusqu'à trouver.
 
 🎮 PLUSIEURS MODES
 • Classique : l'aventure palier par palier
@@ -128,7 +128,7 @@ Answer fast to score more. Get 5 right in a row to trigger Fever mode: all your 
 10 mystery levels, the same for everyone. Keep your streak going and open a chest every 7 days.
 
 💡 NEVER STUCK
-Reveal an emoji, remove 5 wrong ones or shuffle the grid. And if you miss, the answer is shown: you learn something every level.
+Reveal an emoji, remove 5 wrong ones or shuffle the grid. And if you miss, you lose a life and try the same level again until you get it.
 
 🎮 SEVERAL MODES
 • Classic: the adventure, tier by tier
@@ -185,7 +185,7 @@ Responde rápido para ganar más puntos. Encadena 5 aciertos y activa el modo Fe
 10 niveles misteriosos, los mismos para todos. Mantén tu racha y abre un cofre cada 7 días.
 
 💡 NUNCA ATASCADO
-Revela un emoji, quita 5 falsos o mezcla la cuadrícula. Y si fallas, se muestra la respuesta: aprendes en cada nivel.
+Revela un emoji, quita 5 falsos o mezcla la cuadrícula. Y si fallas, pierdes una vida y vuelves a intentar el mismo nivel hasta acertar.
 
 🎮 VARIOS MODOS
 • Clásico: la aventura, etapa por etapa
@@ -242,7 +242,7 @@ Antworte schnell für mehr Punkte. 5 richtige Antworten in Folge lösen den Feve
 10 geheime Levels, für alle gleich. Halte deine Serie und öffne alle 7 Tage eine Truhe.
 
 💡 NIE FESTGEFAHREN
-Decke ein Emoji auf, entferne 5 falsche oder mische das Raster. Und wenn du danebenliegst, siehst du die Antwort: In jedem Level lernst du etwas.
+Decke ein Emoji auf, entferne 5 falsche oder mische das Raster. Und wenn du danebenliegst, verlierst du ein Leben und versuchst dasselbe Level erneut, bis du es hast.
 
 🎮 MEHRERE MODI
 • Klassisch: das Abenteuer, Etappe für Etappe
@@ -299,7 +299,7 @@ Rispondi veloce per fare più punti. 5 risposte giuste di fila attivano la modal
 10 livelli misteriosi, uguali per tutti. Mantieni la serie e apri un forziere ogni 7 giorni.
 
 💡 MAI BLOCCATO
-Rivela un emoji, togline 5 sbagliati o mescola la griglia. E se sbagli, vedi la risposta: impari qualcosa a ogni livello.
+Rivela un emoji, togline 5 sbagliati o mescola la griglia. E se sbagli, perdi una vita e riprovi lo stesso livello finché non indovini.
 
 🎮 TANTE MODALITÀ
 • Classica: l'avventura, tappa dopo tappa
@@ -356,7 +356,7 @@ Responda rápido para marcar mais. 5 acertos seguidos ativam o modo Fever: todos
 10 níveis misteriosos, iguais para todos. Mantenha sua sequência e abra um baú a cada 7 dias.
 
 💡 NUNCA TRAVADO
-Revele um emoji, tire 5 errados ou embaralhe a grade. E se errar, a resposta aparece: você aprende algo a cada nível.
+Revele um emoji, tire 5 errados ou embaralhe a grade. E se errar, você perde uma vida e tenta o mesmo nível de novo até acertar.
 
 🎮 VÁRIOS MODOS
 • Clássico: a aventura, etapa por etapa
@@ -413,7 +413,7 @@ Antwoord snel voor meer punten. 5 goede antwoorden op rij starten de Fever-modus
 10 mysterieuze levels, voor iedereen gelijk. Houd je reeks vast en open elke 7 dagen een kist.
 
 💡 NOOIT VAST
-Toon een emoji, haal er 5 foute weg of schud het raster. En als je het mist, zie je het antwoord: elk level leer je iets.
+Toon een emoji, haal er 5 foute weg of schud het raster. En als je het mist, verlies je een leven en probeer je hetzelfde level opnieuw tot je het hebt.
 
 🎮 MEERDERE MODI
 • Klassiek: het avontuur, etappe na etappe
@@ -470,7 +470,7 @@ Odpowiadaj szybko, by zdobyć więcej punktów. 5 dobrych odpowiedzi z rzędu w�
 10 tajemniczych poziomów, takich samych dla wszystkich. Utrzymaj serię i otwieraj skrzynię co 7 dni.
 
 💡 NIGDY NIE UTKNIESZ
-Odkryj emoji, usuń 5 złych albo przetasuj siatkę. A gdy się pomylisz, zobaczysz odpowiedź: na każdym poziomie czegoś się uczysz.
+Odkryj emoji, usuń 5 złych albo przetasuj siatkę. A gdy się pomylisz, tracisz życie i próbujesz ten sam poziom, aż zgadniesz.
 
 🎮 WIELE TRYBÓW
 • Klasyczny: przygoda, etap po etapie
@@ -527,7 +527,7 @@ Daha çok puan için hızlı cevap ver. Üst üste 5 doğru cevap Fever modunu a
 Herkes için aynı 10 gizemli seviye. Serini koru ve her 7 günde bir sandık aç.
 
 💡 ASLA TAKILMA
-Bir emoji göster, 5 yanlışı kaldır ya da ızgarayı karıştır. Iskalarsan cevap gösterilir: her seviyede bir şey öğrenirsin.
+Bir emoji göster, 5 yanlışı kaldır ya da ızgarayı karıştır. Iskalarsan bir can kaybedersin ve bulana kadar aynı seviyeyi yeniden denersin.
 
 🎮 BİRÇOK MOD
 • Klasik: macera, etap etap
@@ -584,7 +584,7 @@ Pop-Corn Alchemy — игра-угадайка с эмодзи, от котор�
 10 загадочных уровней, одинаковых для всех. Держи серию и открывай сундук каждые 7 дней.
 
 💡 НИКОГДА НЕ ЗАСТРЯНЕШЬ
-Открой эмодзи, убери 5 неверных или перемешай сетку. А если ошибёшься, увидишь ответ: на каждом уровне узнаёшь что-то новое.
+Открой эмодзи, убери 5 неверных или перемешай сетку. А если ошибёшься, потеряешь жизнь и попробуешь тот же уровень ещё раз, пока не угадаешь.
 
 🎮 НЕСКОЛЬКО РЕЖИМОВ
 • Классика: приключение, этап за этапом
@@ -641,7 +641,7 @@ Pop-Corn Alchemyは、頭がポップコーンみたいにはじける絵文字�
 全員共通のミステリー10レベル。連続記録をキープして、7日ごとに宝箱を開けよう。
 
 💡 行き詰まらない
-絵文字を1つ表示、間違いを5つ消す、並びをシャッフル。はずれても答えが表示されるので、毎回なにか学べます。
+絵文字を1つ表示、間違いを5つ消す、並びをシャッフル。はずれるとライフが1つ減り、正解するまで同じレベルに再挑戦できます。
 
 🎮 いろいろなモード
 • クラシック: ステージごとに進む冒険
@@ -698,7 +698,7 @@ Pop-Corn Alchemy는 머리가 팝콘처럼 톡톡 터지는 이모지 맞히기 
 모두에게 똑같은 미스터리 10레벨. 연속 기록을 이어가고 7일마다 상자를 열어요.
 
 💡 막힐 일 없어요
-이모지 하나 공개, 틀린 이모지 5개 제거, 칸 섞기. 틀려도 정답을 보여 줘서 매 레벨 뭔가를 배워요.
+이모지 하나 공개, 틀린 이모지 5개 제거, 칸 섞기. 틀리면 목숨이 하나 줄고, 맞힐 때까지 같은 레벨에 다시 도전해요.
 
 🎮 다양한 모드
 • 클래식: 스테이지별 모험
@@ -755,7 +755,7 @@ Pop-Corn Alchemy 是一款让大脑像爆米花一样蹦跳的表情猜谜游戏
 10个神秘关卡，所有人都一样。保持连续纪录，每7天开一个宝箱。
 
 💡 永远不会卡住
-显示一个表情、去掉5个错误表情或打乱格子。答错也会显示答案：每一关都能学到新东西。
+显示一个表情、去掉5个错误表情或打乱格子。答错会失去一条命，然后重试同一关，直到答对为止。
 
 🎮 多种模式
 • 经典：一个阶段接一个阶段的冒险

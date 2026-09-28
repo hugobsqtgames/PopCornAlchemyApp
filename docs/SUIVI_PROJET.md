@@ -22,7 +22,8 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
   - Les niveaux sont générés par `mobile/scripts/build-levels.js` et `levels-more.js`.
 - **Modes** : Classique (aventure), Catégorie, Zen, Chrono, Hardcore, Défi du jour, Défier un ami.
 - **Premier niveau guidé** (Titanic 🚢🧊) au premier lancement.
-- **La réponse s'affiche** quand on perd une vie ou qu'on passe un niveau.
+- **Un raté coûte une vie et on retente le même niveau** (depuis le 28/09/2026). La réponse
+  s'affiche seulement au game over, quand on passe le niveau, ou après 3 essais en mode Zen.
 - **Indices** : révéler un emoji (1 💡), retirer 5 intrus (15 💰), mélanger la grille (gratuit).
 - **Animations** : fusion, confettis, option « Réduire les animations ».
 - **Rappel du défi du jour à 18 h** (notification locale, proposée après le 1ᵉʳ défi du jour).
