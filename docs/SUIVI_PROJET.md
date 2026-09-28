@@ -53,8 +53,14 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 - **21 mondes sur la carte** (`mobile/src/game/worlds.ts`, dessins dans
   `mobile/src/components/world-deco.tsx`) : un monde par palier, jamais deux fois le même
   (Facile « Le tour du monde » 10, Moyen « Le voyage extraordinaire » 7, Difficile « Les légendes » 4).
-  Couleur du sol, petits décors au bord du chemin, panneau d'entrée, écran « Les mondes »,
-  annonce « Nouveau monde débloqué ! » en fin de palier.
+  Couleur du sol, panneau d'entrée, écran « Les mondes », annonce « Nouveau monde débloqué ! »
+  en fin de palier.
+- **Décors peints** (`mobile/src/components/world-scene.tsx`) : chaque monde a un vrai paysage
+  sur les deux bords (collines, mer, forêt, immeubles, montagnes, rideaux, planètes, récifs, lave…),
+  une texture au sol, un chemin dessiné entre les niveaux et des groupes de petits dessins.
+  La carte est dessinée par bandes de 400 px, seulement près de l'écran. Aperçu de chaque paysage
+  dans « Les mondes » et dans l'annonce de nouveau monde. À vérifier sur un vrai iPhone : la
+  fluidité du défilement.
 - **Popi, la mascotte** (`mobile/src/components/mascot.tsx`, dessin vectoriel, 7 humeurs) :
   dans la carte du niveau (réagit : content, aux anges, en feu en Fever, triste après une
   erreur, surpris), carte réponse, palier, game over, victoire, pause (endormi), accueil, carte.

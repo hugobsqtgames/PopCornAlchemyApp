@@ -15,7 +15,7 @@ import { Btn, Card, Emoji, Px, Screen, Txt } from '../ui';
 
 import { Confetti } from '../confetti';
 import { Popi } from '../mascot';
-import { WorldDeco } from '../world-deco';
+import { WorldPreview } from '../world-scene';
 
 import { AnswerEmojis, Stars } from './board';
 
@@ -80,8 +80,8 @@ export function TierView({ run }: { run: Run }) {
       {next && (
         <View style={{ paddingHorizontal: 16, paddingTop: 12 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12, borderRadius: 18, backgroundColor: next.bg, borderWidth: 2, borderColor: next.sign }}>
-            <View style={{ width: 48, height: 48, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.35)', alignItems: 'center', justifyContent: 'center' }}>
-              <WorldDeco kind={next.decos[0]} size={40} />
+            <View style={{ width: 80, height: 56, borderRadius: 12, overflow: 'hidden', borderWidth: 2, borderColor: 'rgba(255,255,255,0.6)' }}>
+              <WorldPreview world={next} width={76} height={52} />
             </View>
             <View style={{ flex: 1, gap: 2 }}>
               <Txt size={12} weight="heavy" color={next.dark ? '#FFFFFF' : p.ink} style={{ letterSpacing: 0.8 }}>

@@ -695,3 +695,29 @@ export function SceneStrip({
     </View>
   );
 }
+
+/** A small picture of one world: its ground, scenery on both edges, the road and a drawing. */
+export function WorldPreview({ world, width, height }: { world: World; width: number; height: number }) {
+  const look = lookOf(world);
+  const lw = width * 0.5;
+  const road = `M${width * 0.42} ${height + 16} C${width * 0.2} ${height * 0.6} ${width * 0.8} ${height * 0.4} ${width * 0.56} -16`;
+  let marks = '';
+  const rng = mulberry32(width * 31 + world.name.en.length);
+  for (let i = 0; i < 10; i++) marks += mark(world.scene.texture, rng() * width, rng() * height, 2.5);
+  const prop = Math.min(width, height) * 0.42;
+  return (
+    <Svg width={width} height={height} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+      <Rect width={width} height={height} fill={world.bg} />
+      <Ellipse cx={width * 0.6} cy={height * 0.3} rx={width * 0.35} ry={height * 0.22} fill={look.patchLight} opacity={0.55} />
+      <Path d={marks} stroke={look.mark} strokeWidth={1.5} strokeLinecap="round" fill="none" />
+      <LandView land={{ x: -lw * 0.3, y: -height * 0.1, w: lw, h: height * 1.1, side: 1, far: false, seed: 7 }} world={world} />
+      <LandView land={{ x: width - lw * 0.7, y: height * 0.05, w: lw, h: height * 1.05, side: -1, far: true, seed: 11 }} world={world} />
+      <Path d={road} stroke={look.roadEdge} strokeWidth={12} fill="none" opacity={0.5} />
+      <Path d={road} stroke={look.roadFill} strokeWidth={8} fill="none" />
+      <G transform={`translate(${width * 0.62 - prop / 2} ${height * 0.62 - prop / 2}) scale(${prop / 48})`}>
+        <Ellipse cx={24} cy={46} rx={17} ry={4} fill="#000000" opacity={0.12} />
+        <DecoShapes kind={world.decos[0] as Deco} />
+      </G>
+    </Svg>
+  );
+}

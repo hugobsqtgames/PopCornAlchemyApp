@@ -3,7 +3,7 @@ import { ScrollView, View } from 'react-native';
 
 import { Popi } from '@/components/mascot';
 import { Header, Screen, Tap, Txt } from '@/components/ui';
-import { WorldDeco } from '@/components/world-deco';
+import { WorldPreview } from '@/components/world-scene';
 import { one } from '@/game/links';
 import { adventureIds, TIER_SIZE } from '@/game/rules';
 import type { Difficulty } from '@/game/types';
@@ -55,18 +55,9 @@ export default function Mondes() {
                 label={`${name}, ${status}`}
                 tint={done ? p.greenTint : current ? p.goldTint : undefined}
                 border={done ? p.green : current ? p.gold : undefined}
-                style={{ minHeight: 68, paddingHorizontal: 10, paddingVertical: 8, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                <View
-                  style={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: 14,
-                    backgroundColor: world.bg,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    opacity: locked ? 0.55 : 1,
-                  }}>
-                  <WorldDeco kind={world.decos[0]} size={40} />
+                style={{ minHeight: 80, paddingHorizontal: 8, paddingVertical: 8, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                <View style={{ width: 92, height: 64, borderRadius: 14, overflow: 'hidden', opacity: locked ? 0.55 : 1 }}>
+                  <WorldPreview world={world} width={92} height={64} />
                 </View>
                 <View style={{ flex: 1, gap: 2 }}>
                   <Txt size={16} weight="heavy" color={locked ? p.muted : p.ink} lines={1}>
