@@ -3,16 +3,21 @@
 Le code est prêt mais **éteint** : `MONEY_READY = false` dans `mobile/src/services/store-services.ts`.
 Tant qu'il est éteint, aucun bouton payant ni aucune pub n'apparaît.
 
-## ⚠️ À lire avant la version 1.0
+## ⚠️ Les modules de la 1.1 sont mis de côté
 
-Les modules de pubs et d'achats sont installés dans le code depuis le 27/09/2026. Le SDK Google
-serait donc présent dans l'app, même éteint. La **version 1.0** se construit à partir du commit
-**`b6fe824`** (sans ces modules), pour rester « Données non collectées » sans risque :
+La **version 1.0** (avec la carte et Popi) se construit directement depuis la branche : les
+parties natives de la 1.1 en ont été retirées par le commit **`a8fb48e`**, pour que l'app 1.0 ne
+contienne ni le SDK Google ni iCloud (« Données non collectées » sans risque). Tout le reste du
+code de la 1.1 est là, éteint.
+
+**Pour commencer la 1.1**, une fois la 1.0 envoyée à Apple :
 
 ```bash
-git worktree add ../popcorn-1.0 b6fe824
-cd ../popcorn-1.0/mobile && npm ci && npx eas-cli@latest build --platform ios --profile production
+git revert a8fb48e          # remet expo-iap, AdMob, le suivi Apple, le module iCloud et ses droits
+cd mobile && npm install    # réinstalle les 3 bibliothèques
 ```
+
+Puis `npx tsc --noEmit`, `npm test` et `bash tests-e2e/run.sh` avant tout build.
 
 ## Ce que fait le code
 

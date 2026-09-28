@@ -58,10 +58,12 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
   mode sombre, iPad, gros texte jusqu'à +30 %, musique et sons.
 - **Achats intégrés et pubs : code prêt mais éteint** (`MONEY_READY = false` dans
   `mobile/src/services/store-services.ts`). Tout est expliqué dans `store/VERSION_1_1.md`.
-  ⚠️ **La version 1.0 se construit depuis le commit `b6fe824`** (sans les modules de pub).
+  La 1.0 se construit depuis la branche : les modules natifs de la 1.1 (pubs, achats, iCloud) sont
+  mis de côté par le commit `a8fb48e` ; `git revert a8fb48e` les remet pour la 1.1.
 - **Sauvegarde iCloud (1.1)** : même progression sur iPhone et iPad, automatique. Module maison
-  `mobile/modules/cloud-kv`, règles de fusion dans `mobile/src/store/cloud-merge.ts`. Détails dans
-  `store/VERSION_1_1.md`. Pas encore testée sur de vrais appareils.
+  `mobile/modules/cloud-kv` (mis de côté pour la 1.0, voir ci-dessus), règles de fusion dans
+  `mobile/src/store/cloud-merge.ts`. Détails dans `store/VERSION_1_1.md`. Pas encore testée sur de
+  vrais appareils.
 - **Classement Game Center** : pas encore codé, caché (`GAME_CENTER_READY`).
 - **Audit de robustesse fait** : sauvegarde abîmée, liens piégés, doubles taps, arrière-plan.
 

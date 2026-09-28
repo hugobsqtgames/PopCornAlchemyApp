@@ -82,6 +82,9 @@ Envoie tes 5 derniers niveaux et ton score : tes amis doivent faire mieux.
 ⭐ 3 ÉTOILES ET LE POP-CORNÉDEX
 Chaque réponse trouvée rejoint ton album, rangé par catégorie. Rejoue tes niveaux pour décrocher les 3 étoiles : sans indice, sans erreur et en vitesse !
 
+🗺️ LA CARTE DE L'AVENTURE
+Avance niveau par niveau sur un chemin, palier après palier, avec Popi, la mascotte pop-corn qui réagit à chacune de tes réponses. Ta progression est gardée : un game over ne te renvoie jamais au début.
+
 🎡 ET AUSSI
 Un cadeau chaque jour, la roue de la chance, des protections de série, un rappel du défi du jour, des boucliers et passe-niveaux, des thèmes et des styles à débloquer, un arbre de 46 trophées, tes statistiques, un mode sombre, et une version pensée pour iPad.
 
@@ -136,6 +139,9 @@ Send your last 5 levels and your score: your friends have to beat it.
 ⭐ 3 STARS AND THE POP-CORNÉDEX
 Every answer you find joins your album, sorted by category. Replay your levels to earn all 3 stars: no clue, no mistake, and fast!
 
+🗺️ THE ADVENTURE MAP
+Move forward level by level along a path, tier after tier, with Popi, the pop-corn mascot who reacts to every answer. Your progress is saved: a game over never sends you back to the start.
+
 🎡 AND MORE
 A gift every day, the lucky wheel, streak freezes, a daily challenge reminder, shields and skips, themes and styles to unlock, a tree of 46 trophies, your stats, dark mode, and a layout made for iPad.
 
@@ -189,6 +195,9 @@ Envía tus 5 últimos niveles y tu puntuación: tus amigos tendrán que superarl
 
 ⭐ 3 ESTRELLAS Y EL POP-CORNÉDEX
 Cada respuesta que encuentras entra en tu álbum, ordenada por categoría. Repite tus niveles para conseguir las 3 estrellas: sin pistas, sin errores y rápido.
+
+🗺️ EL MAPA DE LA AVENTURA
+Avanza nivel a nivel por un camino, etapa tras etapa, con Popi, la mascota de palomitas que reacciona a cada respuesta. Tu progreso se guarda: un game over nunca te devuelve al principio.
 
 🎡 Y ADEMÁS
 Un regalo cada día, la ruleta de la suerte, protectores de racha, un recordatorio del reto diario, escudos y saltos de nivel, temas y estilos para desbloquear, un árbol de 46 trofeos, tus estadísticas, modo oscuro y una versión pensada para iPad.
