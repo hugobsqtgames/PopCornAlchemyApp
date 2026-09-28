@@ -110,7 +110,7 @@ describe('damaged saves', () => {
 
   it('replaces every wrong value with its default', () => {
     const p = sanitizeProfile(
-      { lang: 'de', coins: 'lots', hints: -3, stats: 'x', achievements: 'nope', theme: 'rainbow', style: 42, best: { classic: NaN, chrono: 30 }, received: {}, ownedThemes: null, avatar: null, dailyLast: 123, name: '🦊'.repeat(40) },
+      { lang: 'xx', coins: 'lots', hints: -3, stats: 'x', achievements: 'nope', theme: 'rainbow', style: 42, best: { classic: NaN, chrono: 30 }, received: {}, ownedThemes: null, avatar: null, dailyLast: 123, name: '🦊'.repeat(40) },
       INITIAL
     );
     expect(p.lang).toBeNull();

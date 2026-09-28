@@ -149,8 +149,10 @@ async function step(name, fn, fresh = true) {
 for (const [locale, text, what] of [
   ['es-ES', 'con emojis. ¡Toca', 'Spanish phone: the app starts in Spanish'],
   ['fr-FR', 'avec des emojis. Touche', 'French phone: the app starts in French'],
-  ['de-DE', 'with emojis. Tap', 'German phone: the app starts in English'],
-  [['de-CH', 'fr-CH'], 'avec des emojis. Touche', 'Swiss phone (German, then French): the app starts in French'],
+  ['de-DE', 'mit Emojis. Tippe auf', 'German phone: the app starts in German'],
+  ['ja-JP', '絵文字で「', 'Japanese phone: the app starts in Japanese'],
+  ['ar-SA', 'with emojis. Tap', 'Arabic phone (not translated): the app starts in English'],
+  [['sv-SE', 'fr-FR'], 'avec des emojis. Touche', 'Swedish phone with French second: the app starts in French'],
 ]) {
   const other = await browser.newContext({ viewport: { width: 375, height: 667 }, locale: Array.isArray(locale) ? locale[0] : locale });
   if (Array.isArray(locale)) await other.addInitScript((langs) => Object.defineProperty(navigator, 'languages', { get: () => langs }), locale);

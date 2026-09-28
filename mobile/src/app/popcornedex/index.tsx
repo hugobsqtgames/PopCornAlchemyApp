@@ -56,7 +56,7 @@ export default function PopCornedex() {
                     <Emoji size={20}>{c.icon}</Emoji>
                   </Badge>
                   <View style={{ flex: 1, gap: 4 }}>
-                    <Txt size={15} weight="bold" lines={1}>
+                    <Txt size={15} weight="bold" lines={1} fit={88}>
                       {t(`cat_${c.id}`)}
                     </Txt>
                     <Bar value={done.length / levels.length} height={5} color={full ? p.green : p.ink} />

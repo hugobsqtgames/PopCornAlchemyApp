@@ -55,6 +55,11 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
   (Facile « Le tour du monde » 10, Moyen « Le voyage extraordinaire » 7, Difficile « Les légendes » 4).
   Couleur du sol, panneau d'entrée, écran « Les mondes », annonce « Nouveau monde débloqué ! »
   en fin de palier.
+- **13 langues** : français, anglais, espagnol, allemand, italien, portugais (Brésil), néerlandais, polonais,
+  turc, russe, japonais, coréen, chinois simplifié. Les 10 dernières sont dans `mobile/src/i18n/packs/*.json`
+  (textes de l'app, réponses des 400 niveaux, noms des 21 mondes, trophées). Pluriels russes et polonais
+  gérés. Un test vérifie qu'aucune langue n'oublie un texte, une réponse ou un `{nombre}`. Fiche App Store
+  et 7 images dans chaque langue. Traductions faites par Claude : à faire relire par des natifs si possible.
 - **Langue automatique** (`mobile/src/i18n/device.ts`) : plus d'écran de langue au premier lancement,
   l'app parle la langue du téléphone (la première connue dans l'ordre du téléphone : français, anglais
   ou espagnol ; anglais pour toutes les autres). Réglages → Langue permet de choisir à la main ou de

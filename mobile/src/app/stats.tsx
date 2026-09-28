@@ -70,7 +70,7 @@ export default function Statistiques() {
               <Card key={b.label} style={{ width: half, padding: 12, gap: 6, borderRadius: 16 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   <Emoji size={16}>{b.icon}</Emoji>
-                  <Txt size={12} weight="semibold" color={p.muted} lines={1} style={{ flex: 1 }}>
+                  <Txt size={12} weight="semibold" color={p.muted} lines={2} style={{ flex: 1 }}>
                     {b.label}
                   </Txt>
                 </View>

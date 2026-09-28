@@ -25,7 +25,16 @@ interface TxtProps {
   color?: string;
   center?: boolean;
   lines?: number;
+  /** A width in points the text must fit on one line: long words get a smaller font (min 70 %). */
+  fit?: number;
   style?: StyleProp<TextStyle>;
+}
+
+/** Rough width of a text in em, for `fit`: wide characters for Chinese, Japanese and Korean. */
+function textEm(text: string) {
+  let w = 0;
+  for (const c of text) w += /[\u2E80-\u9FFF\uAC00-\uD7AF\uFF00-\uFFEF]/.test(c) ? 1 : c === c.toUpperCase() && c !== c.toLowerCase() ? 0.75 : 0.64;
+  return w;
 }
 
 /**
@@ -42,11 +51,14 @@ export function useOnePress(fn?: () => void) {
   };
 }
 
-export function Txt({ children, size = 15, weight = 'medium', color, center, lines, style }: TxtProps) {
+export function Txt({ children, size = 15, weight = 'medium', color, center, lines, fit, style }: TxtProps) {
   const p = usePalette();
+  if (fit && typeof children === 'string') size = Math.max(size * 0.7, Math.min(size, fit / textEm(children)));
   return (
     <Text
       numberOfLines={lines}
+      adjustsFontSizeToFit={!!fit}
+      minimumFontScale={fit ? 0.7 : undefined}
       maxFontSizeMultiplier={MAX_TEXT_SCALE}
       style={[
         { fontFamily: FONTS[weight], fontSize: size, color: color ?? p.ink, lineHeight: Math.round(size * 1.3) },
@@ -307,7 +319,8 @@ export function Header({ title, right, onBack }: { title: string; right?: ReactN
       <IconBtn label={t('back')} onPress={onBack ?? (() => (router.canGoBack() ? router.back() : router.replace('/')))}>
         <BackIcon color={p.ink} />
       </IconBtn>
-      <Txt size={20} weight="heavy" style={{ flex: 1 }} lines={1}>
+      {/* Long titles (some languages) go smaller and may take two lines rather than being cut. */}
+      <Txt size={title.length > 18 ? 17 : 20} weight="heavy" style={{ flex: 1 }} lines={2}>
         {title}
       </Txt>
       {right}

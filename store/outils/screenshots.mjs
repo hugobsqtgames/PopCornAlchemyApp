@@ -62,11 +62,111 @@ const TEXT = {
     ['Un reto nuevo cada día', '10 niveles, los mismos para todos'],
     ['Reta a tus amigos', 'Envía tu puntuación y descubre quién es el mejor alquimista'],
   ],
+  de: [
+    ["Errate mit Emojis", "Kombiniere die richtigen Emojis und finde den Film, die Serie, das Land …"],
+    ["Die Abenteuerkarte", "Level für Level mit Popi, dein Fortschritt bleibt gespeichert"],
+    ["Combos am laufenden Band", "Löse den Fever-Modus aus und hol dir alle 3 Sterne"],
+    ["400 Levels, 16 Kategorien", "Folge dem Abenteuer oder spiel die Kategorie, die du willst"],
+    ["Fülle deinen Pop-Cornédex", "Alle gefundenen Antworten, nach Kategorie sortiert"],
+    ["Jeden Tag eine Challenge", "10 Levels, für alle gleich"],
+    ["Fordere deine Freunde heraus", "Schick deine Punkte und finde den besten Alchemisten"],
+  ],
+  it: [
+    ["Indovina con le emoji", "Combina le emoji giuste per trovare il film, la serie, il paese…"],
+    ["La mappa dell'avventura", "Avanza livello dopo livello con Popi, i progressi restano salvati"],
+    ["Concatena le combo", "Attiva la modalità Fever e conquista le 3 stelle"],
+    ["400 livelli, 16 categorie", "Segui l'avventura o gioca la categoria che vuoi"],
+    ["Completa il Pop-Cornédex", "Tutte le risposte trovate, divise per categoria"],
+    ["Una sfida ogni giorno", "10 livelli, uguali per tutti"],
+    ["Sfida i tuoi amici", "Invia il punteggio e scopri chi è il miglior alchimista"],
+  ],
+  pt: [
+    ["Adivinhe com emojis", "Combine os emojis certos para achar o filme, a série, o país…"],
+    ["O mapa da aventura", "Avance nível por nível com Popi, seu progresso fica salvo"],
+    ["Emende combos", "Ative o modo Fever e ganhe as 3 estrelas"],
+    ["400 níveis, 16 categorias", "Siga a aventura ou jogue a categoria que quiser"],
+    ["Complete o Pop-Cornédex", "Todas as respostas encontradas, por categoria"],
+    ["Um desafio todo dia", "10 níveis, iguais para todos"],
+    ["Desafie seus amigos", "Envie sua pontuação e veja quem é o melhor alquimista"],
+  ],
+  nl: [
+    ["Raad het met emoji", "Combineer de juiste emoji's en vind de film, de serie, het land…"],
+    ["De avonturenkaart", "Level na level met Popi, je voortgang blijft bewaard"],
+    ["Rijg combo's aaneen", "Start de Fever-modus en haal alle 3 sterren"],
+    ["400 levels, 16 categorieën", "Volg het avontuur of speel de categorie die je wilt"],
+    ["Vul je Pop-Cornédex", "Al je gevonden antwoorden, per categorie"],
+    ["Elke dag een uitdaging", "10 levels, voor iedereen gelijk"],
+    ["Daag je vrienden uit", "Stuur je score en kijk wie de beste alchemist is"],
+  ],
+  pl: [
+    ["Zgaduj z emoji", "Połącz właściwe emoji, by odgadnąć film, serial, kraj…"],
+    ["Mapa przygody", "Poziom po poziomie z Popim, postęp jest zapisany"],
+    ["Łap combo", "Włącz tryb Fever i zdobądź 3 gwiazdki"],
+    ["400 poziomów, 16 kategorii", "Idź za przygodą albo graj w wybraną kategorię"],
+    ["Uzupełnij Pop-Cornédex", "Wszystkie znalezione odpowiedzi, według kategorii"],
+    ["Wyzwanie każdego dnia", "10 poziomów, takich samych dla wszystkich"],
+    ["Wyzwij znajomych", "Wyślij wynik i sprawdź, kto jest najlepszym alchemikiem"],
+  ],
+  tr: [
+    ["Emojilerle tahmin et", "Doğru emojileri birleştir: filmi, diziyi, ülkeyi bul…"],
+    ["Macera haritası", "Popi ile seviye seviye ilerle, ilerlemen kaydedilir"],
+    ["Kombo üstüne kombo", "Fever modunu aç ve 3 yıldızı kap"],
+    ["400 seviye, 16 kategori", "Macerayı takip et ya da istediğin kategoriyi oyna"],
+    ["Pop-Cornédex'ini doldur", "Bulduğun tüm cevaplar, kategoriye göre"],
+    ["Her gün bir meydan okuma", "Herkes için aynı 10 seviye"],
+    ["Arkadaşlarına meydan oku", "Puanını gönder, en iyi simyacı kim görün"],
+  ],
+  ru: [
+    ["Угадай по эмодзи", "Соединяй нужные эмодзи и угадывай фильм, сериал, страну…"],
+    ["Карта приключения", "Уровень за уровнем с Попи, прогресс сохраняется"],
+    ["Собирай комбо", "Включай режим Fever и получай все 3 звезды"],
+    ["400 уровней, 16 категорий", "Иди по приключению или играй любимую категорию"],
+    ["Заполни Pop-Cornédex", "Все найденные ответы, по категориям"],
+    ["Задание каждый день", "10 уровней, одинаковых для всех"],
+    ["Брось вызов друзьям", "Отправь свой счёт и узнай, кто лучший алхимик"],
+  ],
+  ja: [
+    ["絵文字で当てよう", "正しい絵文字を組み合わせて、映画やドラマ、国を当てよう"],
+    ["冒険マップ", "ポピと一緒に1レベルずつ。進行状況は保存されます"],
+    ["コンボをつなごう", "フィーバーモードで星3つを狙おう"],
+    ["400レベル、16カテゴリー", "冒険を進めても、好きなカテゴリーを遊んでもOK"],
+    ["Pop-Cornédexを完成させよう", "見つけた答えをカテゴリー別に集めよう"],
+    ["毎日のチャレンジ", "全員共通の10レベル"],
+    ["友だちに挑戦", "スコアを送って、最高の錬金術師を決めよう"],
+  ],
+  ko: [
+    ["이모지로 맞혀 봐", "알맞은 이모지를 합쳐 영화, 드라마, 나라를 맞혀요"],
+    ["모험 지도", "포피와 함께 한 레벨씩, 진행 상황은 저장돼요"],
+    ["콤보를 이어가요", "피버 모드를 켜고 별 3개를 모아요"],
+    ["400레벨, 16개 카테고리", "모험을 따라가거나 원하는 카테고리를 플레이"],
+    ["Pop-Cornédex 채우기", "찾은 정답을 카테고리별로 모아요"],
+    ["매일 새로운 도전", "모두에게 똑같은 10레벨"],
+    ["친구에게 도전", "점수를 보내고 최고의 연금술사를 가려요"],
+  ],
+  zh: [
+    ["用表情来猜", "组合正确的表情，猜出电影、剧集、国家……"],
+    ["冒险地图", "和 Popi 一起一关一关前进，进度自动保存"],
+    ["连击不断", "开启狂热模式，拿下3颗星"],
+    ["400关，16个类别", "跟随冒险，或玩你喜欢的类别"],
+    ["集满 Pop-Cornédex", "找到的所有答案，按类别收藏"],
+    ["每天一个挑战", "10个关卡，所有人都一样"],
+    ["挑战好友", "发送你的得分，看谁是最强炼金术士"],
+  ],
 };
 const WORDS = {
   fr: { fuse: 'Fusionner', spin: 'Lancer la roue', name: 'Hugo' },
   en: { fuse: 'Fuse', spin: 'Spin the wheel', name: 'Hugo' },
   es: { fuse: 'Fusionar', spin: 'Girar la ruleta', name: 'Hugo' },
+  de: { fuse: "Fusion", name: 'Hugo' },
+  it: { fuse: "Fondi", name: 'Hugo' },
+  pt: { fuse: "Fundir", name: 'Hugo' },
+  nl: { fuse: "Fuseren", name: 'Hugo' },
+  pl: { fuse: "Połącz", name: 'Hugo' },
+  tr: { fuse: "Birleştir", name: 'Hugo' },
+  ru: { fuse: "Слить", name: 'Hugo' },
+  ja: { fuse: "合体", name: 'Hugo' },
+  ko: { fuse: "합치기", name: 'Hugo' },
+  zh: { fuse: "合成", name: 'Hugo' },
 };
 // Background and text color of each slide.
 const COLORS = [
@@ -224,10 +324,10 @@ function slide({ W, H, status, scale, view }, shot, [title, sub], [bg, fg]) {
     @font-face { font-family: R8; src: url(file://${fonts}/rubik/800ExtraBold/Rubik_800ExtraBold.ttf); }
     @font-face { font-family: R5; src: url(file://${fonts}/rubik/500Medium/Rubik_500Medium.ttf); }
     * { margin: 0; box-sizing: border-box; }
-    body { width: ${W}px; height: ${H}px; background: ${bg}; overflow: hidden; position: relative; font-family: R8; }
+    body { width: ${W}px; height: ${H}px; background: ${bg}; overflow: hidden; position: relative; font-family: R8, 'WenQuanYi Zen Hei', sans-serif; }
     .cap { position: absolute; left: 0; right: 0; top: ${tablet ? 110 : 170}px; text-align: center; color: ${fg}; padding: 0 90px; }
-    h1 { font-family: R8; font-size: ${tablet ? 118 : 116}px; line-height: 1.08; letter-spacing: -1px; }
-    p { font-family: R5; font-size: ${tablet ? 52 : 54}px; line-height: 1.3; margin-top: 28px; opacity: .88; }
+    h1 { font-family: R8, 'WenQuanYi Zen Hei', sans-serif; font-size: ${tablet ? 118 : 116}px; line-height: 1.08; letter-spacing: -1px; }
+    p { font-family: R5, 'WenQuanYi Zen Hei', sans-serif; font-size: ${tablet ? 52 : 54}px; line-height: 1.3; margin-top: 28px; opacity: .88; }
     .dev { position: absolute; left: 50%; top: ${top}px; transform: translateX(-50%) scale(${k}); transform-origin: top center;
       background: #1F1B2D; padding: ${bezel}px; border-radius: ${radius + bezel}px; box-shadow: 0 40px 90px rgba(0,0,0,.28); }
     .screen { width: ${screenW}px; height: ${screenH}px; border-radius: ${radius}px; overflow: hidden; background: #FBF6EC; }

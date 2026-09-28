@@ -20,8 +20,9 @@ cd mobile && npm install    # réinstalle les 3 bibliothèques
 Le `git revert` va buter sur `mobile/app.json` et `mobile/locales/*.json`, modifiés depuis pour la
 langue automatique de la 1.0. Pour résoudre :
 
-- `mobile/locales/fr|en|es.json` : garder `CFBundleDisplayName` et ajouter la clé
-  `NSUserTrackingUsageDescription` de la 1.1 dans le bloc `"ios"` (le texte est dans `git show a8fb48e`).
+- `mobile/locales/*.json` (13 langues) : garder `CFBundleDisplayName` et ajouter la clé
+  `NSUserTrackingUsageDescription` de la 1.1 dans le bloc `"ios"` (textes fr/en/es dans `git show a8fb48e`,
+  à traduire pour les 10 autres langues).
 - `mobile/app.json` : garder le bloc `locales` et le plugin `expo-localization` avec ses
   `supportedLocales`, et reprendre de la 1.1 les plugins (expo-iap, AdMob, suivi), les droits iCloud et
   `CFBundleAllowMixedLocalizations`.
