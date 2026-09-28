@@ -7,7 +7,7 @@
 import { EMPTY_STATS, type Stats } from '@/game/achievements';
 import { AVATARS, STYLES, THEMES, type ThemeId } from '@/game/catalog';
 import { MAX_STREAK_SAVES } from '@/game/progress';
-import { levelById } from '@/game/rules';
+import { adventureIds, levelById } from '@/game/rules';
 import type { Lang, Mode, RunSave } from '@/game/types';
 
 import type { ProfileState, ReceivedChallenge } from './profile';
@@ -40,6 +40,8 @@ export function cleanSave(v: unknown): RunSave | null {
   const save: RunSave = { mode: v.mode as Mode, ids, index, lives, score: count(v.score, 0), combo: count(v.combo, 0), continued: bool(v.continued, false) };
   if (typeof v.category === 'string') save.category = v.category as RunSave['category'];
   if (v.difficulty === 1 || v.difficulty === 2 || v.difficulty === 3) save.difficulty = v.difficulty;
+  // A map run keeps its flag only with the map's own levels, so its progress stays right.
+  if (v.adventure === true && save.difficulty && ids.join() === adventureIds(save.difficulty).join()) save.adventure = true;
   return save;
 }
 
@@ -80,6 +82,7 @@ export function sanitizeProfile(saved: unknown, defaults: ProfileState): Profile
   const avatars = [...new Set(['🍿', ...(ownedAvatars ?? [])])];
   const best: ProfileState['best'] = {};
   if (isObj(p.best)) for (const m of MODES) if (typeof p.best[m] === 'number') best[m] = count(p.best[m], 0);
+  const adv = isObj(p.adventure) ? p.adventure : {};
   const stars: ProfileState['stars'] = {};
   if (isObj(p.stars)) {
     for (const [k, v] of Object.entries(p.stars)) if (levelById(Number(k)) && (v === 1 || v === 2 || v === 3)) stars[k] = v;
@@ -128,6 +131,11 @@ export function sanitizeProfile(saved: unknown, defaults: ProfileState): Profile
     lastRun: lastRun && lastRun.ids.length ? lastRun : null,
     received: cleanReceived(p.received),
     streakSaves: count(p.streakSaves, 0, MAX_STREAK_SAVES),
+    adventure: {
+      1: count(adv[1], 0, adventureIds(1).length),
+      2: count(adv[2], 0, adventureIds(2).length),
+      3: count(adv[3], 0, adventureIds(3).length),
+    },
     found: [...new Set(levelIds(p.found, 1000))],
     stars,
     activity,

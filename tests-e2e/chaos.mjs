@@ -317,6 +317,28 @@ await scenario('replay links', async () => {
   check(p2.skips === 3 && p2.doubles === 3 && !(await see('Niveau réussi !')), 'no skip and no doubler in a replay');
 });
 
+// 18. Adventure map with broken data and hostile links
+await scenario('adventure map', async () => {
+  await start({ ...base, adventure: { 1: 'x', 2: -5, 3: 1e9 } }, '/aventure?diff=3');
+  check(await see('Aventure terminée !'), 'an out-of-range progress is capped (hard adventure shown as finished)');
+  check(!(await see('NaN', false)), 'map shows no NaN');
+  await shot('map-broken');
+  await start(base, '/aventure?diff=9');
+  check(await see('Nouvelle partie'), 'unknown difficulty goes back to New game');
+  await start({ ...base, adventure: { 1: 5, 2: 0, 3: 0 } }, '/aventure?diff=1');
+  const b = page.getByRole('button', { name: 'Jouer le niveau 6' }).filter({ visible: true }).last();
+  await b.click();
+  await b.click({ force: true }).catch(() => {});
+  await wait(900);
+  const lv = await currentLevel();
+  check(!!lv && lv.d === 1, 'the map starts the run at its current level');
+  check(await see('Niveau 6', false), 'the run starts at level 6');
+  // Locked levels cannot be opened.
+  await start({ ...base, adventure: { 1: 5, 2: 0, 3: 0 } }, '/aventure?diff=1');
+  const locked = page.getByRole('button', { name: 'Niveau 9, verrouillé' });
+  check((await locked.count()) === 1 && (await locked.first().getAttribute('aria-disabled')) === 'true', 'locked levels are disabled');
+});
+
 fs.writeFileSync(out + 'report.txt', results.map(([ok, w]) => (ok ? 'PASS ' : 'FAIL ') + w).join('\n'));
 const fails = results.filter(([ok]) => !ok);
 console.log(`chaos: ${results.length - fails.length} ok, ${fails.length} failed`);

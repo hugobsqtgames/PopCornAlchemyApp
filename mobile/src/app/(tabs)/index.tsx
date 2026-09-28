@@ -3,6 +3,7 @@ import { ScrollView, View } from 'react-native';
 
 import { ChevronIcon, GearIcon, PlayIcon } from '@/components/icons';
 import { LoginGift } from '@/components/login-gift';
+import { Popi } from '@/components/mascot';
 import { Badge, Btn, Emoji, IconBtn, Logo, Pill, Tap, Txt } from '@/components/ui';
 import { dayKey } from '@/game/dates';
 import { fmt, useLayout, useNow, usePalette, useT } from '@/hooks/use-app';
@@ -58,22 +59,7 @@ export default function Home() {
 
   const hero = (
     <View style={{ alignItems: 'center', gap: 8 }}>
-      {(big || wide) && (
-        <View
-          style={{
-            width: wide ? 120 : 96,
-            height: wide ? 120 : 96,
-            borderRadius: 28,
-            backgroundColor: p.gold,
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 18,
-            borderBottomWidth: 5,
-            borderColor: p.goldDeep,
-          }}>
-          <Emoji size={wide ? 64 : 52}>🍿</Emoji>
-        </View>
-      )}
+      {(big || wide) && <Popi mood="happy" size={wide ? 130 : 104} style={{ marginBottom: 10 }} />}
       <Logo size={wide ? 34 : big ? 26 : 22} />
       <Txt size={14} weight="semibold" color={p.muted} style={{ marginTop: 6 }}>
         {[streak > 0 ? `🔥 ${t('streak_line', { n: streak })}` : '', bestAll > 0 ? t('record_line', { n: bestAll }) : '']

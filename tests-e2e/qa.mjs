@@ -53,6 +53,13 @@ const btn = async (name) => {
   await page.getByRole('button', { name, exact: true }).filter({ visible: true }).first().click();
   await page.waitForTimeout(350);
 };
+/** From "New game": an adventure opens its map, then its big play button starts the run. */
+const adventure = async (name) => {
+  await btn(name);
+  await page.waitForTimeout(500);
+  await page.getByRole('button', { name: /^(Jouer le niveau|Continuer · niveau|Rejouer depuis)/ }).filter({ visible: true }).last().click();
+  await page.waitForTimeout(600);
+};
 const tab = async (name) => {
   await page.getByRole('tab', { name }).click();
   await page.waitForTimeout(400);
@@ -275,6 +282,10 @@ await step('classic run', async () => {
   await shot('nouvelle-partie');
   await btn('Aventure Facile');
   await page.waitForTimeout(600);
+  check(await see('Palier 1 · niveaux 1 à 20'), 'easy adventure opens its map at tier 1');
+  await shot('carte');
+  await page.getByRole('button', { name: 'Jouer le niveau 1' }).filter({ visible: true }).last().click();
+  await page.waitForTimeout(600);
   check((await currentLevel()).d === 1, 'easy adventure starts with an easy level');
   await sounds();
   const level = await currentLevel();
@@ -442,8 +453,7 @@ await step('daily', async () => {
 await step('saved games', async () => {
   if (await see('Continuer')) await btn('Nouvelle partie');
   else await btn('Jouer');
-  await btn('Aventure Difficile');
-  await page.waitForTimeout(600);
+  await adventure('Aventure Difficile');
   check((await currentLevel()).d === 3, 'hard adventure starts with a hard level');
   await btn('PAUSE');
   await tap('Quitter · partie sauvegardée');
@@ -619,6 +629,36 @@ await step('pop-cornedex & replay', async () => {
   await tab('Jouer');
 });
 
+// ───────────────────────── Adventure map: progress kept, levels to replay, Popi
+await step('adventure map', async () => {
+  const pr = await profile();
+  check(pr.adventure['1'] >= 20, `the easy adventure progress is kept (${pr.adventure['1']} levels)`);
+  if (await see('Continuer')) await btn('Nouvelle partie');
+  else await btn('Jouer');
+  check(await see('Continuer · niveau', false), 'new game shows where the easy adventure is');
+  await shot('nouvelle-partie-carte');
+  await btn('Aventure Facile');
+  await page.waitForTimeout(700);
+  check(await see('✓ Palier 1 terminé'), 'finished tier shows as done on the map');
+  check(await see('À toi de jouer !'), 'Popi shows the level to play');
+  await shot('carte-progression');
+  // A level already passed opens its sheet and can be replayed.
+  await page.getByRole('button', { name: /^Niveau 1, / }).filter({ visible: true }).first().click();
+  await page.waitForTimeout(500);
+  check(await see('Rejouer'), 'a passed level opens its sheet');
+  await shot('carte-niveau');
+  await tap('Rejouer');
+  await page.waitForTimeout(700);
+  check(await see('Rejouer un niveau', false), 'replaying a map level');
+  await solve();
+  check(await see('Niveau réussi !'), 'map level replayed');
+  await tap('Retour à la carte');
+  check(await see('Aventure Facile'), 'back to the map after the replay');
+  check((await profile()).adventure['1'] === pr.adventure['1'], 'a replay does not move the map progress');
+  await back();
+  await back();
+});
+
 // ───────────────────────── Streak freeze and the 7th day gift
 await step('streak freeze & day 7', async () => {
   await patchProfile({ dailyLast: daysAgo(2), dailyStreak: 5, streakSaves: 1 });
@@ -762,8 +802,7 @@ for (const [w, h, name, scheme] of [
     if (await see('Nouvelle partie')) await tap('Nouvelle partie');
     else await btn('Jouer');
     await shot(`${name}-nouvelle-partie`);
-    await btn('Aventure Facile');
-    await page.waitForTimeout(600);
+    await adventure('Aventure Facile');
     await shot(`${name}-jeu`);
     await btn('PAUSE');
     await tap('Quitter · partie sauvegardée');

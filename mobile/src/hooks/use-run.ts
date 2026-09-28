@@ -181,9 +181,16 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     setChronoLeft(chronoRef.current);
   };
 
+  /** Adventure map: `passed` levels of this difficulty are now behind the player. */
+  const reach = (passed: number) => {
+    if (config.adventure && config.difficulty) profile.getState().reachAdventure(config.difficulty, passed);
+  };
+
   // New level: start the bonus bar and save the run.
   useEffect(() => {
     if (!level) return;
+    // On the map, every level before this one is passed (found, or its answer shown).
+    reach(index);
     levelStart.current = Date.now();
     if (index > 0) play('whoosh');
     runBonus(1);
@@ -239,6 +246,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       let saved = 0;
       let coins = 0;
       if (won) {
+        if (config.adventure && config.difficulty) s.reachAdventure(config.difficulty, config.ids.length);
         if (mode === 'classic') {
           coins = REWARDS.classicVictory;
           s.bumpStats({ victories: 1 });
@@ -305,6 +313,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
         s.addCoins(REWARDS.tier.coins);
         s.addItem('hints', REWARDS.tier.hints);
         if (config.mode === 'classic') s.bumpStats({ bestTier: tierOf(index + 1) + 1 }, 'max');
+        if (config.adventure && config.difficulty) s.reachAdventure(config.difficulty, index + 1);
         setLives(startLives(config.mode));
         if (canSave(config.mode)) s.set({ save: { ...config, index: index + 1, lives: startLives(config.mode), score: nextScore, combo: 0, continued } });
         setPhase('tier');

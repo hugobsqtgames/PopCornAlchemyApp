@@ -9,14 +9,14 @@ import { PauseSheet } from '@/components/game/pause';
 import { OverView, TierView, WinView } from '@/components/game/results';
 import { dayKey, daySeed } from '@/game/dates';
 import { one, parseCategory, parseLevelIds, parseName, parseScore } from '@/game/links';
-import { buildDaily, buildRun } from '@/game/rules';
+import { adventureIds, buildDaily, buildRun, startLives } from '@/game/rules';
 import type { Difficulty, Mode, RunConfig, RunSave } from '@/game/types';
 import { useLayout, usePalette } from '@/hooks/use-app';
 import { useRun } from '@/hooks/use-run';
 import { useProfile } from '@/store/profile';
 
 type Param = string | string[] | undefined;
-type Params = { mode?: Param; cat?: Param; diff?: Param; resume?: Param; ids?: Param; target?: Param; name?: Param };
+type Params = { mode?: Param; cat?: Param; diff?: Param; resume?: Param; ids?: Param; target?: Param; name?: Param; from?: Param };
 
 function makeConfig(params: Params): { config: RunConfig; save?: RunSave } {
   // The profile store already dropped any save that does not point to a real level.
@@ -30,9 +30,11 @@ function makeConfig(params: Params): { config: RunConfig; save?: RunSave } {
       // The guided first level: Titanic, 🚢 + 🧊.
       return { config: { mode: 'tutorial', ids: [1] } };
     case 'replay': {
-      // One level again from the Pop-Cornédex: only an answer already found.
-      const found = useProfile.getState().found;
-      return { config: { mode: 'replay', ids: parseLevelIds(params.ids, 1).filter((id) => found.includes(id)) } };
+      // One level again, from the Pop-Cornédex or the map: only a level already found or passed.
+      const { found, adventure } = useProfile.getState();
+      const passed = ([1, 2, 3] as const).flatMap((d) => adventureIds(d).slice(0, adventure[d]));
+      const ids = parseLevelIds(params.ids, 1).filter((id) => found.includes(id) || passed.includes(id));
+      return { config: { mode: 'replay', ids, ...(one(params.from) === 'map' && { origin: 'map' as const }) } };
     }
     case 'challenge':
       return { config: { mode: 'challenge', ids: parseLevelIds(params.ids), target: parseScore(params.target), challenger: parseName(params.name) } };
@@ -46,8 +48,15 @@ function makeConfig(params: Params): { config: RunConfig; save?: RunSave } {
     case 'zen':
       return { config: buildRun(mode) };
     default: {
-      const d = Number(one(params.diff));
-      return { config: buildRun('classic', { difficulty: d === 2 || d === 3 ? d : (1 as Difficulty) }) };
+      // The adventure map: its fixed levels, from the first one not passed yet.
+      const n = Number(one(params.diff));
+      const d: Difficulty = n === 2 || n === 3 ? n : 1;
+      const ids = adventureIds(d);
+      const passed = useProfile.getState().adventure[d];
+      const config: RunConfig = { mode: 'classic', difficulty: d, ids, adventure: true };
+      // A finished adventure starts over from level 1 (the map keeps its progress and stars).
+      const index = passed < ids.length ? passed : 0;
+      return { config, save: index ? { ...config, index, lives: startLives('classic'), score: 0, combo: 0, continued: false } : undefined };
     }
   }
 }
@@ -80,7 +89,7 @@ export default function Jeu() {
         config.mode === 'challenge'
           ? { mode: 'challenge', ids: config.ids.join(','), target: String(config.target ?? 0), name: config.challenger ?? '' }
           : config.mode === 'replay'
-            ? { mode: 'replay', ids: config.ids.join(','), fresh: String(Date.now()) }
+            ? { mode: 'replay', ids: config.ids.join(','), from: config.origin ?? '', fresh: String(Date.now()) }
             : { mode: config.mode, cat: config.category ?? '', diff: String(config.difficulty ?? 1), fresh: String(Date.now()) },
     });
 

@@ -7,8 +7,8 @@ import { packGoods, PRODUCT_PREFIX, type ThemeId } from '@/game/catalog';
 import type { GiftReward } from '@/game/codes';
 import { currentStreak, dayKey, nextStreakWithSaves } from '@/game/dates';
 import { addActivity, canClaimLogin, LOGIN_REWARDS, MAX_STREAK_SAVES, type StarCount } from '@/game/progress';
-import { REWARDS } from '@/game/rules';
-import type { Lang, Mode, RunSave } from '@/game/types';
+import { adventureIds, REWARDS } from '@/game/rules';
+import type { Difficulty, Lang, Mode, RunSave } from '@/game/types';
 
 import { sanitizeProfile } from './sanitize';
 
@@ -71,6 +71,8 @@ export interface ProfileState {
   received: ReceivedChallenge[];
   /** Streak protections for the daily challenge (at most MAX_STREAK_SAVES). */
   streakSaves: number;
+  /** Adventure map: levels passed in each difficulty (the next one to play is at this index). */
+  adventure: Record<'1' | '2' | '3', number>;
   /** Levels ever solved (the Pop-Cornédex) and the best stars of each, by level id. */
   found: number[];
   stars: Record<string, StarCount>;
@@ -101,6 +103,8 @@ interface ProfileActions {
     patch: Partial<Omit<Stats, 'cat' | 'catTries'>> & { cat?: Partial<Stats['cat']>; catTries?: Partial<Stats['catTries']> },
     mode?: 'add' | 'max'
   ) => void;
+  /** The adventure of difficulty `d` went up to `passed` levels (never goes back). */
+  reachAdventure: (d: Difficulty, passed: number) => void;
   /** A level was solved: Pop-Cornédex, best stars, daily activity. Returns true on a first find. */
   recordSolve: (levelId: number, stars: StarCount) => boolean;
   /** Takes today's calendar gift; null when it was already taken today. */
@@ -162,6 +166,7 @@ const INITIAL: ProfileState = {
   lastRun: null,
   received: [],
   streakSaves: 0,
+  adventure: { 1: 0, 2: 0, 3: 0 },
   found: [],
   stars: {},
   activity: {},
@@ -309,6 +314,11 @@ export const useProfile = create<ProfileState & ProfileActions>()(
           const today = dayKey();
           return { adsDay: today, adsCount: s.adsDay === today ? s.adsCount + 1 : 1 };
         }),
+      reachAdventure: (d, passed) => {
+        const s = get();
+        const n = Math.min(passed, adventureIds(d).length);
+        if (n > s.adventure[d]) set({ adventure: { ...s.adventure, [d]: n } });
+      },
       grantPurchase: (transactionId, product) => {
         const s = get();
         const goods = packGoods(product);

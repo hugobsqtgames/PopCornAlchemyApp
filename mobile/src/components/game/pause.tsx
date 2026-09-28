@@ -9,6 +9,7 @@ import { play } from '@/services/feedback';
 import { useProfile } from '@/store/profile';
 
 import { ChevronIcon, PlayIcon } from '../icons';
+import { Popi } from '../mascot';
 import { Btn, Emoji, Px, Tap, Toggle, Txt, useOnePress } from '../ui';
 
 export function PauseSheet({ run }: { run: Run }) {
@@ -67,6 +68,7 @@ export function PauseSheet({ run }: { run: Run }) {
     <Modal visible={run.paused && run.phase === 'play' && focused} transparent animationType="slide" onRequestClose={resume}>
       <View style={{ flex: 1, backgroundColor: '#1F1B2D' }}>
         <Pressable style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 }} onPress={resume} accessibilityLabel={t('resume')}>
+          <Popi mood="sleep" size={80} />
           <Px size={22} color="#FFFFFF">
             {t('pause')}
           </Px>

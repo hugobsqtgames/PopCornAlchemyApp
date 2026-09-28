@@ -134,6 +134,20 @@ export function isCorrect(picked: string[], solution: string[]): boolean {
   return a.every((e, i) => e === b[i]);
 }
 
+const ADVENTURES = new Map<Difficulty, number[]>();
+/**
+ * The adventure of one difficulty, as drawn on the map: always the same levels in the same
+ * order (easy to hard, shuffled once inside each tier with a fixed seed).
+ */
+export function adventureIds(d: Difficulty): number[] {
+  let ids = ADVENTURES.get(d);
+  if (!ids) {
+    ids = curve(levelsOfDifficulty(d), TIER_SIZE, mulberry32(1000 + d));
+    ADVENTURES.set(d, ids);
+  }
+  return ids;
+}
+
 /** Level ids for a new run, in play order. */
 export function buildRun(
   mode: Exclude<Mode, 'daily' | 'challenge' | 'tutorial' | 'replay'>,

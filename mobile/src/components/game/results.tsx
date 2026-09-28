@@ -13,6 +13,7 @@ import { AdIcon, ShareIcon } from '../icons';
 import { Btn, Card, Emoji, Px, Screen, Txt } from '../ui';
 
 import { Confetti } from '../confetti';
+import { Popi } from '../mascot';
 
 import { AnswerEmojis, Stars } from './board';
 
@@ -45,9 +46,7 @@ export function TierView({ run }: { run: Run }) {
       <Confetti />
       <View style={{ flex: 1 }} />
       <View style={{ alignItems: 'center', gap: 10, paddingHorizontal: 24 }}>
-        <View style={{ width: 96, height: 96, borderRadius: 48, backgroundColor: p.goldTint, alignItems: 'center', justifyContent: 'center' }}>
-          <Emoji size={52}>🏆</Emoji>
-        </View>
+        <Popi mood="joy" size={110} />
         <Txt size={13} weight="bold" color={p.muted} style={{ letterSpacing: 1.2, marginTop: 6 }}>
           {t('tier_of', { n: tier, t: run.totalTiers })}
         </Txt>
@@ -108,7 +107,7 @@ export function OverView({ run, onReplay }: { run: Run; onReplay: () => void }) 
     <Screen>
       <View style={{ flex: 1 }} />
       <View style={{ alignItems: 'center', gap: 12, paddingHorizontal: 24 }}>
-        <Emoji size={52}>{chrono ? '⏱️' : '💔'}</Emoji>
+        <Popi mood="sad" size={96} />
         <Px size={22} color={p.action}>
           {t('gameover')}
         </Px>
@@ -162,7 +161,7 @@ export function OverView({ run, onReplay }: { run: Run; onReplay: () => void }) 
       <Bottom>
         <View style={{ flexDirection: 'row', gap: 10 }}>
           {run.practice ? (
-            <Btn variant="soft" label={t('back_dex')} size={14} height={52} style={{ flex: 1 }} onPress={backToDex} />
+            <Btn variant="soft" label={t(run.config.origin === 'map' ? 'back_map' : 'back_dex')} size={14} height={52} style={{ flex: 1 }} onPress={backToDex} />
           ) : (
             <Btn variant="soft" label={t('home')} size={14} height={52} style={{ flex: 1 }} onPress={() => router.dismissTo('/')} />
           )}
@@ -205,6 +204,7 @@ function ReplayWinView({ run, onReplay }: { run: Run; onReplay: () => void }) {
       {stars === 3 && <Confetti />}
       <View style={{ flex: 1 }} />
       <View style={{ alignItems: 'center', gap: 12, paddingHorizontal: 24 }}>
+        <Popi mood={stars === 3 ? 'joy' : 'happy'} size={96} />
         {run.level && <AnswerEmojis level={run.level} size={56} />}
         <Txt size={26} weight="heavy" center style={{ marginTop: 10 }}>
           {t('replay_done')}
@@ -227,7 +227,7 @@ function ReplayWinView({ run, onReplay }: { run: Run; onReplay: () => void }) {
       <View style={{ flex: 1 }} />
       <Bottom>
         <Btn label={t('replay')} onPress={onReplay} variant={stars === 3 ? 'soft' : 'action'} />
-        <Btn variant={stars === 3 ? 'action' : 'soft'} label={t('back_dex')} size={14} height={50} onPress={backToDex} />
+        <Btn variant={stars === 3 ? 'action' : 'soft'} label={t(run.config.origin === 'map' ? 'back_map' : 'back_dex')} size={14} height={50} onPress={backToDex} />
       </Bottom>
     </Screen>
   );
@@ -271,8 +271,12 @@ export function WinView({ run, onReplay }: { run: Run; onReplay: () => void }) {
       {party && <Confetti />}
       <View style={{ flex: 1 }} />
       <View style={{ alignItems: 'center', gap: 12, paddingHorizontal: 24 }}>
-        <View style={{ width: 104, height: 104, borderRadius: 52, backgroundColor: p.gold, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 5, borderColor: p.goldDeep }}>
-          <Emoji size={56}>{icon}</Emoji>
+        <View style={{ alignItems: 'center' }}>
+          <Popi mood={party ? 'joy' : 'sad'} size={120} />
+          {/* The mode's own badge, pinned to Popi. */}
+          <View style={{ position: 'absolute', right: -8, bottom: 4, width: 44, height: 44, borderRadius: 22, backgroundColor: p.gold, alignItems: 'center', justifyContent: 'center', borderBottomWidth: 3, borderColor: p.goldDeep }}>
+            <Emoji size={24}>{icon}</Emoji>
+          </View>
         </View>
         {pixel ? (
           <Px size={18} style={{ marginTop: 10, textAlign: 'center' }}>

@@ -241,3 +241,24 @@ describe('App Store purchases', () => {
     expect(p.purchases).toEqual(['a', 'b']);
   });
 });
+
+describe('adventure map progress', () => {
+  it('only goes forward, never past the end, and survives damaged saves', () => {
+    state().reachAdventure(1, 5);
+    state().reachAdventure(1, 3);
+    expect(state().adventure[1]).toBe(5);
+    state().reachAdventure(3, 99999);
+    expect(state().adventure[3]).toBe(70);
+    const p = sanitizeProfile({ adventure: { 1: -4, 2: 'x', 3: 1e9 } }, useProfile.getInitialState());
+    expect(p.adventure).toEqual({ 1: 0, 2: 0, 3: 70 });
+  });
+
+  it('keeps the map flag of a saved run only with the map levels', () => {
+    const { adventureIds } = jest.requireActual<typeof import('@/game/rules')>('@/game/rules');
+    const ids = adventureIds(2);
+    const good = cleanSave({ mode: 'classic', difficulty: 2, adventure: true, ids, index: 3, lives: 2, score: 10, combo: 0, continued: false });
+    expect(good?.adventure).toBe(true);
+    const shuffled = cleanSave({ mode: 'classic', difficulty: 2, adventure: true, ids: [...ids].reverse(), index: 3, lives: 2, score: 10, combo: 0, continued: false });
+    expect(shuffled?.adventure).toBeUndefined();
+  });
+});

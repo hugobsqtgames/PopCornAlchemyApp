@@ -8,6 +8,7 @@ import type { StringKey } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
 
 import { CheckIcon, PauseIcon } from '../icons';
+import { Popi, type Mood } from '../mascot';
 import { Bar, Btn, Emoji, IconBtn, Px, Txt } from '../ui';
 
 export function Hud({ run, onPause, big }: { run: Run; onPause: () => void; big?: boolean }) {
@@ -58,6 +59,25 @@ export function Hud({ run, onPause, big }: { run: Run; onPause: () => void; big?
   );
 }
 
+/** How Popi feels about what is happening in the run. */
+export function runMood(run: Run): Mood {
+  if (run.paused) return 'sleep';
+  switch (run.phase) {
+    case 'reveal':
+      return run.missed?.skipped ? 'surprised' : 'sad';
+    case 'correct':
+      return run.fever ? 'fever' : run.last.stars === 3 ? 'joy' : 'happy';
+    case 'tier':
+    case 'win':
+      return 'joy';
+    case 'over':
+      return 'sad';
+    default:
+      // Worried after a wrong try, on fire in Fever, calm otherwise.
+      return run.fever ? 'fever' : run.tierStats.mistakesThisLevel > 0 ? 'sad' : 'idle';
+  }
+}
+
 export function ObjectiveCard({ run, big }: { run: Run; big?: boolean }) {
   const p = usePalette();
   const t = useT();
@@ -67,6 +87,7 @@ export function ObjectiveCard({ run, big }: { run: Run; big?: boolean }) {
   const lifeCount = run.config.mode === 'hardcore' ? 1 : 4;
   const showLives = run.config.mode !== 'chrono' && !run.relaxed && !run.practice;
   const done = run.phase !== 'play';
+  const popi = big ? 64 : 44;
 
   return (
     <View
@@ -113,9 +134,14 @@ export function ObjectiveCard({ run, big }: { run: Run; big?: boolean }) {
           </View>
         )}
       </View>
-      <Txt size={big ? 32 : 22} weight="heavy" center lines={2} style={{ lineHeight: big ? 38 : 26 }}>
-        {name(run.level)}
-      </Txt>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <Popi mood={runMood(run)} size={popi} />
+        <Txt size={big ? 32 : 22} weight="heavy" center lines={2} style={{ lineHeight: big ? 38 : 26, flex: 1 }}>
+          {name(run.level)}
+        </Txt>
+        {/* Same width as Popi, so the name stays centred. */}
+        <View style={{ width: popi }} />
+      </View>
       {!run.relaxed && (
         <View style={{ height: big ? 8 : 6, borderRadius: 999, backgroundColor: p.sunk, overflow: 'hidden' }} accessibilityLabel={t('time_up')}>
           {/* Scaled from the left edge: a transform runs natively, a width would not. */}
@@ -476,6 +502,7 @@ export function RevealCard({ run }: { run: Run }) {
           alignItems: 'center',
           gap: 10,
         }}>
+        <Popi mood={skipped ? 'surprised' : 'sad'} size={64} style={{ marginTop: -54 }} />
         <Txt size={20} weight="heavy" color={skipped ? p.ink : p.action}>
           {skipped ? t('level_skipped') : t('missed_title')}
         </Txt>

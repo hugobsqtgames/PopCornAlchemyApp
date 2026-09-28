@@ -40,6 +40,10 @@ export interface RunConfig {
   category?: Category;
   /** Classic adventure only; runs saved before 1.1 have none. */
   difficulty?: Difficulty;
+  /** Played from the adventure map: the levels are the map's, and its progress is kept level by level. */
+  adventure?: boolean;
+  /** A replayed level opened from the adventure map (its "back" button returns there). */
+  origin?: 'map';
   /** Level ids in play order. */
   ids: number[];
   /** Score to beat, for challenges. */

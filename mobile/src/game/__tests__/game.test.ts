@@ -6,6 +6,7 @@ import { addActivity, categoryStats, favoriteCategory, LOGIN_REWARDS, starsFor }
 import { LEVELS } from '../levels';
 import { mulberry32 } from '../random';
 import {
+  adventureIds,
   buildDaily,
   buildGrid,
   buildRun,
@@ -295,5 +296,16 @@ describe('statistics', () => {
   it('has 7 login gifts, the last one the biggest', () => {
     expect(LOGIN_REWARDS).toHaveLength(7);
     expect(LOGIN_REWARDS[6].coins).toBeGreaterThan(Math.max(...LOGIN_REWARDS.slice(0, 6).map((r) => r.coins ?? 0)));
+  });
+});
+
+describe('adventure map', () => {
+  it('always gives the same levels in the same order, easy to hard', () => {
+    for (const d of [1, 2, 3] as const) {
+      const ids = adventureIds(d);
+      expect(ids).toEqual(adventureIds(d));
+      expect(new Set(ids).size).toBe(levelsOfDifficulty(d).length);
+      expect(ids.every((id) => levelById(id)?.d === d)).toBe(true);
+    }
   });
 });

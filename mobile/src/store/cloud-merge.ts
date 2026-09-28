@@ -120,6 +120,7 @@ export function mergeProfiles(local: SharedProfile, localAt: number, remote: Sha
     found: union(newer.found, older.found),
     stars,
     best: maxOf(local.best, remote.best),
+    adventure: maxOf(local.adventure, remote.adventure),
     stats,
     activity,
     bestDay,
