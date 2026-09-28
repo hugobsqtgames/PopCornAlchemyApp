@@ -87,7 +87,7 @@ export function TierView({ run }: { run: Run }) {
               <Txt size={12} weight="heavy" color={next.dark ? '#FFFFFF' : p.ink} style={{ letterSpacing: 0.8 }}>
                 {t('world_unlocked').toUpperCase()}
               </Txt>
-              <Txt size={17} weight="heavy" color={next.dark ? '#FFFFFF' : p.ink} lines={1}>
+              <Txt size={17} weight="heavy" color={next.dark ? '#FFFFFF' : p.ink} lines={2}>
                 {next.name[lang]}
               </Txt>
             </View>

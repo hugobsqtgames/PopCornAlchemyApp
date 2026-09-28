@@ -640,7 +640,13 @@ await step('adventure map', async () => {
   await shot('nouvelle-partie-carte');
   await btn('Aventure Facile');
   await page.waitForTimeout(700);
-  check(await see('✓ MONDE 1 · LE CHAMP DE MAÏS'), 'finished world shows as done on its sign');
+  check(await see('✓ MONDE 1') && (await see('Le Champ de maïs')), 'finished world shows as done on its sign');
+  // No world sign may cut its name ("…"), even the longest ones.
+  const cutSigns = await page.evaluate(() =>
+    [...document.querySelectorAll('div[aria-label*="·"]')]
+      .flatMap((e) => [...e.querySelectorAll('div')].filter((t) => !t.children.length && t.scrollWidth > t.clientWidth + 1).map((t) => t.textContent)),
+  );
+  check(cutSigns.length === 0, `world signs show their full name (${cutSigns.join(', ') || 'none cut'})`);
   check(await see('Monde 2 · La Plage Caramel'), 'the map says which world the player is in');
   check(await see('À toi de jouer !'), 'Popi shows the level to play');
   const node = await page.getByRole('button', { name: /^(Jouer le niveau|Continuer · niveau) \d+$/ }).first().boundingBox();
@@ -650,6 +656,12 @@ await step('adventure map', async () => {
   await tap('Les mondes ›');
   check(await see('Le tour du monde') && (await see('10 · Le Château Doré')), 'worlds list opens with the 10 easy worlds');
   check(await see('En cours · 1 / 20', false) || (await see('En cours', false)), 'the current world is marked');
+  // No world name may be cut ("…") in the list.
+  const cutNames = await page.evaluate(() =>
+    [...document.querySelectorAll('[role="button"]')]
+      .flatMap((e) => [...e.querySelectorAll('div')].filter((t) => !t.children.length && / · /.test(t.textContent ?? '') && t.scrollHeight > t.clientHeight + 2).map((t) => t.textContent)),
+  );
+  check(cutNames.length === 0, `worlds list shows full names (${cutNames.join(', ') || 'none cut'})`);
   await shot('mondes');
   await back();
   // A level already passed opens its sheet and can be replayed.

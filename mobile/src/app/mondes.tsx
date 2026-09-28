@@ -51,7 +51,8 @@ export default function Mondes() {
             return (
               <Tap
                 key={tier}
-                onPress={() => !locked && router.back()}
+                onPress={() => router.back()}
+                disabled={locked}
                 label={`${name}, ${status}`}
                 tint={done ? p.greenTint : current ? p.goldTint : undefined}
                 border={done ? p.green : current ? p.gold : undefined}
@@ -60,7 +61,7 @@ export default function Mondes() {
                   <WorldPreview world={world} width={92} height={64} />
                 </View>
                 <View style={{ flex: 1, gap: 2 }}>
-                  <Txt size={16} weight="heavy" color={locked ? p.muted : p.ink} lines={1}>
+                  <Txt size={16} weight="heavy" color={locked ? p.muted : p.ink} lines={2}>
                     {name}
                   </Txt>
                   <Txt size={12} weight="bold" color={done ? p.greenDeep : current ? p.ink : p.muted}>

@@ -196,6 +196,7 @@ export function Tap({
   tint,
   border,
   label,
+  disabled,
 }: {
   children: ReactNode;
   onPress: () => void;
@@ -203,6 +204,7 @@ export function Tap({
   tint?: string;
   border?: string;
   label?: string;
+  disabled?: boolean;
 }) {
   const p = usePalette();
   const press = useOnePress(() => {
@@ -213,8 +215,10 @@ export function Tap({
   return (
     <Pressable
       onPress={press}
+      disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={label}
+      accessibilityState={disabled ? { disabled: true } : undefined}
       style={({ pressed }) => [
         {
           backgroundColor: tint ?? p.surface,

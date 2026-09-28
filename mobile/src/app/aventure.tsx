@@ -68,6 +68,8 @@ export default function Aventure() {
   const lang = useProfile((s) => s.lang) ?? 'fr';
   const [open, setOpen] = useState<number | null>(null);
   const width = Math.min(screenWidth, tablet ? 640 : 600);
+  // The entrance sign of a world: wide enough for the longest names.
+  const signW = Math.min(width - 32, 320);
   const ids = useMemo(() => (d ? adventureIds(d) : []), [d]);
   const map = useMemo(() => layoutMap(ids.length, width), [ids.length, width]);
   // The painted landscape, in screen coordinates (the path column is centred).
@@ -150,7 +152,7 @@ export default function Aventure() {
           }
         />
         <View style={{ paddingHorizontal: 16, paddingTop: 6, paddingBottom: 8, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Txt size={13} weight="bold" color={p.muted} lines={1} style={{ flex: 1 }}>
+          <Txt size={13} weight="bold" color={p.muted} lines={2} style={{ flex: 1 }}>
             {t('map_world', { n: tierOfCurrent + 1, name: worldOf(d, tierOfCurrent).name[lang] })}
           </Txt>
           <Tap
@@ -210,20 +212,23 @@ export default function Aventure() {
                   accessibilityLabel={complete ? `${label}, ${t('map_tier_done', { n: tier + 1 })}` : label}
                   style={{
                     position: 'absolute',
-                    left: width / 2 - 130,
-                    top: y + (BANNER - 44) / 2,
-                    width: 260,
-                    height: 44,
-                    borderRadius: 10,
+                    left: width / 2 - signW / 2,
+                    top: y + (BANNER - 52) / 2,
+                    width: signW,
+                    height: 52,
+                    borderRadius: 12,
                     backgroundColor: world.sign,
                     borderBottomWidth: 4,
                     borderBottomColor: 'rgba(0,0,0,0.25)',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    paddingHorizontal: 10,
+                    paddingHorizontal: 12,
                   }}>
-                  <Txt size={13} weight="heavy" color={world.signText} lines={1} style={{ letterSpacing: 0.4 }}>
-                    {`${complete ? '✓ ' : ''}${label.toUpperCase()}`}
+                  <Txt size={10} weight="heavy" color={world.signText} lines={1} style={{ letterSpacing: 1.2, opacity: 0.85 }}>
+                    {`${complete ? '✓ ' : ''}${t('map_world_n', { n: tier + 1 }).toUpperCase()}`}
+                  </Txt>
+                  <Txt size={15} weight="heavy" color={world.signText} lines={1}>
+                    {world.name[lang]}
                   </Txt>
                 </View>
               );

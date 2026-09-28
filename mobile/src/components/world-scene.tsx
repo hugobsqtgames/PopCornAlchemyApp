@@ -158,8 +158,9 @@ export function buildScene(worlds: World[], sections: SceneSection[], pos: Point
         if (rng() < 0.55) continue;
         const mx = x + (rng() - 0.5) * step * 0.8;
         const my = y + (rng() - 0.5) * step * 0.8;
-        const k = Math.floor(my / STRIP);
-        marks[k] = (marks[k] ?? '') + mark(world.scene.texture, mx, my, 3 + rng() * 3);
+        const m = mark(world.scene.texture, mx, my, 3 + rng() * 3);
+        // A mark on the edge of a strip is drawn in both strips so it is never cut.
+        for (const k of new Set([Math.floor((my - 10) / STRIP), Math.floor((my + 10) / STRIP)])) marks[k] = (marks[k] ?? '') + m;
       }
     }
 
@@ -674,7 +675,8 @@ export function SceneStrip({
                 ))}
               {sec.marks[k] ? <Path d={sec.marks[k]} stroke={look.mark} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" fill="none" /> : null}
               {sec.lands
-                .filter((l) => near(l.y - 30, l.h + 60))
+                // Some scenery (leaves, glows, rings) spreads well past its box.
+                .filter((l) => near(l.y - l.w, l.h + 2 * l.w))
                 .map((l, n) => (
                   <LandView key={`l${n}`} land={l} world={world} />
                 ))}
