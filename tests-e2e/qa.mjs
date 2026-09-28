@@ -282,7 +282,7 @@ await step('classic run', async () => {
   await shot('nouvelle-partie');
   await btn('Aventure Facile');
   await page.waitForTimeout(600);
-  check(await see('Palier 1 · niveaux 1 à 20'), 'easy adventure opens its map at tier 1');
+  check(await see('Monde 1 · Le Champ de maïs'), 'easy adventure opens its map in world 1');
   await shot('carte');
   await page.getByRole('button', { name: 'Jouer le niveau 1' }).filter({ visible: true }).last().click();
   await page.waitForTimeout(600);
