@@ -1,4 +1,4 @@
-// Makes the App Store screenshots (iPhone 6.9" and iPad 13", FR/EN/ES) from the web build.
+// Makes the App Store screenshots (iPhone 6.9" and iPad 13", FR/EN/ES, 7 each) from the web build.
 //
 //   cd mobile && npx expo export --platform web --output-dir /tmp/pca-web
 //   serve /tmp/pca-web on http://localhost:8766 with a single-page fallback
@@ -37,26 +37,29 @@ const DEVICES = {
 const TEXT = {
   fr: [
     ['Devine en emojis', 'Combine les bons emojis pour trouver le film, la série, le pays…'],
-    ['Enchaîne les combos', 'Réponds vite, déclenche le mode Fever et double tes points'],
-    ['400 niveaux, 16 catégories', 'Facile, moyen ou difficile : à toi de choisir'],
+    ["La carte de l'aventure", 'Avance niveau par niveau avec Popi, ta progression est gardée'],
+    ['Enchaîne les combos', 'Déclenche le mode Fever et décroche les 3 étoiles'],
+    ['400 niveaux, 16 catégories', "Suis l'aventure ou joue la catégorie que tu veux"],
+    ['Complète ton Pop-Cornédex', 'Toutes tes réponses trouvées, rangées par catégorie'],
     ['Un défi chaque jour', '10 niveaux, les mêmes pour tout le monde'],
-    ['Tourne la roue', 'Des pièces et des bonus gratuits tous les jours'],
     ['Défie tes amis', 'Envoie ton score et vois qui est le meilleur alchimiste'],
   ],
   en: [
     ['Guess it in emojis', 'Combine the right emojis to find the movie, the show, the country…'],
-    ['Chain the combos', 'Answer fast, trigger Fever mode and double your points'],
-    ['400 levels, 16 categories', 'Easy, medium or hard: you choose'],
+    ['The adventure map', 'Move forward level by level with Popi, your progress is saved'],
+    ['Chain the combos', 'Trigger Fever mode and earn all 3 stars'],
+    ['400 levels, 16 categories', 'Follow the adventure or play the category you like'],
+    ['Fill your Pop-Cornédex', 'Every answer you find, sorted by category'],
     ['A new challenge every day', '10 levels, the same for everyone'],
-    ['Spin the wheel', 'Free coins and boosts every day'],
     ['Challenge your friends', 'Send your score and see who is the best alchemist'],
   ],
   es: [
     ['Adivina con emojis', 'Combina los emojis correctos para encontrar la película, la serie, el país…'],
-    ['Encadena combos', 'Responde rápido, activa el modo Fever y duplica tus puntos'],
-    ['400 niveles, 16 categorías', 'Fácil, normal o difícil: tú eliges'],
+    ['El mapa de la aventura', 'Avanza nivel a nivel con Popi, tu progreso se guarda'],
+    ['Encadena combos', 'Activa el modo Fever y consigue las 3 estrellas'],
+    ['400 niveles, 16 categorías', 'Sigue la aventura o juega la categoría que quieras'],
+    ['Completa tu Pop-Cornédex', 'Todas tus respuestas encontradas, por categoría'],
     ['Un reto nuevo cada día', '10 niveles, los mismos para todos'],
-    ['Gira la ruleta', 'Monedas y bonus gratis cada día'],
     ['Reta a tus amigos', 'Envía tu puntuación y descubre quién es el mejor alquimista'],
   ],
 };
@@ -68,18 +71,24 @@ const WORDS = {
 // Background and text color of each slide.
 const COLORS = [
   ['#D93A3A', '#FFFFFF'],
-  ['#FFC93C', '#1F1B2D'],
   ['#1FA463', '#FFFFFF'],
+  ['#FFC93C', '#1F1B2D'],
   ['#FBF6EC', '#1F1B2D'],
   ['#7B6CF6', '#FFFFFF'],
+  ['#FDE9E6', '#1F1B2D'],
   ['#1F1B2D', '#FFFFFF'],
 ];
 
+const dayKey = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const today = dayKey(new Date());
 const yesterday = (() => {
   const d = new Date();
   d.setDate(d.getDate() - 1);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  return dayKey(d);
 })();
+// Answers found so far, with their stars: most easy levels, a few others (Pop-Cornédex, map).
+const FOUND = LEVELS.filter((l, i) => l.d === 1 || i % 3 === 0).map((l) => l.id);
+const STARS = Object.fromEntries(FOUND.map((id, i) => [id, i % 4 === 1 ? 2 : 3]));
 
 function profile(lang, extra = {}) {
   return {
@@ -106,6 +115,12 @@ function profile(lang, extra = {}) {
     dailyBestStreak: 4,
     lastRun: { ids: [36, 1, 6, 16, 24], score: 1450 },
     save: null,
+    // Today's gift already taken: no calendar over the screens.
+    loginLast: today,
+    loginDay: 3,
+    found: FOUND,
+    stars: STARS,
+    adventure: { 1: 23, 2: 4, 3: 0 },
     ...extra,
   };
 }
@@ -146,19 +161,17 @@ const SCENES = [
     await page.getByText(WORDS[lang].fuse, { exact: false }).filter({ visible: true }).last().click();
     await page.waitForTimeout(450);
   },
-  // 3. New game: difficulties and categories.
+  // 4. New game: the adventures and the categories.
   async (page, lang) => open(page, lang, '/categories'),
-  // 4. Daily challenge.
+  // 5. The Pop-Cornédex, movies.
+  async (page, lang) => open(page, lang, '/popcornedex/movie'),
+  // 6. Daily challenge.
   async (page, lang) => open(page, lang, '/defi'),
-  // 5. Wheel, prize shown.
-  async (page, lang) => {
-    await open(page, lang, '/roue');
-    await page.getByText(WORDS[lang].spin, { exact: true }).filter({ visible: true }).first().click();
-    await page.waitForTimeout(5000);
-  },
-  // 6. Challenge a friend.
+  // 7. Challenge a friend.
   async (page, lang) => open(page, lang, '/defier'),
 ];
+// 2. The adventure map, on the current level with Popi (right after the first level).
+SCENES.splice(1, 0, async (page, lang) => open(page, lang, '/aventure?diff=1'));
 
 const statusBar = (h, scale) => `
   <div class="status" style="height:${h * scale}px;font-size:${16 * scale}px;padding:0 ${30 * scale}px">
