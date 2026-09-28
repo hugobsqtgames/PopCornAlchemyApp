@@ -5,10 +5,12 @@ import { Modal, Pressable, ScrollView, View, type LayoutChangeEvent } from 'reac
 import { AnswerEmojis, Stars } from '@/components/game/board';
 import { PlayIcon } from '@/components/icons';
 import { Popi } from '@/components/mascot';
-import { Btn, Header, Screen, Txt } from '@/components/ui';
+import { Btn, Header, Screen, Tap, Txt } from '@/components/ui';
+import { WorldDeco } from '@/components/world-deco';
 import { one } from '@/game/links';
 import { adventureIds, levelById, TIER_SIZE } from '@/game/rules';
 import type { Difficulty } from '@/game/types';
+import { worldOf } from '@/game/worlds';
 import { useLayout, useLevelName, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
 import { useProfile } from '@/store/profile';
@@ -24,24 +26,38 @@ interface MapLayout {
   pos: { x: number; y: number }[];
   /** One banner under the first level of each tier. */
   banners: { tier: number; y: number }[];
+  /** The ground of each tier's world, from its top to the bottom of its banner. */
+  sections: { tier: number; top: number; bottom: number }[];
+  /** Scenery along the path, on the side the path is not. */
+  decos: { i: number; x: number; y: number }[];
   height: number;
 }
+
+const DECO = 44;
 
 /** Lays the path out from the top (last level) down to level 1, winding left and right. */
 function layoutMap(total: number, width: number): MapLayout {
   const pos: MapLayout['pos'] = new Array(total);
   const banners: MapLayout['banners'] = [];
+  const sections: MapLayout['sections'] = [];
+  const decos: MapLayout['decos'] = [];
   const swing = Math.max(0, width / 2 - 70);
   let y = PAD;
+  let top = 0;
   for (let i = total - 1; i >= 0; i--) {
-    pos[i] = { x: width / 2 + swing * Math.sin(i * 0.75), y: y + ROW / 2 };
+    const side = Math.sin(i * 0.75);
+    pos[i] = { x: width / 2 + swing * side, y: y + ROW / 2 };
+    // Every other level, a drawing on the free side (never under the path).
+    if (i % 2 === 0) decos.push({ i, x: side > 0 ? 4 : width - DECO - 4, y: y + ROW / 2 - DECO / 2 });
     y += ROW;
     if (i % TIER_SIZE === 0) {
       banners.push({ tier: i / TIER_SIZE, y });
       y += BANNER;
+      sections.push({ tier: i / TIER_SIZE, top, bottom: i === 0 ? y + PAD : y });
+      top = y;
     }
   }
-  return { pos, banners, height: y + PAD };
+  return { pos, banners, sections, decos, height: y + PAD };
 }
 
 /** The adventure map of one difficulty: the path of levels, what is done and what is left. */
@@ -56,6 +72,7 @@ export default function Aventure() {
   const stars = useProfile((s) => s.stars);
   const found = useProfile((s) => s.found);
   const save = useProfile((s) => s.save);
+  const lang = useProfile((s) => s.lang) ?? 'fr';
   const [open, setOpen] = useState<number | null>(null);
   const width = Math.min(screenWidth, tablet ? 640 : 600);
   const ids = useMemo(() => (d ? adventureIds(d) : []), [d]);
@@ -114,18 +131,42 @@ export default function Aventure() {
           </View>
         }
       />
-      <View style={{ paddingHorizontal: 16, paddingTop: 6, gap: 6 }}>
-        <Txt size={13} weight="semibold" color={p.muted}>
-          {t('map_tier_range', { n: tierOfCurrent + 1, a: tierOfCurrent * TIER_SIZE + 1, b: tierEnd })}
+      <View style={{ paddingHorizontal: 16, paddingTop: 6, paddingBottom: 8, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <Txt size={13} weight="bold" color={p.muted} lines={1} style={{ flex: 1 }}>
+          {`${t('map_world', { n: tierOfCurrent + 1, name: worldOf(d, tierOfCurrent).name[lang] })} · ${tierOfCurrent * TIER_SIZE + 1}–${tierEnd}`}
         </Txt>
+        <Tap
+          onPress={() => router.push({ pathname: '/mondes', params: { diff: String(d) } })}
+          label={t('worlds_link')}
+          style={{ height: 32, paddingHorizontal: 12, borderRadius: 16, justifyContent: 'center' }}>
+          <Txt size={13} weight="heavy">
+            {`${t('worlds_link')} ›`}
+          </Txt>
+        </Tap>
       </View>
 
-      <ScrollView ref={scroller} onLayout={onViewport} onContentSizeChange={onContent} style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center' }}>
+      <ScrollView ref={scroller} onLayout={onViewport} onContentSizeChange={onContent} style={{ flex: 1, backgroundColor: worldOf(d, 0).bg }} contentContainerStyle={{ alignItems: 'center' }}>
         <View style={{ width, height: map.height }}>
+          {/* Each tier is a world: its ground, drawn edge to edge. */}
+          {map.sections.map(({ tier, top, bottom }) => (
+            <View
+              key={`ground-${tier}`}
+              style={{ position: 'absolute', left: -(screenWidth - width) / 2, width: screenWidth, top, height: bottom - top, backgroundColor: worldOf(d, tier).bg }}
+            />
+          ))}
+          {map.decos.map(({ i, x, y }) => {
+            const world = worldOf(d, Math.floor(i / TIER_SIZE));
+            return (
+              <View key={`deco-${i}`} pointerEvents="none" style={{ position: 'absolute', left: x, top: y }}>
+                <WorldDeco kind={world.decos[(i / 2) % 2]} size={DECO} />
+              </View>
+            );
+          })}
           {/* The trail: small dots between levels, gold where the player went. */}
           {map.pos.slice(0, -1).map((a, i) => {
             const b = map.pos[i + 1];
             const done = i + 1 <= passed;
+            const road = worldOf(d, Math.floor((i + 1) / TIER_SIZE)).road;
             return [1, 2].map((k) => (
               <View
                 key={`${i}-${k}`}
@@ -136,33 +177,39 @@ export default function Aventure() {
                   width: 10,
                   height: 10,
                   borderRadius: 5,
-                  backgroundColor: done ? p.gold : p.line2,
+                  backgroundColor: done ? p.gold : road,
                 }}
               />
             ));
           })}
 
+          {/* The entrance sign of each world, under its first level. */}
           {map.banners.map(({ tier, y }) => {
             const end = Math.min(total, (tier + 1) * TIER_SIZE);
             const complete = passed >= end;
+            const world = worldOf(d, tier);
+            const label = t('map_world', { n: tier + 1, name: world.name[lang] });
             return (
               <View
                 key={tier}
+                accessible
+                accessibilityLabel={complete ? `${label}, ${t('map_tier_done', { n: tier + 1 })}` : label}
                 style={{
                   position: 'absolute',
-                  left: width / 2 - 110,
-                  top: y + (BANNER - 40) / 2,
-                  width: 220,
-                  height: 40,
-                  borderRadius: 20,
-                  backgroundColor: complete ? p.green : p.surface,
-                  borderWidth: complete ? 0 : p.border,
-                  borderColor: p.line,
+                  left: width / 2 - 130,
+                  top: y + (BANNER - 44) / 2,
+                  width: 260,
+                  height: 44,
+                  borderRadius: 10,
+                  backgroundColor: world.sign,
+                  borderBottomWidth: 4,
+                  borderBottomColor: 'rgba(0,0,0,0.25)',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  paddingHorizontal: 10,
                 }}>
-                <Txt size={14} weight="heavy" color={complete ? '#FFFFFF' : p.muted}>
-                  {complete ? `✓ ${t('map_tier_done', { n: tier + 1 })}` : `${t('tier')} ${tier + 1} · ${tier * TIER_SIZE + 1}–${end}`}
+                <Txt size={13} weight="heavy" color={world.signText} lines={1} style={{ letterSpacing: 0.4 }}>
+                  {`${complete ? '✓ ' : ''}${label.toUpperCase()}`}
                 </Txt>
               </View>
             );

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Share, View } from 'react-native';
 
 import { PRICES, REWARDS } from '@/game/rules';
+import { WORLDS } from '@/game/worlds';
 import type { Run } from '@/hooks/use-run';
 import { fmt, useLayout, useLevelName, usePalette, useT } from '@/hooks/use-app';
 import type { StringKey } from '@/i18n/strings';
@@ -14,6 +15,7 @@ import { Btn, Card, Emoji, Px, Screen, Txt } from '../ui';
 
 import { Confetti } from '../confetti';
 import { Popi } from '../mascot';
+import { WorldDeco } from '../world-deco';
 
 import { AnswerEmojis, Stars } from './board';
 
@@ -41,6 +43,10 @@ export function TierView({ run }: { run: Run }) {
   const p = usePalette();
   const t = useT();
   const tier = Math.floor(run.index / 20) + 1;
+  const lang = useProfile((s) => s.lang) ?? 'fr';
+  // On the adventure map, the next tier is a new world.
+  const d = run.config.adventure ? run.config.difficulty : undefined;
+  const next = d && tier < WORLDS[d].length ? WORLDS[d][tier] : null;
   return (
     <Screen>
       <Confetti />
@@ -71,6 +77,23 @@ export function TierView({ run }: { run: Run }) {
           </View>
         ))}
       </View>
+      {next && (
+        <View style={{ paddingHorizontal: 16, paddingTop: 12 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12, borderRadius: 18, backgroundColor: next.bg, borderWidth: 2, borderColor: next.sign }}>
+            <View style={{ width: 48, height: 48, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.35)', alignItems: 'center', justifyContent: 'center' }}>
+              <WorldDeco kind={next.decos[0]} size={40} />
+            </View>
+            <View style={{ flex: 1, gap: 2 }}>
+              <Txt size={12} weight="heavy" color={next.dark ? '#FFFFFF' : p.ink} style={{ letterSpacing: 0.8 }}>
+                {t('world_unlocked').toUpperCase()}
+              </Txt>
+              <Txt size={17} weight="heavy" color={next.dark ? '#FFFFFF' : p.ink} lines={1}>
+                {next.name[lang]}
+              </Txt>
+            </View>
+          </View>
+        </View>
+      )}
       <View style={{ paddingHorizontal: 16, paddingTop: 12 }}>
         <Card style={{ padding: 14, gap: 10 }}>
           <Row label={t('score')} value={fmt(run.score)} />

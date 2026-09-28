@@ -368,6 +368,17 @@ const fr = {
   categories_hint: "Dans l'ordre que tu veux, niveaux mélangés à chaque partie.",
   map_progress: "Continuer · niveau {n} · ★ {s}",
   dex_everywhere: "Chaque réponse trouvée, dans l'aventure ou une catégorie, compte pour le Pop-Cornédex.",
+  map_world: "Monde {n} · {name}",
+  worlds_link: "Les mondes",
+  worlds_title_1: "Le tour du monde",
+  worlds_title_2: "Le voyage extraordinaire",
+  worlds_title_3: "Les légendes",
+  worlds_sub: "{d} · {n} mondes, un par palier",
+  world_unlocked: "Nouveau monde débloqué !",
+  world_done: "Terminé · ★ {s} / {t}",
+  world_current: "En cours · {n} / {t}",
+  world_levels: "niveaux {a} à {b}",
+  world_hint: "Chaque monde fini ouvre le suivant, avec un nouveau décor !",
 };
 
 export type StringKey = keyof typeof fr;
@@ -722,6 +733,17 @@ const en: Record<StringKey, string> = {
   categories_hint: "In any order you like, levels shuffled every game.",
   map_progress: "Continue · level {n} · ★ {s}",
   dex_everywhere: "Every answer you find, in the adventure or a category, counts for the Pop-Cornédex.",
+  map_world: "World {n} · {name}",
+  worlds_link: "Worlds",
+  worlds_title_1: "Around the world",
+  worlds_title_2: "The extraordinary journey",
+  worlds_title_3: "Legends",
+  worlds_sub: "{d} · {n} worlds, one per tier",
+  world_unlocked: "New world unlocked!",
+  world_done: "Done · ★ {s} / {t}",
+  world_current: "In progress · {n} / {t}",
+  world_levels: "levels {a} to {b}",
+  world_hint: "Each world you finish opens the next one, with new scenery!",
 };
 
 const es: Record<StringKey, string> = {
@@ -1074,6 +1096,17 @@ const es: Record<StringKey, string> = {
   categories_hint: "En el orden que quieras, niveles mezclados en cada partida.",
   map_progress: "Continuar · nivel {n} · ★ {s}",
   dex_everywhere: "Cada respuesta que encuentras, en la aventura o en una categoría, cuenta para el Pop-Cornédex.",
+  map_world: "Mundo {n} · {name}",
+  worlds_link: "Los mundos",
+  worlds_title_1: "La vuelta al mundo",
+  worlds_title_2: "El viaje extraordinario",
+  worlds_title_3: "Las leyendas",
+  worlds_sub: "{d} · {n} mundos, uno por etapa",
+  world_unlocked: "¡Nuevo mundo desbloqueado!",
+  world_done: "Terminado · ★ {s} / {t}",
+  world_current: "En curso · {n} / {t}",
+  world_levels: "niveles {a} a {b}",
+  world_hint: "Cada mundo que terminas abre el siguiente, ¡con un decorado nuevo!",
 };
 
 export const STRINGS = { fr, en, es };

@@ -371,6 +371,7 @@ await step('classic run', async () => {
   check(fever, 'fever chime plays at combo 5');
   check(heard.includes('voice_combo') && heard.includes('voice_fever'), `announcer says combo and fever (${[...new Set(heard.filter((x) => x.startsWith('voice')))].join(',')})`);
   check(tier, 'tier screen after 20 levels');
+  check(await see('NOUVEAU MONDE DÉBLOQUÉ !') && (await see('La Plage Caramel')), 'the tier screen announces the next world');
   await shot('palier');
   const pr = await profile();
   check(pr.achievements.includes('first_fusion') && pr.achievements.includes('combo_5'), 'achievements unlocked during play');
@@ -639,11 +640,18 @@ await step('adventure map', async () => {
   await shot('nouvelle-partie-carte');
   await btn('Aventure Facile');
   await page.waitForTimeout(700);
-  check(await see('✓ Palier 1 terminé'), 'finished tier shows as done on the map');
+  check(await see('✓ MONDE 1 · LE CHAMP DE MAÏS'), 'finished world shows as done on its sign');
+  check(await see('Monde 2 · La Plage Caramel · 21–40'), 'the map says which world the player is in');
   check(await see('À toi de jouer !'), 'Popi shows the level to play');
   const node = await page.getByRole('button', { name: /^(Jouer le niveau|Continuer · niveau) \d+$/ }).first().boundingBox();
   check(!!node && node.y > 60 && node.y < 560, `the map opens on the current level (y ${Math.round(node?.y ?? -1)})`);
   await shot('carte-progression');
+  // The worlds of the adventure.
+  await tap('Les mondes ›');
+  check(await see('Le tour du monde') && (await see('10 · Le Château Doré')), 'worlds list opens with the 10 easy worlds');
+  check(await see('En cours · 1 / 20', false) || (await see('En cours', false)), 'the current world is marked');
+  await shot('mondes');
+  await back();
   // A level already passed opens its sheet and can be replayed.
   await page.getByRole('button', { name: /^Niveau 1, / }).filter({ visible: true }).first().click();
   await page.waitForTimeout(500);

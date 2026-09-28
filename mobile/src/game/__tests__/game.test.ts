@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it, jest } from '@jest/globals';
 
 import { ACHIEVEMENTS, EMPTY_STATS, newlyUnlocked } from '../achievements';
 import { currentStreak, dayKey, daysBetween, nextStreak, nextStreakWithSaves } from '../dates';
@@ -307,5 +307,21 @@ describe('adventure map', () => {
       expect(new Set(ids).size).toBe(levelsOfDifficulty(d).length);
       expect(ids.every((id) => levelById(id)?.d === d)).toBe(true);
     }
+  });
+});
+
+describe('adventure worlds', () => {
+  it('gives each tier its own world, never the same twice', () => {
+    const { WORLDS } = jest.requireActual<typeof import('../worlds')>('../worlds');
+    const names = new Set<string>();
+    for (const d of [1, 2, 3] as const) {
+      expect(WORLDS[d]).toHaveLength(Math.ceil(adventureIds(d).length / TIER_SIZE));
+      for (const w of WORLDS[d]) {
+        expect(names.has(w.name.fr)).toBe(false);
+        names.add(w.name.fr);
+        expect(w.name.en && w.name.es).toBeTruthy();
+      }
+    }
+    expect(names.size).toBe(21);
   });
 });
