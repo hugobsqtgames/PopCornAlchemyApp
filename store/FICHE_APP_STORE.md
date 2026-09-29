@@ -96,7 +96,7 @@ Un cadeau chaque jour, la roue de la chance, des protections de série, un rappe
 Jouable hors ligne, sans compte, en 13 langues.
 
 **Mots-clés (100)**
-emoji,quiz,devinette,film,série,culture,rébus,énigme,trivia,mots,cinéma,pays,logo,marque,sport
+devinette,film,série,culture,rébus,énigme,trivia,mots,cinéma,pays,logo,marque,sport,charade,anime
 
 **Nouveautés de cette version (4000)**
 Première version de Pop-Corn Alchemy ! 400 niveaux, 16 catégories, 3 difficultés, un mode Zen, un défi par jour et la roue de la chance. Bon jeu 🍿
