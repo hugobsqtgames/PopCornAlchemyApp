@@ -267,7 +267,7 @@ Ein Geschenk pro Tag, das Glücksrad, Serienschutz, Erinnerung an die Challenge,
 Offline spielbar, ohne Konto, in 13 Sprachen.
 
 **Keywords (100)**
-emoji,quiz,raten,film,rätsel,wort,serie,logo,land,popcorn,denkspiel,wissen,rätselspiel
+raten,film,rätsel,wort,serie,logo,land,popcorn,denkspiel,wissen,rätselspiel,marke,kino,anime,trivia
 
 **What's New (4000)**
 Die erste Version von Pop-Corn Alchemy! 400 Levels, 16 Kategorien, 3 Schwierigkeitsstufen, eine Abenteuerkarte mit 21 Welten, ein Zen-Modus, eine tägliche Challenge und das Glücksrad. Viel Spaß
