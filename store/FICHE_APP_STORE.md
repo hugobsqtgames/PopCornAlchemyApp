@@ -35,6 +35,7 @@ Dans `store/screenshots/` : 7 images par langue et par appareil, déjà aux tail
 | Dossier | Taille | Où les mettre |
 |---|---|---|
 | `<langue>/iphone-6.9/` | 1320 × 2868 | iPhone 6,9 pouces (sert aussi pour tous les autres iPhone) |
+| `<langue>/iphone-6.5/` | 1284 × 2778 | iPhone 6,5 pouces (si App Store Connect demande cette taille-là) |
 | `<langue>/ipad-13/` | 2064 × 2752 | iPad 13 pouces |
 
 13 langues : `fr`, `en`, `es`, `de`, `it`, `pt` (à mettre dans « Portugais (Brésil) »), `nl`, `pl`, `tr`, `ru`, `ja`,

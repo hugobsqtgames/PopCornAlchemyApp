@@ -34,6 +34,7 @@ Clique sur **Enregistrer** (en haut à droite) après chaque page.
 ### A4. Page de la version « 1.0 Préparation pour la soumission »
 - **Captures d'écran** (glisse-les dans l'ordre 01 → 07) :
   - iPhone 6,9 pouces : `store/screenshots/fr/iphone-6.9/`
+    (si la case affichée est « Écran de 6,5 pouces » : `store/screenshots/fr/iphone-6.5/`)
   - iPad 13 pouces : `store/screenshots/fr/ipad-13/`
 - **Texte promotionnel**, **Description**, **Mots-clés** : partie 🇫🇷 de `FICHE_APP_STORE.md`.
 - **URL d'assistance** : `https://hugobsqtgames.github.io/PopCornAlchemyApp/`
