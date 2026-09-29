@@ -210,7 +210,7 @@ Un regalo cada día, la ruleta de la suerte, protectores de racha, un recordator
 Se juega sin conexión, sin cuenta, en 13 idiomas.
 
 **Palabras clave (100)**
-emoji,quiz,adivinanza,película,serie,trivia,acertijo,palabras,cine,país,logo,marca,cultura,juego
+adivinanza,película,serie,trivia,acertijo,palabras,cine,país,logo,marca,cultura,juego,charada,anime
 
 **Novedades (4000)**
 ¡La primera versión de Pop-Corn Alchemy! 400 niveles, 16 categorías, 3 dificultades, un modo Zen, un reto diario y la ruleta de la suerte. ¡A jugar!
