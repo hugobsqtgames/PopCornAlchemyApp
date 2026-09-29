@@ -48,7 +48,7 @@ Glisse-les dans l'ordre 01 → 07. Pour les refaire après un changement : `stor
 ## 🇫🇷 Français
 
 **Sous-titre (30)**
-Devine des films en emojis
+Quiz : devine tout en emojis
 
 **Texte promotionnel (170)**
 400 niveaux, 16 catégories et 3 difficultés : combine les bons emojis pour retrouver films, séries, pays ou marques. Un nouveau défi chaque jour !
@@ -105,7 +105,7 @@ Première version de Pop-Corn Alchemy ! 400 niveaux, 16 catégories, 3 difficult
 ## 🇬🇧 English (U.S. et U.K.)
 
 **Subtitle (30)**
-Guess movies & more in emojis
+Emoji quiz: guess everything
 
 **Promotional text (170)**
 400 levels, 16 categories and 3 difficulty levels: combine the right emojis to find movies, TV shows, countries and brands. A new challenge every day!
@@ -162,7 +162,7 @@ The first version of Pop-Corn Alchemy! 400 levels, 16 categories, 3 difficulty l
 ## 🇪🇸 Español (España et México)
 
 **Subtítulo (30)**
-Adivina películas con emojis
+Quiz: adivina todo con emojis
 
 **Texto promocional (170)**
 400 niveles, 16 categorías y 3 dificultades: combina los emojis correctos para encontrar películas, series, países o marcas. ¡Un reto nuevo cada día!
@@ -219,7 +219,7 @@ emoji,quiz,adivinanza,película,serie,trivia,acertijo,palabras,cine,país,logo,m
 ## 🇩🇪 Deutsch (`de`)
 
 **Subtitle (30)**
-Errate Filme & mehr mit Emojis
+Emoji-Quiz: Errate alles!
 
 **Promotional text (170)**
 400 Levels, 16 Kategorien und 3 Schwierigkeitsstufen: Kombiniere die richtigen Emojis und finde Filme, Serien, Länder und Marken. Jeden Tag eine neue Challenge!
@@ -276,7 +276,7 @@ Die erste Version von Pop-Corn Alchemy! 400 Levels, 16 Kategorien, 3 Schwierigke
 ## 🇮🇹 Italiano (`it`)
 
 **Subtitle (30)**
-Indovina i film con le emoji
+Quiz: indovina tutto con emoji
 
 **Promotional text (170)**
 400 livelli, 16 categorie e 3 difficoltà: combina gli emoji giusti per trovare film, serie TV, paesi e marchi. Una nuova sfida ogni giorno!
@@ -333,7 +333,7 @@ La prima versione di Pop-Corn Alchemy! 400 livelli, 16 categorie, 3 difficoltà,
 ## 🇧🇷 Português (Brasil) (`pt-BR`)
 
 **Subtitle (30)**
-Adivinhe filmes com emojis
+Quiz: adivinhe tudo com emojis
 
 **Promotional text (170)**
 400 níveis, 16 categorias e 3 dificuldades: combine os emojis certos para descobrir filmes, séries, países e marcas. Um desafio novo todo dia!
@@ -390,7 +390,7 @@ A primeira versão de Pop-Corn Alchemy! 400 níveis, 16 categorias, 3 dificuldad
 ## 🇳🇱 Nederlands (`nl`)
 
 **Subtitle (30)**
-Raad films en meer met emoji
+Emoji-quiz: raad alles!
 
 **Promotional text (170)**
 400 levels, 16 categorieën en 3 moeilijkheden: combineer de juiste emoji's om films, series, landen en merken te vinden. Elke dag een nieuwe uitdaging!
@@ -447,7 +447,7 @@ De eerste versie van Pop-Corn Alchemy! 400 levels, 16 categorieën, 3 moeilijkhe
 ## 🇵🇱 Polski (`pl`)
 
 **Subtitle (30)**
-Zgadnij filmy i więcej z emoji
+Quiz: zgadnij wszystko z emoji
 
 **Promotional text (170)**
 400 poziomów, 16 kategorii i 3 poziomy trudności: połącz właściwe emoji, by odgadnąć filmy, seriale, kraje i marki. Nowe wyzwanie każdego dnia!
@@ -504,7 +504,7 @@ Pierwsza wersja Pop-Corn Alchemy! 400 poziomów, 16 kategorii, 3 poziomy trudno�
 ## 🇹🇷 Türkçe (`tr`)
 
 **Subtitle (30)**
-Filmleri emojilerle tahmin et
+Emoji quiz: her şeyi tahmin et
 
 **Promotional text (170)**
 400 seviye, 16 kategori ve 3 zorluk: doğru emojileri birleştirip filmleri, dizileri, ülkeleri ve markaları bul. Her gün yeni bir meydan okuma!
@@ -561,7 +561,7 @@ Pop-Corn Alchemy'nin ilk sürümü! 400 seviye, 16 kategori, 3 zorluk, 21 dünya
 ## 🇷🇺 Русский (`ru`)
 
 **Subtitle (30)**
-Угадай фильмы по эмодзи
+Эмодзи-квиз: угадай всё!
 
 **Promotional text (170)**
 400 уровней, 16 категорий и 3 уровня сложности: соединяй нужные эмодзи и угадывай фильмы, сериалы, страны и бренды. Новое задание каждый день!
@@ -618,7 +618,7 @@ Pop-Corn Alchemy — игра-угадайка с эмодзи, от котор�
 ## 🇯🇵 日本語 (`ja`)
 
 **Subtitle (30)**
-絵文字で映画やドラマを当てよう
+絵文字クイズ：なんでも当てよう
 
 **Promotional text (170)**
 400レベル、16カテゴリー、3つの難易度。正しい絵文字を組み合わせて、映画、ドラマ、国、ブランドを当てよう。毎日新しいチャレンジも！
@@ -675,7 +675,7 @@ Pop-Corn Alchemy最初のバージョン！400レベル、16カテゴリー、3�
 ## 🇰🇷 한국어 (`ko`)
 
 **Subtitle (30)**
-이모지로 영화와 드라마 맞히기
+이모지 퀴즈: 뭐든지 맞혀 봐
 
 **Promotional text (170)**
 400레벨, 16개 카테고리, 3가지 난이도! 알맞은 이모지를 합쳐 영화, 드라마, 나라, 브랜드를 맞혀 보세요. 매일 새로운 도전도 있어요!
@@ -732,7 +732,7 @@ Pop-Corn Alchemy 첫 번째 버전! 400레벨, 16개 카테고리, 3가지 난�
 ## 🇨🇳 简体中文 (`zh-Hans`)
 
 **Subtitle (30)**
-看表情猜电影、剧集和更多
+表情猜谜：什么都能猜
 
 **Promotional text (170)**
 400个关卡、16个类别、3种难度：组合正确的表情，猜出电影、剧集、国家和品牌。每天都有新挑战！
