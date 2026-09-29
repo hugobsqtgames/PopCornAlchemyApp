@@ -324,7 +324,7 @@ Un regalo ogni giorno, la ruota della fortuna, i salva-serie, il promemoria dell
 Si gioca offline, senza account, in 13 lingue.
 
 **Keywords (100)**
-emoji,quiz,indovina,film,indovinello,parole,serie,logo,paese,popcorn,cervello,cultura
+film,indovinello,parole,serie,logo,paese,popcorn,cervello,cultura,marchio,cinema,anime,trivia,rebus
 
 **What's New (4000)**
 La prima versione di Pop-Corn Alchemy! 400 livelli, 16 categorie, 3 difficoltà, una mappa con 21 mondi, una modalità Zen, una sfida del giorno e la ruota della fortuna. Buon divertimento
@@ -381,7 +381,7 @@ Um presente por dia, a roleta da sorte, protetores de sequência, lembrete do de
 Funciona offline, sem conta, em 13 idiomas.
 
 **Keywords (100)**
-emoji,quiz,adivinhar,filme,charada,palavra,série,logo,país,pipoca,cérebro,cultura,jogo
+adivinhar,filme,charada,palavra,série,logo,país,pipoca,cérebro,cultura,jogo,marca,cinema,anime
 
 **What's New (4000)**
 A primeira versão de Pop-Corn Alchemy! 400 níveis, 16 categorias, 3 dificuldades, um mapa com 21 mundos, um modo Zen, um desafio do dia e a roleta da sorte. Divirta-se
@@ -438,7 +438,7 @@ Elke dag een cadeau, het rad van fortuin, reeksbeschermers, een herinnering aan 
 Speelbaar offline, zonder account, in 13 talen.
 
 **Keywords (100)**
-emoji,quiz,raden,film,raadsel,woord,serie,logo,land,popcorn,hersenen,kennis,puzzel
+raden,film,raadsel,woord,serie,logo,land,popcorn,hersenen,kennis,puzzel,merk,bioscoop,anime,trivia
 
 **What's New (4000)**
 De eerste versie van Pop-Corn Alchemy! 400 levels, 16 categorieën, 3 moeilijkheden, een kaart met 21 werelden, een Zen-modus, een dagelijkse uitdaging en het rad van fortuin. Veel plezier
@@ -495,7 +495,7 @@ Prezent każdego dnia, koło fortuny, ochrona serii, przypomnienie o wyzwaniu, t
 Działa offline, bez konta, w 13 językach.
 
 **Keywords (100)**
-emoji,quiz,zgadywanie,film,zagadka,słowa,serial,logo,kraj,popcorn,łamigłówka,wiedza
+zgadywanie,film,zagadka,słowa,serial,logo,kraj,popcorn,łamigłówka,wiedza,marka,kino,anime,rebus
 
 **What's New (4000)**
 Pierwsza wersja Pop-Corn Alchemy! 400 poziomów, 16 kategorii, 3 poziomy trudności, mapa z 21 światami, tryb Zen, wyzwanie dnia i koło fortuny. Miłej zabawy
@@ -552,7 +552,7 @@ Her gün bir hediye, şans çarkı, seri koruyucular, meydan okuma hatırlatıc�
 İnternetsiz oynanır, hesap gerekmez, 13 dilde.
 
 **Keywords (100)**
-emoji,bilgi yarışması,tahmin,film,bulmaca,kelime,dizi,logo,ülke,zeka,oyun,kültür
+bilgi yarışması,film,bulmaca,kelime,dizi,logo,ülke,zeka,oyun,kültür,marka,sinema,anime,bilmece
 
 **What's New (4000)**
 Pop-Corn Alchemy'nin ilk sürümü! 400 seviye, 16 kategori, 3 zorluk, 21 dünyalı bir harita, Zen modu, günün meydan okuması ve şans çarkı. İyi eğlenceler
@@ -609,7 +609,7 @@ Pop-Corn Alchemy — игра-угадайка с эмодзи, от котор�
 Работает без интернета, без регистрации, на 13 языках.
 
 **Keywords (100)**
-эмодзи,викторина,угадай,фильм,загадка,слова,сериал,логотип,страна,попкорн,головоломка
+викторина,фильм,загадка,слова,сериал,логотип,страна,попкорн,головоломка,бренд,кино,аниме
 
 **What's New (4000)**
 Первая версия Pop-Corn Alchemy! 400 уровней, 16 категорий, 3 уровня сложности, карта с 21 миром, режим Дзен, задание дня и колесо удачи. Приятной игры
@@ -666,7 +666,7 @@ Pop-Corn Alchemyは、頭がポップコーンみたいにはじける絵文字�
 オフラインで遊べて、アカウント不要、13言語対応。
 
 **Keywords (100)**
-絵文字,クイズ,当てる,映画,なぞなぞ,言葉,ドラマ,ロゴ,国,ポップコーン,脳トレ,雑学,謎解き
+当てる,映画,なぞなぞ,言葉,ドラマ,ロゴ,国,ポップコーン,脳トレ,雑学,謎解き,アニメ,ブランド,連想
 
 **What's New (4000)**
 Pop-Corn Alchemy最初のバージョン！400レベル、16カテゴリー、3つの難易度、21ワールドの冒険マップ、ZENモード、デイリーチャレンジ、ラッキールーレット。楽しんでね
@@ -723,7 +723,7 @@ Pop-Corn Alchemy는 머리가 팝콘처럼 톡톡 터지는 이모지 맞히기 
 오프라인으로 즐기고, 계정이 필요 없으며, 13개 언어를 지원해요.
 
 **Keywords (100)**
-이모지,퀴즈,맞히기,영화,수수께끼,단어,드라마,로고,나라,팝콘,두뇌,상식,게임
+맞히기,영화,수수께끼,단어,드라마,로고,나라,팝콘,두뇌,상식,게임,애니,브랜드,넌센스
 
 **What's New (4000)**
 Pop-Corn Alchemy 첫 번째 버전! 400레벨, 16개 카테고리, 3가지 난이도, 21개 월드의 모험 지도, 젠 모드, 오늘의 도전, 행운의 룰렛. 즐겁게 플레이하세요
@@ -780,7 +780,7 @@ Pop-Corn Alchemy 是一款让大脑像爆米花一样蹦跳的表情猜谜游戏
 可离线游玩，无需账号，支持13种语言。
 
 **Keywords (100)**
-表情,猜谜,竞猜,电影,谜语,文字,剧集,标志,国家,爆米花,益智,知识,游戏
+竞猜,电影,谜语,文字,剧集,标志,国家,爆米花,益智,知识,游戏,动漫,品牌,脑筋急转弯
 
 **What's New (4000)**
 Pop-Corn Alchemy 首个版本！400个关卡、16个类别、3种难度、21个世界的冒险地图、禅模式、每日挑战和幸运转盘。祝你玩得开心
