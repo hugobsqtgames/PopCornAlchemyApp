@@ -16,6 +16,10 @@ Clique sur **Enregistrer** (en haut à droite) après chaque page.
 - **Catégorie secondaire** : Jeux → *Quiz* (Trivia)
 - **Classification par âge** → « Définir » : « Rare ou léger » pour *Violence de dessin animé ou
   fantastique* et *Horreur / peur*, « Non » / « Aucun » partout ailleurs → tu dois obtenir **9+**.
+  Attention à deux pièges qui font passer à 13+ :
+  - *Jeux de hasard simulés* → **Aucun** (la roue est un cadeau gratuit, pas un casino) ;
+  - *Armes à feu ou autres armes* → **Aucun** (ce ne sont que des emojis dans la grille).
+  Publicités → **Non** tant qu'elles ne sont pas activées (à changer pour la version 1.1).
 - **Droits sur le contenu** : « Non, elle ne contient pas de contenu tiers ».
 - **URL de la politique de confidentialité** :
   `https://hugobsqtgames.github.io/PopCornAlchemyApp/confidentialite.html`
