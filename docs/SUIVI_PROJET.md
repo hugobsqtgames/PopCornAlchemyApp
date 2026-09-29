@@ -117,6 +117,11 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 
 ## En cours / bloquant ⏳
 
+- **29/09/2026 : version 1.0 (build 1) soumise à Apple** après test TestFlight sur l'iPhone de Hugo
+  (tout fonctionne). Fiche remplie en 13 langues, âge 9+, « Données non collectées », Game Center
+  désactivé sur la fiche (il arrive en 1.1). Guide pas à pas : `store/GUIDE_PUBLICATION.md`.
+- Demande envoyée au support Apple pour afficher « Hugo BUSQUET » (sans « Anselme ») comme vendeur.
+
 - **Compte Apple Developer : validé** (payé le 27/09/2026, 98,99 €) avec un nouvel identifiant
   Apple. Utiliser ce même identifiant pour TestFlight et App Store Connect.
 - `mobile/eas.json` est prêt (profil `production`, numéro de build géré par EAS).
