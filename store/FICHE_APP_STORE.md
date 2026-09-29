@@ -153,7 +153,7 @@ A gift every day, the lucky wheel, streak freezes, a daily challenge reminder, s
 Plays offline, no account needed, in 13 languages.
 
 **Keywords (100)**
-emoji,quiz,guess,movie,trivia,puzzle,riddle,word,film,tv,show,brain,logo,country,pop,culture
+movie,trivia,puzzle,riddle,word,film,tv,show,brain,logo,country,pop,culture,charades,rebus,anime
 
 **What's New (4000)**
 The first version of Pop-Corn Alchemy! 400 levels, 16 categories, 3 difficulty levels, a Zen mode, a daily challenge and the lucky wheel. Have fun
