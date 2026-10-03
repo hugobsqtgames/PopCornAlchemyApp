@@ -36,6 +36,10 @@ Clique sur **Enregistrer** (en haut à droite) après chaque page.
   - iPhone 6,9 pouces : `store/screenshots/fr/iphone-6.9/`
     (si la case affichée est « Écran de 6,5 pouces » : `store/screenshots/fr/iphone-6.5/`)
   - iPad 13 pouces : `store/screenshots/fr/ipad-13/`
+- **Aperçu vidéo** (facultatif, dans la même case que les captures iPhone, zone « aperçus d'app ») :
+  glisse `store/apercu/apercu-fr.mp4`. Apple met quelques minutes à la traiter. Clique ensuite sur
+  la vidéo → **Image de l'affiche** pour choisir l'image fixe affichée avant la lecture (conseil :
+  vers 2,5 s, le « BRAVO ! » sur Le Roi Lion). Pour les fiches en anglais : `store/apercu/apercu-en.mp4`.
 - **Texte promotionnel**, **Description**, **Mots-clés** : partie 🇫🇷 de `FICHE_APP_STORE.md`.
 - **URL d'assistance** : `https://hugobsqtgames.github.io/PopCornAlchemyApp/`
 - **Copyright** : `© 2026 Hugo_BSQT`

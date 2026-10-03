@@ -1,0 +1,363 @@
+<!doctype html>
+<!--
+  App Store preview of Pop-Corn Alchemy: the editing table. render.mjs opens this page, calls
+  window.render(t) for every frame (t in seconds) and films it. Every shot shows the real app
+  (frames filmed by capture.mjs); this page only moves the "camera", the cards and the titles.
+  Query: ?work=/tmp/pca-video&lang=fr&device=0 (device=1: inside an iPhone, for social media).
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: R8; src: url(../../../mobile/node_modules/@expo-google-fonts/rubik/800ExtraBold/Rubik_800ExtraBold.ttf); }
+  @font-face { font-family: R5; src: url(../../../mobile/node_modules/@expo-google-fonts/rubik/500Medium/Rubik_500Medium.ttf); }
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 886px; height: 1920px; overflow: hidden; }
+  body { position: relative; font-family: R8, 'WenQuanYi Zen Hei', sans-serif; background: #D93A3A; }
+  #glow { position: absolute; inset: 0; pointer-events: none; }
+  .card { position: absolute; left: 0; top: 0; transform-origin: 50% 50%; will-change: transform; }
+  .screen { position: relative; overflow: hidden; background: #FBF6EC; }
+  .screen img.frame { display: block; position: absolute; left: 0; }
+  .status { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; justify-content: space-between; background: #FBF6EC; color: #1F1B2D; font-family: R8; }
+  .bezel { position: absolute; background: #1F1B2D; }
+  .island { position: absolute; background: #000; border-radius: 999px; }
+  .title { position: absolute; left: 0; right: 0; text-align: center; padding: 0 60px; }
+  .line { display: block; overflow: hidden; padding: 0 0 10px; margin-bottom: -10px; }
+  .line > span { display: inline-block; will-change: transform; }
+  .t1 { font-family: R8, 'WenQuanYi Zen Hei', sans-serif; font-size: 92px; line-height: 1.04; letter-spacing: -1.5px; }
+  .t2 { font-family: R5, 'WenQuanYi Zen Hei', sans-serif; font-size: 46px; line-height: 1.3; margin-top: 14px; }
+  #end { position: absolute; inset: 0; }
+  #endName .t1 { font-size: 80px; }
+  #icon { position: absolute; width: 300px; height: 300px; border-radius: 68px; box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+  .corn { position: absolute; font-size: 64px; line-height: 1; }
+</style>
+</head>
+<body>
+<div id="glow"></div>
+<div id="stage"></div>
+<div id="titles"></div>
+<div id="end">
+  <img id="icon" src="../../../mobile/assets/images/icon.png">
+  <div class="title" id="endName"></div>
+</div>
+<script>
+const Q = new URLSearchParams(location.search);
+const WORK = Q.get('work') || '/tmp/pca-video';
+const LANG = Q.get('lang') || 'fr';
+const DEVICE = Q.get('device') === '1';
+const FPS = 30;
+const W = 886, H = 1920;
+
+// ─── Colours of the app and of the App Store screenshots ───
+const C = { red: '#D93A3A', green: '#1FA463', yellow: '#FFC93C', cream: '#FBF6EC', purple: '#7B6CF6', pink: '#FDE9E6', ink: '#1F1B2D', white: '#FFFFFF', gold: '#FFC93C' };
+
+// ─── Texts on screen (short and punchy) ───
+const TEXT = {
+  fr: { guess: ['Devine-le', 'en emojis.'], combo: ['Enchaîne', 'les combos.'], fever: ['Mode Fever', 'points ×2'], map: ['21 mondes', 'à explorer.'],
+        cats: ['400 niveaux,', '16 catégories.'], dex: ['Collectionne', 'les 3 étoiles.'], daily: ['Un défi', 'chaque jour.'], wheel: ['Et la roue', 'de la chance.'],
+        langs: ['13 langues', 'Hors ligne · Sans compte'], name: 'Pop-Corn Alchemy', tag: 'Devine tout en emojis.' },
+  en: { guess: ['Guess it', 'in emojis.'], combo: ['Chain', 'the combos.'], fever: ['Fever mode', 'points ×2'], map: ['21 worlds', 'to explore.'],
+        cats: ['400 levels,', '16 categories.'], dex: ['Collect', 'all 3 stars.'], daily: ['A new challenge', 'every day.'], wheel: ['And the', 'lucky wheel.'],
+        langs: ['13 languages', 'Offline · No account'], name: 'Pop-Corn Alchemy', tag: 'Guess everything in emojis.' },
+  es: { guess: ['Adivínalo', 'con emojis.'], combo: ['Encadena', 'combos.'], fever: ['Modo Fever', 'puntos ×2'], map: ['21 mundos', 'por explorar.'],
+        cats: ['400 niveles,', '16 categorías.'], dex: ['Consigue', 'las 3 estrellas.'], daily: ['Un reto', 'cada día.'], wheel: ['Y la ruleta', 'de la suerte.'],
+        langs: ['13 idiomas', 'Sin conexión · Sin cuenta'], name: 'Pop-Corn Alchemy', tag: 'Adivina todo con emojis.' },
+}[LANG];
+
+// ─── Easing and keyframes ───
+const E = {
+  lin: (x) => x,
+  io: (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
+  out: (x) => 1 - Math.pow(1 - x, 3),
+  in: (x) => x * x * x,
+  expo: (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x)),
+  back: (x) => { const c1 = 1.25, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+  sine: (x) => -(Math.cos(Math.PI * x) - 1) / 2,
+};
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const mix = (a, b, k) => a + (b - a) * k;
+/** keys: [[time, {values}, easing to reach this key], …] → values at t (missing fields keep the previous value). */
+function kf(t, keys) {
+  let state = { ...keys[0][1] };
+  for (let i = 1; i < keys.length; i++) {
+    const [t0] = keys[i - 1];
+    const [t1, v, ease] = keys[i];
+    const prev = { ...state };
+    const next = { ...prev, ...v };
+    if (t <= t0) return prev;
+    const k = t >= t1 ? 1 : (ease || E.io)((t - t0) / (t1 - t0));
+    for (const f in next) state[f] = typeof next[f] === 'number' ? mix(prev[f] ?? next[f], next[f], k) : next[f];
+    if (t < t1) return state;
+  }
+  return state;
+}
+function hex(c) { const n = parseInt(c.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
+function mixColor(a, b, k) { const x = hex(a), y = hex(b); return `rgb(${x.map((v, i) => Math.round(mix(v, y[i], k))).join(',')})`; }
+/** Colour track: [[time, colour], …], each change blended over `dur` seconds. */
+function colorAt(t, track, dur = 0.45) {
+  let prev = track[0][1];
+  for (let i = 1; i < track.length; i++) {
+    const [ti, ci] = track[i];
+    if (t < ti) break;
+    if (t < ti + dur) return mixColor(prev, ci, E.io((t - ti) / dur));
+    prev = ci;
+  }
+  return prev;
+}
+
+// ─── The card: the real app screen (status bar + filmed frame) ───
+const CW = 640;                       // card width at scale 1
+const K = CW / 440;                    // app point → pixel
+const STATUS = 54 * K;
+const CH = STATUS + 902 * K;           // card height at scale 1
+const RADIUS = 58 * K;
+const BEZEL = 18;
+const HOME = { px: W / 2, py: 1188 };  // where the card centre sits at rest
+
+const statusSVG = `<span style="font-size:${17 * K}px;padding-left:${16 * K}px">9:41</span>
+  <svg height="${12 * K}" viewBox="0 0 70 12" style="margin-right:${22 * K}px"><g fill="#1F1B2D">
+    <rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/>
+    <path d="M31 11.5l-2.4-2.6a3.5 3.5 0 0 1 4.8 0zM26.5 6.7a6.6 6.6 0 0 1 9 0l-1.3 1.4a4.7 4.7 0 0 0-6.4 0zM24.4 4.5a9.7 9.7 0 0 1 13.2 0l-1.3 1.4a7.8 7.8 0 0 0-10.6 0z"/>
+    <rect x="43" y="1" width="23" height="10" rx="3" fill="none" stroke="#1F1B2D" stroke-opacity=".4"/><rect x="45" y="3" width="19" height="6" rx="1.5"/><rect x="67" y="4" width="1.5" height="4" rx=".7" fill-opacity=".4"/>
+  </g></svg>`;
+
+const stage = document.getElementById('stage');
+const pool = [];
+function card(i) {
+  if (pool[i]) return pool[i];
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.style.width = CW + 'px';
+  el.style.height = CH + 'px';
+  el.innerHTML = (DEVICE ? `<div class="bezel" style="left:${-BEZEL}px;top:${-BEZEL}px;width:${CW + 2 * BEZEL}px;height:${CH + 2 * BEZEL}px;border-radius:${RADIUS + BEZEL}px"></div>` : '') +
+    `<div class="screen" style="width:${CW}px;height:${CH}px;border-radius:${RADIUS}px">
+       <div class="status" style="height:${STATUS}px">${statusSVG}</div>
+       <img class="frame" style="top:${STATUS}px;width:${CW}px;height:${902 * K}px">
+       <img class="frame next" style="top:${STATUS}px;width:${CW}px;height:${902 * K}px;opacity:0">
+     </div>` +
+    (DEVICE ? `<div class="island" style="left:${CW / 2 - 62 * K}px;top:${11 * K}px;width:${124 * K}px;height:${36 * K}px"></div>` : '');
+  stage.appendChild(el);
+  pool[i] = { el, img: el.querySelectorAll('img.frame')[0], img2: el.querySelectorAll('img.frame')[1], screen: el.querySelector('.screen') };
+  return pool[i];
+}
+const frameUrl = (clip, f) => `file://${WORK}/${clip.includes('/') ? clip : LANG + '/' + clip}/${String(f).padStart(5, '0')}.jpg`;
+let CLIPS = {};
+
+/** Places card i: camera {s, fx, fy, px, py, rx, ry, rz, o} and its clip frame. */
+const loads = [];
+function show(i, cam, clip, clipTime, blend) {
+  const c = card(i);
+  const s = cam.s ?? 1, fx = cam.fx ?? 0.5, fy = cam.fy ?? 0.5, px = cam.px ?? HOME.px, py = cam.py ?? HOME.py;
+  const cx = px + (0.5 - fx) * CW * s, cy = py + (0.5 - fy) * CH * s;
+  c.el.style.display = 'block';
+  c.el.style.opacity = cam.o ?? 1;
+  c.el.style.zIndex = cam.z ?? i;
+  c.el.style.transform = `translate(${cx - CW / 2}px, ${cy - CH / 2}px) perspective(2600px) rotateX(${cam.rx ?? 0}deg) rotateY(${cam.ry ?? 0}deg) rotateZ(${cam.rz ?? 0}deg) scale(${s})`;
+  const sh = cam.shadow ?? 1;
+  c.screen.style.boxShadow = DEVICE ? 'none' : `0 ${36 * s}px ${90 * s}px rgba(15,10,30,${0.32 * sh})`;
+  if (DEVICE) c.el.querySelector('.bezel').style.boxShadow = `0 ${36 * s}px ${90 * s}px rgba(15,10,30,${0.32 * sh})`;
+  const n = CLIPS[clip]?.frames ?? 1;
+  const f = Math.max(1, Math.min(n, Math.floor(clipTime * FPS) + 1));
+  const url = frameUrl(clip, f);
+  if (c.img.dataset.src !== url) {
+    c.img.dataset.src = url;
+    c.img.src = url;
+    loads.push(c.img.decode().catch(() => {}));
+  }
+  if (blend) {
+    const u2 = frameUrl(blend.clip, Math.max(1, Math.min(CLIPS[blend.clip]?.frames ?? 1, Math.floor(blend.time * FPS) + 1)));
+    if (c.img2.dataset.src !== u2) { c.img2.dataset.src = u2; c.img2.src = u2; loads.push(c.img2.decode().catch(() => {})); }
+    c.img2.style.opacity = blend.k;
+  } else c.img2.style.opacity = 0;
+}
+
+// ─── Titles: each line rises out of a mask, then fades up ───
+const titles = document.getElementById('titles');
+const titleEls = {};
+function title(id, t, t0, t1, lines, color, top = 168) {
+  let el = titleEls[id];
+  if (!el) {
+    el = document.createElement('div');
+    el.className = 'title';
+    el.innerHTML = `<span class="line t1"><span>${lines[0]}</span></span>` + (lines[1] ? `<span class="line ${id === 'langs' ? 't2' : 't1'}"><span>${lines[1]}</span></span>` : '');
+    titles.appendChild(el);
+    titleEls[id] = el;
+  }
+  el.style.top = top + 'px';
+  el.style.color = color;
+  const on = t >= t0 - 0.01 && t <= t1 + 0.4;
+  el.style.display = on ? 'block' : 'none';
+  if (!on) return;
+  const spans = el.querySelectorAll('.line > span');
+  const out = clamp((t - t1) / 0.3);
+  spans.forEach((sp, i) => {
+    const k = E.expo(clamp((t - t0 - i * 0.08) / 0.55));
+    sp.style.transform = `translateY(${(1 - k) * 110}%)`;
+  });
+  el.style.opacity = 1 - E.in(out);
+  el.style.transform = `translateY(${-E.in(out) * 40}px)`;
+}
+
+// ─── The end card: app icon, name, tagline ───
+const endEl = document.getElementById('end');
+const icon = document.getElementById('icon');
+const endName = document.getElementById('endName');
+endName.innerHTML = `<span class="line t1"><span>${TEXT.name}</span></span><span class="line t2"><span>${TEXT.tag}</span></span>`;
+const halo = document.createElement('div');
+halo.style.cssText = 'position:absolute;left:0;top:0;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle, rgba(255,201,60,.38) 0%, rgba(255,201,60,.12) 38%, rgba(255,201,60,0) 68%)';
+endEl.insertBefore(halo, icon);
+function endCard(t, t0) {
+  const on = t >= t0;
+  endEl.style.display = on ? 'block' : 'none';
+  if (!on) return;
+  const k = E.back(clamp((t - t0) / 0.6));
+  const sz = 300 * k;
+  icon.style.width = icon.style.height = sz + 'px';
+  icon.style.borderRadius = 68 * k + 'px';
+  const iy = 640 - 40 * E.out(clamp((t - t0 - 0.5) / 0.6));
+  icon.style.left = W / 2 - sz / 2 + 'px';
+  icon.style.top = iy + 150 - sz / 2 + 'px';
+  icon.style.transform = `rotate(${(1 - E.out(clamp((t - t0) / 0.7))) * -12}deg)`;
+  endName.style.top = 1000 + 'px';
+  endName.style.color = C.white;
+  endName.querySelectorAll('.line > span').forEach((sp, i) => {
+    const kk = E.expo(clamp((t - t0 - 0.45 - i * 0.12) / 0.6));
+    sp.style.transform = `translateY(${(1 - kk) * 110}%)`;
+  });
+  endName.querySelectorAll('.t2')[0].style.opacity = 0.82;
+  const hk = E.out(clamp((t - t0) / 0.9));
+  halo.style.transform = `translate(${W / 2 - 450}px, ${iy + 150 - 450}px) scale(${0.4 + 0.6 * hk + Math.sin((t - t0) * 2) * 0.02})`;
+  halo.style.opacity = hk;
+}
+
+// ─── Background: a soft radial light over the scene colour ───
+const glow = document.getElementById('glow');
+const BG = [[0, C.red], [2.62, C.yellow], [4.78, C.ink], [6.85, C.green], [10.25, C.yellow], [12.5, C.cream], [14.6, C.purple], [20.5, C.pink], [23.6, C.ink]];
+const INK = [[0, C.white], [2.62, C.ink], [4.78, C.gold], [6.85, C.white], [10.25, C.ink], [14.6, C.white], [20.5, C.ink], [23.6, C.white]];
+
+// ─── The storyboard ───
+// Shot timing (seconds of video) → clip time: (t - start) * speed + clipStart.
+const at = (t, start, speed = 1, from = 0) => (t - start) * speed + from;
+// The 13 languages of the app, starting with the one of the video and ending back on it.
+const CYCLE = (() => { const all = ['fr', 'en', 'es', 'de', 'it', 'pt', 'nl', 'pl', 'tr', 'ru', 'ja', 'ko', 'zh']; return [...all.filter((l) => l !== LANG), LANG]; })();
+const DURATION = 28;
+
+function frameAt(t) {
+  pool.forEach((c) => (c.el.style.display = 'none'));
+  document.body.style.background = colorAt(t, BG);
+  glow.style.background = `radial-gradient(120% 60% at 50% 38%, rgba(255,255,255,${0.16}) 0%, rgba(255,255,255,0) 60%)`;
+  const ink = colorAt(t, INK);
+
+  // 1–2. The game: Le Roi Lion, then combos and Fever — one continuous take of the real game.
+  if (t < 7.4) {
+    let cam = kf(t, [
+      [0, { s: 2.42, fx: 0.5, fy: 0.215, px: W / 2, py: 1135, rz: 0 }],
+      [0.62, { s: 2.3 }, E.lin],
+      [1.42, { s: 1.32, fy: 0.42, py: 1165 }, E.io],
+      [1.83, { s: 1.3 }, E.lin],
+      [1.95, { s: 1.37 }, E.out],
+      [2.35, { s: 1.24 }, E.out],
+      [2.95, { s: 1.0, fy: 0.5, py: HOME.py }, E.io],
+      [4.75, { s: 1.04 }, E.lin],
+      [5.25, { s: 1.6, fy: 0.17, py: 1010 }, E.io],
+      [6.2, { s: 1.66 }, E.lin],
+      [6.85, { s: 1.12, fy: 0.5, py: HOME.py }, E.io],
+      [7.35, { px: -520, ry: 28, s: 0.86 }, E.in],
+    ]);
+    show(0, cam, 'play', at(t, 0));
+  }
+  // 3. The adventure map, flying over the first worlds up to Popi.
+  if (t >= 6.85 && t < 10.45) {
+    const cam = kf(t, [
+      [6.85, { s: 0.86, px: W + 520, ry: -28, fx: 0.5, fy: 0.5, py: HOME.py, o: 1 }],
+      [7.4, { s: 1.0, px: W / 2, ry: 0 }, E.out],
+      [9.95, { s: 1.07, o: 1 }, E.lin],
+      [10.25, { s: 1.5, fx: 0.32, fy: 0.42, py: 1050 }, E.in],
+      [10.42, { s: 2.3, o: 0 }, E.lin],
+    ]);
+    show(1, cam, 'map', at(t, 6.95, 1.1, 0));
+  }
+  // 4. 400 levels, 16 categories.
+  if (t >= 10.36 && t < 12.95) {
+    const cam = kf(t, [
+      [10.36, { s: 1.16, o: 0, py: HOME.py }],
+      [10.72, { s: 1.0, o: 1 }, E.out],
+      [12.5, { s: 1.04 }, E.lin],
+      [12.92, { py: HOME.py - CH - 120 }, E.io],
+    ]);
+    show(2, cam, 'categories', at(t, 10.35, 1.05));
+  }
+  // 5. The Pop-Cornédex and its stars.
+  if (t >= 12.5 && t < 15.0) {
+    const cam = kf(t, [
+      [12.5, { py: HOME.py + CH * 1.04 + 120, s: 1.04, fx: 0.5, fy: 0.5 }],
+      [12.92, { py: HOME.py, s: 1.0 }, E.io],
+      [14.4, { s: 1.12, fx: 0.62, fy: 0.42 }, E.io],
+      [14.95, { s: 0.7, px: -360, rz: -8, o: 0.0 }, E.in],
+    ]);
+    show(3, cam, 'dex', at(t, 12.5));
+  }
+  // 6. Daily challenge.
+  if (t >= 14.6 && t < 16.4) {
+    const cam = kf(t, [
+      [14.6, { s: 0.7, px: W + 360, rz: 8, o: 0, fx: 0.5, fy: 0.5, py: HOME.py }],
+      [15.05, { s: 1.0, px: W / 2, rz: 0, o: 1 }, E.out],
+      [15.55, { s: 1.32, fy: 0.27, py: 1080 }, E.io],
+      [16.1, { s: 1.36 }, E.lin],
+      [16.35, { ry: 90, s: 1.2 }, E.in],
+    ]);
+    show(4, cam, 'daily', at(t, 14.6));
+  }
+  // 7. The lucky wheel spins (sped up a little), then the prize.
+  if (t >= 16.35 && t < 20.75) {
+    const cam = kf(t, [
+      [16.35, { ry: -90, s: 1.2, fx: 0.5, fy: 0.47, py: 1230 }],
+      [16.6, { ry: 0, s: 1.24 }, E.out],
+      [19.55, { s: 1.3 }, E.lin],
+      [20.0, { s: 1.0, fy: 0.5, py: HOME.py }, E.io],
+    ]);
+    const blend = t > 20.4 ? { clip: LANG + '/still', time: 0.75, k: E.io(clamp((t - 20.4) / 0.3)) } : null;
+    show(5, cam, 'wheel', at(t, 16.35, 1.33, 0.25), blend);
+  }
+  // 8. Thirteen languages: the same level, its name changing language under the camera.
+  if (t >= 20.75 && t < 24.1) {
+    const cam = kf(t, [
+      [20.75, { s: 1.0, fx: 0.5, fy: 0.5, px: W / 2, py: HOME.py, o: 1 }],
+      [21.25, { s: 1.5, fy: 0.21, py: 1010 }, E.io],
+      [23.25, { s: 1.58 }, E.lin],
+      [23.55, { s: 1.0, fy: 0.5, py: HOME.py }, E.io],
+      [24.05, { s: 0.34, o: 0, py: 800 }, E.in],
+    ]);
+    const step = 2.0 / CYCLE.length;
+    const i = Math.floor((t - 21.25) / step);
+    // Clean cuts from one language to the next (a cross-fade would double the text).
+    const clip = i >= 0 && i < CYCLE.length ? CYCLE[i] + '/still' : LANG + '/still';
+    show(6, cam, clip, 0.75);
+  }
+  // 9. The end card.
+  endCard(t, 24.05);
+
+  // Titles.
+  const T = TEXT;
+  title('guess', t, 0.03, 2.45, T.guess, ink);
+  title('combo', t, 2.78, 4.62, T.combo, ink);
+  title('fever', t, 4.92, 6.7, T.fever, ink);
+  title('map', t, 7.25, 10.05, T.map, ink);
+  title('cats', t, 10.6, 12.35, T.cats, ink);
+  title('dex', t, 12.85, 14.45, T.dex, ink);
+  title('daily', t, 15.0, 16.15, T.daily, ink);
+  title('wheel', t, 16.55, 20.35, T.wheel, ink);
+  title('langs', t, 20.95, 23.45, T.langs, ink);
+}
+
+window.setup = (clips) => { CLIPS = clips; };
+window.DURATION = DURATION;
+window.render = async (t) => {
+  loads.length = 0;
+  frameAt(t);
+  await Promise.all(loads);
+  await document.fonts.ready;
+};
+</script>
+</body>
+</html>
