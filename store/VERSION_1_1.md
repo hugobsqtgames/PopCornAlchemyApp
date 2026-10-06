@@ -77,6 +77,16 @@ Toujours active dans la 1.1, rien à régler pour le joueur (Réglages → « �
 
    Pour chacun : un nom et une description en FR/EN/ES, et une capture d'écran de la boutique
    (Apple la demande pour vérifier).
+
+   Textes à copier (nom 30 caractères max, description 45 max) :
+
+   | Produit | Nom FR / EN / ES | Description FR / EN / ES |
+   |---|---|---|
+   | coins_500 | Cornet de 500 pièces / 500-coin cone / Cucurucho de 500 monedas | 500 pièces pour la boutique / 500 coins for the shop / 500 monedas para la tienda |
+   | coins_1200 | Barquette de 1 200 pièces / 1,200-coin tray / Bandeja de 1200 monedas | 1 200 pièces (+20 %) / 1,200 coins (+20%) / 1200 monedas (+20 %) |
+   | coins_3500 | Seau de 3 500 pièces / 3,500-coin bucket / Cubo de 3500 monedas | 3 500 pièces (+40 %) / 3,500 coins (+40%) / 3500 monedas (+40 %) |
+   | coins_8000 | Méga seau de 8 000 pièces / 8,000-coin mega bucket / Megacubo de 8000 monedas | 8 000 pièces (+60 %) / 8,000 coins (+60%) / 8000 monedas (+60 %) |
+   | no_ads | Pack sans pub / No ads pack / Pack sin anuncios | Bonus sans vidéo + 1 000 pièces / Bonuses without videos + 1,000 coins / Bonus sin vídeos + 1000 monedas |
 4. **Utilisateurs et accès → Sandbox** → créer un compte de test pour acheter sans payer.
 
 ### Google AdMob (apps.admob.com, gratuit)

@@ -291,7 +291,7 @@ await step('shop', async () => {
   check((await profile()).avatar === '😎', 'avatar bought');
   await shot('avatars');
 
-  check((await page.getByRole('tab', { name: 'Pièces' }).count()) === 0, 'no real-money coins tab while purchases are not wired');
+  check((await page.getByRole('tab', { name: 'Pièces' }).count()) > 0, 'the coins tab (in-app purchases) is there in 1.1');
   check(!(await see('0,99 €', false)), 'no price in euros anywhere in the shop');
   await tab('Jouer');
 });
@@ -572,7 +572,7 @@ await step('wheel', async () => {
   check(s.includes('spin') && ticks >= 20, `wheel plays spin + ticks (${ticks} ticks)`);
   check(await see('Tu gagnes', false) || (await see('Cadeau surprise !', false)), 'wheel shows the prize');
   await shot('roue');
-  check(!(await see('Tour bonus avec une pub')), 'no ad bonus spin while ads are not wired');
+  check(await see('Tour bonus avec une pub', false), 'after the free spin, a bonus spin with an ad is offered (1.1)');
   check(!(await see('Lancer la roue')), 'one free spin a day');
   await back();
 });
@@ -750,7 +750,7 @@ await step('settings', async () => {
   await tap('Règles du jeu');
   check(await see('COMMENT JOUER'), 'rules page');
   await tap('Passer');
-  check(!(await see('Restaurer mes achats')) && !(await see('Supprimer les pubs', false)), 'no purchase rows in settings');
+  check((await page.getByText('Restaurer mes achats').count()) > 0, 'settings offer to restore purchases (1.1)');
   // Reduce motion
   await toggle('Réduire les animations');
   check((await profile()).reduceMotion === true, 'reduce motion switch');
