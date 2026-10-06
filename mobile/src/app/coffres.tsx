@@ -374,14 +374,15 @@ function RewardCard({ reward: r }: { reward: ChestReward }) {
   const special = r.kind === 'theme' || r.kind === 'style' || r.kind === 'avatar';
   let icon = '💰';
   let label = '';
-  let swatch: string | null = null;
+  let swatch: { bg: string; action: string } | null = null;
   if (r.kind === 'coins') label = t('prize_coins', { n: r.amount });
   else if (r.kind === 'item') {
     icon = ITEM_ICON[r.item];
     label = r.item === 'hints' ? t('prize_hints', { n: r.amount }) : `${r.amount} × ${t(ITEM_NAME[r.item])}`;
   } else if (r.kind === 'theme') {
     icon = '🎨';
-    swatch = paletteFor(r.id, false).action;
+    const pal = paletteFor(r.id, false);
+    swatch = { bg: pal.bg, action: pal.action };
     label = t('reward_theme', { name: t(`theme_${r.id}` as StringKey) });
   } else if (r.kind === 'style') {
     icon = r.id;
@@ -421,16 +422,10 @@ function RewardCard({ reward: r }: { reward: ChestReward }) {
         </View>
       )}
       {swatch ? (
-        <View
-          style={{
-            width: 30,
-            height: 30,
-            borderRadius: 15,
-            backgroundColor: swatch,
-            borderWidth: 3,
-            borderColor: '#FFFFFF',
-          }}
-        />
+        // A small preview of the theme: its background with its main colour inside.
+        <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: swatch.bg, borderWidth: 2, borderColor: INK, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: swatch.action }} />
+        </View>
       ) : (
         <Emoji size={24}>{icon}</Emoji>
       )}
