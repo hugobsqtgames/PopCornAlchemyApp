@@ -22,13 +22,13 @@ export const MAX_STREAK_SAVES = 2;
 
 /** One gift per day the app is opened; the 7th is the big one, then it starts again. */
 export const LOGIN_REWARDS: GiftReward[] = [
-  { coins: 25 },
+  { coins: 15 },
   { hints: 1 },
-  { coins: 50 },
+  { coins: 25 },
   { shields: 1 },
-  { coins: 75 },
+  { coins: 35 },
   { hints: 2 },
-  { coins: 200, streakSaves: 1 },
+  { chest: 'wood', streakSaves: 1 },
 ];
 
 export function canClaimLogin(lastClaim: string | null, today: string): boolean {

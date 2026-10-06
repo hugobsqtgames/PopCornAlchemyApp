@@ -126,6 +126,7 @@ export function ObjectiveCard({ run, big, wide }: { run: Run; big?: boolean; wid
   const t = useT();
   const name = useLevelName();
   const { width, tablet } = useLayout();
+  const doubleLeft = useProfile((s) => s.doubleLevels);
   if (!run.level) return null;
   const cat = CATEGORIES.find((c) => c.id === run.level?.cat);
   const lifeCount = run.config.mode === 'hardcore' ? 1 : 4;
@@ -160,7 +161,7 @@ export function ObjectiveCard({ run, big, wide }: { run: Run; big?: boolean; wid
           {run.doubleOn && (
             <View style={{ paddingHorizontal: 10, paddingVertical: 3, borderRadius: 999, backgroundColor: p.ink }}>
               <Txt size={11} weight="heavy" color={p.bg}>
-                ✨ 💰×2
+                ✨ 💰×2 · {doubleLeft}
               </Txt>
             </View>
           )}

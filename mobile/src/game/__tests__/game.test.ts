@@ -130,10 +130,11 @@ describe('score and coins', () => {
     expect(later).toBe(250);
   });
 
-  it('gives 5 to 15 coins per level, doubled in hardcore and with a doubler', () => {
-    expect(coinsFor({ timeLeft: 0, combo: 0, mode: 'classic', double: false })).toBe(5);
-    expect(coinsFor({ timeLeft: 1, combo: 9, mode: 'classic', double: false })).toBe(15);
-    expect(coinsFor({ timeLeft: 1, combo: 9, mode: 'hardcore', double: true })).toBe(60);
+  it('gives 2 to 7 coins per level, doubled in hardcore and with a doubler', () => {
+    expect(coinsFor({ timeLeft: 0, combo: 0, mode: 'classic', double: false })).toBe(2);
+    expect(coinsFor({ timeLeft: 0.5, combo: 3, mode: 'classic', double: false })).toBe(5);
+    expect(coinsFor({ timeLeft: 1, combo: 9, mode: 'classic', double: false })).toBe(7);
+    expect(coinsFor({ timeLeft: 1, combo: 9, mode: 'hardcore', double: true })).toBe(28);
   });
 });
 
@@ -293,9 +294,10 @@ describe('statistics', () => {
     expect(Object.keys(a).length).toBe(120);
   });
 
-  it('has 7 login gifts, the last one the biggest', () => {
+  it('has 7 login gifts, the last one a chest', () => {
     expect(LOGIN_REWARDS).toHaveLength(7);
-    expect(LOGIN_REWARDS[6].coins).toBeGreaterThan(Math.max(...LOGIN_REWARDS.slice(0, 6).map((r) => r.coins ?? 0)));
+    expect(LOGIN_REWARDS[6].chest).toBe('wood');
+    expect(LOGIN_REWARDS.slice(0, 6).every((r) => !r.chest)).toBe(true);
   });
 });
 

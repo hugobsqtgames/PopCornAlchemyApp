@@ -1,4 +1,11 @@
-# Version 1.1 : pubs, achats intégrés et sauvegarde iCloud
+# Version 1.2 (prévue d'abord pour la 1.1) : pubs, achats intégrés et sauvegarde iCloud
+
+> **Changement de numéro** : la mise à jour **1.1** est devenue « coffres 3D + nouvelle économie »
+> (voir `docs/SUIVI_PROJET.md`). Ce qui suit (pubs, achats, iCloud) passe donc en **1.2**.
+> Attention : quand les pièces pourront s'acheter avec de l'argent réel, les coffres doivent
+> rester **impossibles à acheter** (ni en pièces, ni en argent). Sinon Apple les considère comme
+> des « loot boxes » : il faudrait afficher les probabilités et répondre « oui » à la question
+> loot boxes de la classification par âge.
 
 Le code est prêt mais **éteint** : `MONEY_READY = false` dans `mobile/src/services/store-services.ts`.
 Tant qu'il est éteint, aucun bouton payant ni aucune pub n'apparaît.

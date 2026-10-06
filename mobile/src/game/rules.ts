@@ -22,21 +22,28 @@ export const PRICES = {
   hints5: 100,
   shield: 150,
   skip: 200,
-  double: 250,
+  /** Coins ×2 for the next DOUBLE_LEVELS levels found. */
+  double: 100,
   /** A streak freeze for the daily challenge (at most 2 held). */
   streakSave: 250,
-  avatar: 200,
+  avatar: 400,
   continue: 150,
   /** Taking 5 wrong emojis off the grid, paid in coins during a level. */
   removeDecoys: 15,
 } as const;
 
+/** How many levels one coin doubler lasts. */
+export const DOUBLE_LEVELS = 25;
+
+/**
+ * Coins are kept scarce (version 1.1): a level gives 2 to 7, the big rewards come in chests
+ * (see chests.ts): one per tier of 20 levels (gold every 5 tiers), legendary at the end of an
+ * adventure, gold for 7 days of daily challenge, wood on the 7th day of the gift calendar.
+ */
 export const REWARDS = {
-  tier: { coins: 50, hints: 3 },
-  daily: { coins: 50, hints: 2 },
-  classicVictory: 500,
-  categoryVictory: 100,
-  ad: 25,
+  tier: { hints: 2 },
+  daily: { coins: 30, hints: 2 },
+  ad: 15,
   adsPerDay: 5,
 } as const;
 
@@ -231,7 +238,8 @@ export function pointsFor({ index, timeLeft, combo, styleBonus }: ScoreInput): n
 }
 
 export function coinsFor(opts: { timeLeft: number; combo: number; mode: Mode; double: boolean }): number {
-  const base = 5 + Math.round(5 * clamp01(opts.timeLeft)) + Math.min(opts.combo, 5);
+  // 2 coins, up to 3 more for speed, +1 from a combo of 3 and +2 in Fever.
+  const base = 2 + Math.round(3 * clamp01(opts.timeLeft)) + (opts.combo >= 5 ? 2 : opts.combo >= 3 ? 1 : 0);
   return base * (opts.mode === 'hardcore' ? 2 : 1) * (opts.double ? 2 : 1);
 }
 

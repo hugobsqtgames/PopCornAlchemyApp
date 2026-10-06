@@ -1,6 +1,7 @@
 import { Redirect, router } from 'expo-router';
-import { ScrollView, View } from 'react-native';
+import { Image, ScrollView, View } from 'react-native';
 
+import { CHEST_IMAGES } from '@/components/chest/fallback';
 import { ChevronIcon, GearIcon, PlayIcon } from '@/components/icons';
 import { LoginGift } from '@/components/login-gift';
 import { Popi } from '@/components/mascot';
@@ -112,6 +113,31 @@ export default function Home() {
     </Tap>
   );
 
+  // Chests waiting to be opened: the best one shows, with how many there are.
+  const chestCount = s.chests.wood + s.chests.gold + s.chests.legend;
+  const bestChest = s.chests.legend > 0 ? 'legend' : s.chests.gold > 0 ? 'gold' : 'wood';
+  const chestsRow = (
+    <Tap onPress={() => router.push('/coffres')} label={`${t('chests')}, ${chestCount}`} style={{ height: big || wide ? 76 : 64, paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+      <Image source={CHEST_IMAGES[bestChest]} style={{ width: 52, height: 52, opacity: chestCount > 0 ? 1 : 0.55 }} resizeMode="contain" />
+      <View style={{ flex: 1, gap: 2 }}>
+        <Txt size={16} weight="heavy">
+          {t('chests')}
+        </Txt>
+        <Txt size={12} weight="semibold" color={chestCount > 0 ? p.action : p.muted}>
+          {chestCount > 0 ? t('chests_sub', { n: chestCount }) : t('chests_none_home')}
+        </Txt>
+      </View>
+      {chestCount > 0 && (
+        <View style={{ minWidth: 26, height: 26, paddingHorizontal: 7, borderRadius: 13, backgroundColor: p.action, alignItems: 'center', justifyContent: 'center' }}>
+          <Txt size={13} weight="heavy" color="#FFFFFF">
+            {chestCount}
+          </Txt>
+        </View>
+      )}
+      <ChevronIcon color={p.muted} />
+    </Tap>
+  );
+
   const wheelReady = s.wheelLast !== today;
   const quick = [
     { icon: '🎮', label: t('modes'), tint: p.blueTint, go: () => router.push('/modes') },
@@ -149,6 +175,7 @@ export default function Home() {
           </View>
           <View style={{ flex: 1, gap: 16 }}>
             {daily}
+            {chestsRow}
             {grid}
           </View>
         </View>
@@ -169,6 +196,7 @@ export default function Home() {
       <View style={{ paddingHorizontal: 16, gap: 10 }}>
         {play}
         {daily}
+        {chestsRow}
         {grid}
       </View>
     </ScrollView>

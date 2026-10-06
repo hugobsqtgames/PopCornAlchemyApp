@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, AppState, Easing } from 'react-native';
 
 import { styleBonus } from '@/game/catalog';
+import { tierChest, type ChestKind } from '@/game/chests';
 import {
   bonusTimeMs,
   buildGrid,
@@ -47,7 +48,8 @@ export interface RunResult {
   newRecord: boolean;
   /** Daily: whether today's reward was given. Challenge: whether the target was beaten. */
   rewarded: boolean;
-  chest: boolean;
+  /** The chest won with this result (end of an adventure or a category, 7 days of daily). */
+  chest: ChestKind | null;
   coins: number;
   /** Daily: streak protections used to keep the streak. */
   saved: number;
@@ -72,7 +74,8 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
   const [picked, setPicked] = useState<number[]>([]);
   const [hinted, setHinted] = useState<number | null>(null);
   const [hintUsed, setHintUsed] = useState(false);
-  const [doubleOn, setDoubleOn] = useState(false);
+  // Coins ×2 lasts a number of levels, kept in the profile (it survives quitting the run).
+  const doubleOn = useProfile((s) => s.doubleLevels > 0);
   const [chronoLeft, setChronoLeft] = useState(CHRONO_SECONDS);
   const [last, setLast] = useState<{ points: number; coins: number; seconds: number; stars: StarCount | null; first: boolean }>({
     points: 0,
@@ -242,19 +245,19 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       const newRecord = mode !== 'tutorial' && mode !== 'replay' && s.setBest(mode, finalScore);
       submitScore(mode, finalScore);
       let rewarded = false;
-      let chest = false;
+      let chest: ChestKind | null = null;
       let saved = 0;
       let coins = 0;
       if (won) {
         if (config.adventure && config.difficulty) s.reachAdventure(config.difficulty, config.ids.length);
         if (mode === 'classic') {
-          coins = REWARDS.classicVictory;
+          chest = 'legend';
           s.bumpStats({ victories: 1 });
-        } else if (mode === 'category') coins = REWARDS.categoryVictory;
+        } else if (mode === 'category') chest = 'wood';
         else if (mode === 'daily') {
           const r = s.finishDaily();
           rewarded = r.rewarded;
-          chest = r.chest;
+          chest = r.chest ? 'gold' : null;
           saved = r.saved;
           // Tonight's reminder is no longer needed. After the first daily, offer the reminder.
           if (s.reminderAsked) scheduleReminders();
@@ -263,6 +266,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
           rewarded = finalScore > (config.target ?? 0);
         }
         if (coins) s.addCoins(coins);
+        if (chest && mode !== 'daily') s.addChest(chest);
       }
       const recent = clearedNow.slice(-CHALLENGE_LENGTH);
       s.set({
@@ -310,7 +314,7 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       }
       if (hasTiers(config.mode) && (index + 1) % TIER_SIZE === 0) {
         const s = profile.getState();
-        s.addCoins(REWARDS.tier.coins);
+        s.addChest(tierChest((index + 1) / TIER_SIZE));
         s.addItem('hints', REWARDS.tier.hints);
         if (config.mode === 'classic') s.bumpStats({ bestTier: tierOf(index + 1) + 1 }, 'max');
         if (config.adventure && config.difficulty) s.reachAdventure(config.difficulty, index + 1);
@@ -360,12 +364,13 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     if (isCorrect(picked.map((i) => grid[i]), level.sol)) {
       const nextCombo = combo + 1;
       const points = pointsFor({ index, timeLeft, combo: nextCombo, styleBonus: styleBonus(s.style) });
-      const coins = practice ? 0 : coinsFor({ timeLeft, combo: nextCombo, mode: config.mode, double: doubleOn });
+      const coins = practice ? 0 : coinsFor({ timeLeft, combo: nextCombo, mode: config.mode, double: s.doubleLevels > 0 });
       const stars = starsFor({ clueUsed: hintUsed || removed.length > 0, mistakes: tierStats.mistakesThisLevel, timeLeft });
       const first = config.mode !== 'tutorial' && s.recordSolve(level.id, stars);
       const nextScore = score + points;
       const clearedNow = [...cleared, { id: level.id, points }];
       if (coins) s.addCoins(coins);
+      if (coins && s.doubleLevels > 0) s.set({ doubleLevels: s.doubleLevels - 1 });
       if (!practice) {
         const recent = clearedNow.slice(-CHALLENGE_LENGTH);
         s.set({ lastRun: { ids: recent.map((c) => c.id), score: recent.reduce((sum, c) => sum + c.points, 0) } });
@@ -376,7 +381,6 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       setCombo(nextCombo);
       setScore(nextScore);
       setCleared(clearedNow);
-      setDoubleOn(false);
       setTierStats((t) => ({
         bestCombo: Math.max(t.bestCombo, nextCombo),
         flawless: t.flawless + (t.mistakesThisLevel === 0 ? 1 : 0),
@@ -537,9 +541,8 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
     // No coins when replaying: a coin doubler would be wasted.
     if (phase !== 'play' || paused || busy.current || doubleOn || practice) return;
     const s = profile.getState();
-    if (!s.useItem('doubles')) return;
+    if (!s.startDouble()) return;
     s.bumpStats({ doublesUsed: 1 });
-    setDoubleOn(true);
     play('powerup');
     flash('double_on');
   };

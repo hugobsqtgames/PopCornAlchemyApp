@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Share, View } from 'react-native';
+import { Image, Share, View } from 'react-native';
 
+import { tierChest, type ChestKind } from '@/game/chests';
 import { PRICES, REWARDS } from '@/game/rules';
 import { WORLDS } from '@/game/worlds';
 import type { Run } from '@/hooks/use-run';
@@ -13,7 +14,8 @@ import { langOf } from '@/i18n/device';
 import { worldName } from '@/i18n/names';
 
 import { AdIcon, ShareIcon } from '../icons';
-import { Btn, Card, Emoji, Px, Screen, Txt } from '../ui';
+import { CHEST_IMAGES } from '../chest/fallback';
+import { Btn, Card, Emoji, Px, Screen, Tap, Txt } from '../ui';
 
 import { Confetti } from '../confetti';
 import { Popi } from '../mascot';
@@ -41,6 +43,22 @@ function Bottom({ children }: { children: React.ReactNode }) {
   return <View style={{ paddingHorizontal: 16, paddingBottom: insets.bottom + 16, gap: 12 }}>{children}</View>;
 }
 
+const CHEST_NAME: Record<ChestKind, StringKey> = { wood: 'chest_wood', gold: 'chest_gold', legend: 'chest_legend' };
+
+/** The chest won at the end of a tier: its picture and its name. */
+function ChestTile({ kind }: { kind: ChestKind }) {
+  const p = usePalette();
+  const t = useT();
+  return (
+    <View style={{ flex: 1.4, height: 76, borderRadius: 18, backgroundColor: p.goldTint, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 6, paddingHorizontal: 6 }}>
+      <Image source={CHEST_IMAGES[kind]} style={{ width: 52, height: 52 }} resizeMode="contain" />
+      <Txt size={13} weight="heavy" lines={2} style={{ flexShrink: 1 }}>
+        {t(CHEST_NAME[kind])}
+      </Txt>
+    </View>
+  );
+}
+
 export function TierView({ run }: { run: Run }) {
   const p = usePalette();
   const t = useT();
@@ -66,8 +84,8 @@ export function TierView({ run }: { run: Run }) {
         </Txt>
       </View>
       <View style={{ flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingTop: 22 }}>
+        <ChestTile kind={tierChest(tier)} />
         {[
-          ['💰', `+${REWARDS.tier.coins}`, p.goldTint],
           ['💡', `+${REWARDS.tier.hints}`, p.blueTint],
           ['❤️', `${run.lives}/${run.lives}`, p.actionTint],
         ].map(([icon, text, tint]) => (
@@ -106,6 +124,7 @@ export function TierView({ run }: { run: Run }) {
       <View style={{ flex: 1 }} />
       <Bottom>
         <Btn label={t('next_tier')} onPress={run.nextTier} />
+        <Btn variant="gold" label={t('chest_open')} size={14} height={50} onPress={() => router.push({ pathname: '/coffres', params: { open: tierChest(tier) } })} />
         <Btn variant="soft" label={t('share')} size={14} height={50} icon={<ShareIcon color={p.ink} />} onPress={() => shareScore(run, t)} />
       </Bottom>
     </Screen>
@@ -287,7 +306,6 @@ export function WinView({ run, onReplay }: { run: Run; onReplay: () => void }) {
   const rewards: string[] = [];
   if (r?.coins) rewards.push(`+${r.coins} 💰`);
   if (mode === 'daily' && r?.rewarded) rewards.push(`+${REWARDS.daily.coins} 💰`, `+${REWARDS.daily.hints} 💡`);
-  if (r?.chest) rewards.push(t('chest'));
   if (r?.saved) rewards.push(t('streak_saved'));
 
   const party = mode !== 'challenge' || !!r?.rewarded;
@@ -316,6 +334,26 @@ export function WinView({ run, onReplay }: { run: Run; onReplay: () => void }) {
           {sub}
         </Txt>
       </View>
+      {r?.chest && (
+        <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
+          <Tap onPress={() => router.push({ pathname: '/coffres', params: { open: r.chest ?? 'wood' } })} tint={p.goldTint} label={t('chest_open')} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 10 }}>
+            <Image source={CHEST_IMAGES[r.chest]} style={{ width: 64, height: 64 }} resizeMode="contain" />
+            <View style={{ flex: 1, gap: 2 }}>
+              <Txt size={12} weight="heavy" color={p.muted} style={{ letterSpacing: 0.8 }}>
+                {t('chest_won').toUpperCase()}
+              </Txt>
+              <Txt size={17} weight="heavy">
+                {t(CHEST_NAME[r.chest])}
+              </Txt>
+            </View>
+            <View style={{ height: 34, paddingHorizontal: 12, borderRadius: 12, backgroundColor: p.gold, justifyContent: 'center' }}>
+              <Txt size={13} weight="heavy" color="#1F1B2D">
+                {t('chest_open')}
+              </Txt>
+            </View>
+          </Tap>
+        </View>
+      )}
       <View style={{ paddingHorizontal: 16, paddingTop: 20 }}>
         <Card style={{ padding: 16, alignItems: 'center', gap: 10 }}>
           <Txt size={12} weight="bold" color={p.muted} style={{ letterSpacing: 1.2 }}>

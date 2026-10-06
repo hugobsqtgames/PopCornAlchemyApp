@@ -57,7 +57,7 @@ await step('free coins ad', async () => {
   await start({ ...base, coins: 0 });
   await tab('Boutique');
   await wait(500);
-  await page.getByText('+25 pièces gratuites', { exact: true }).click();
+  await page.getByText('+15 pièces gratuites', { exact: true }).click();
   await wait(500);
   check(await see('Publicité'), 'the placeholder ad opens');
   await page.screenshot({ path: out + 'pub.png' });
@@ -65,7 +65,7 @@ await step('free coins ad', async () => {
   await page.getByText('Récompense obtenue !', { exact: true }).click();
   await wait(500);
   const pr = await profile();
-  check(pr.coins === 25 && pr.adsCount === 1, `watching gives 25 coins (${pr.coins})`);
+  check(pr.coins === 15 && pr.adsCount === 1, `watching gives 15 coins (${pr.coins})`);
 });
 
 await step('no-ads pack skips the ad', async () => {
@@ -73,10 +73,10 @@ await step('no-ads pack skips the ad', async () => {
   await tab('Boutique');
   await wait(500);
   check(await see('Pubs supprimées ✓'), 'shop shows the no-ads pack as owned');
-  await page.getByText('+25 pièces gratuites', { exact: true }).click();
+  await page.getByText('+15 pièces gratuites', { exact: true }).click();
   await wait(600);
   check(!(await see('Publicité')), 'no ad with the no-ads pack');
-  check((await profile()).coins === 25, 'but the reward is given');
+  check((await profile()).coins === 15, 'but the reward is given');
 });
 
 await step('continue after game over with an ad', async () => {

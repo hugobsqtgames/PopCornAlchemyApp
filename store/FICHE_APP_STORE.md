@@ -786,3 +786,23 @@ Pop-Corn Alchemy 是一款让大脑像爆米花一样蹦跳的表情猜谜游戏
 Pop-Corn Alchemy 首个版本！400个关卡、16个类别、3种难度、21个世界的冒险地图、禅模式、每日挑战和幸运转盘。祝你玩得开心
 
 ---
+
+---
+
+## Nouveautés de la version 1.1 (champ « Nouveautés », à coller pour chaque langue)
+
+| Langue | Texte |
+|---|---|
+| Français | Nouveau : les coffres ! Gagne des coffres en bois, en or et légendaires en jouant, et ouvre-les en 3D. Pièces, indices, bonus et même des thèmes inédits t'attendent dedans. L'économie du jeu a aussi été revue : chaque pièce compte ! |
+| English | New: chests! Win wooden, golden and legendary chests as you play, and open them in 3D. Coins, hints, bonuses and even new themes are waiting inside. The game's economy has been rebalanced too: every coin counts! |
+| Español | ¡Novedad: los cofres! Gana cofres de madera, de oro y legendarios jugando, y ábrelos en 3D. Dentro te esperan monedas, pistas, bonus e incluso temas nuevos. También hemos reequilibrado la economía del juego: ¡cada moneda cuenta! |
+| Deutsch | Neu: Truhen! Gewinne beim Spielen Holz-, Gold- und legendäre Truhen und öffne sie in 3D. Darin warten Münzen, Tipps, Boni und sogar neue Designs. Auch die Spielwirtschaft wurde überarbeitet: Jede Münze zählt! |
+| Italiano | Novità: i forzieri! Vinci forzieri di legno, d'oro e leggendari giocando e aprili in 3D. Dentro ti aspettano monete, indizi, bonus e perfino nuovi temi. Abbiamo anche ribilanciato l'economia del gioco: ogni moneta conta! |
+| Português (Brasil) | Novidade: os baús! Ganhe baús de madeira, de ouro e lendários jogando e abra-os em 3D. Moedas, dicas, bônus e até temas novos esperam por você. A economia do jogo também foi ajustada: cada moeda conta! |
+| Nederlands | Nieuw: kisten! Win houten, gouden en legendarische kisten tijdens het spelen en open ze in 3D. Er wachten munten, hints, bonussen en zelfs nieuwe thema's op je. Ook de economie van het spel is herzien: elke munt telt! |
+| Polski | Nowość: skrzynie! Zdobywaj drewniane, złote i legendarne skrzynie, grając, i otwieraj je w 3D. W środku czekają monety, podpowiedzi, bonusy, a nawet nowe motywy. Przebudowaliśmy też ekonomię gry: każda moneta się liczy! |
+| Türkçe | Yeni: sandıklar! Oynarken ahşap, altın ve efsanevi sandıklar kazan ve onları 3D olarak aç. İçlerinde altınlar, ipuçları, bonuslar ve hatta yeni temalar seni bekliyor. Oyunun ekonomisi de yeniden dengelendi: her altın değerli! |
+| Русский | Новое: сундуки! Выигрывай деревянные, золотые и легендарные сундуки в игре и открывай их в 3D. Внутри тебя ждут монеты, подсказки, бонусы и даже новые темы. Экономика игры тоже обновлена: каждая монета на счету! |
+| 日本語 | 新登場：宝箱！プレイして木・金・伝説の宝箱を手に入れ、3Dで開けよう。中にはコイン、ヒント、ボーナス、さらに新しいテーマも。ゲーム内の経済も見直しました。1枚のコインが大切に！ |
+| 한국어 | 새로운 기능: 상자! 플레이하며 나무, 황금, 전설의 상자를 얻고 3D로 열어 보세요. 코인, 힌트, 보너스는 물론 새 테마까지 들어 있어요. 게임 경제도 새롭게 조정했어요. 코인 하나하나가 소중해요! |
+| 简体中文 | 新内容：宝箱！在游戏中赢取木宝箱、金宝箱和传说宝箱，并以3D方式打开。里面有金币、提示、奖励，甚至还有新主题。游戏经济也重新平衡了：每一枚金币都很珍贵！ |

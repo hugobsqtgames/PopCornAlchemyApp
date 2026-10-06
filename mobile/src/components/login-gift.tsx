@@ -1,6 +1,6 @@
 import { useIsFocused } from 'expo-router';
 import { useState } from 'react';
-import { Modal, View } from 'react-native';
+import { Image, Modal, View } from 'react-native';
 
 import { dayKey } from '@/game/dates';
 import { canClaimLogin, LOGIN_REWARDS } from '@/game/progress';
@@ -9,6 +9,7 @@ import { useLayout, useNow, usePalette, useT } from '@/hooks/use-app';
 import { buzz, play, playLater } from '@/services/feedback';
 import { useProfile } from '@/store/profile';
 
+import { CHEST_IMAGES } from './chest/fallback';
 import { CheckIcon } from './icons';
 import { Btn, Emoji, Txt } from './ui';
 import { Confetti } from './confetti';
@@ -82,7 +83,11 @@ export function LoginGift() {
                   <Txt size={11} weight="bold" color={p.muted}>
                     {t('login_day', { n: i + 1 })}
                   </Txt>
-                  <Emoji size={last ? 28 : 22}>{giftIcon(r)}</Emoji>
+                  {r.chest ? (
+                    <Image source={CHEST_IMAGES[r.chest]} style={{ width: 44, height: 44 }} resizeMode="contain" />
+                  ) : (
+                    <Emoji size={last ? 28 : 22}>{giftIcon(r)}</Emoji>
+                  )}
                   <Txt size={11} weight="heavy" center lines={1}>
                     {rewardText(r)}
                   </Txt>

@@ -259,7 +259,7 @@ await scenario('daily gift spam', async () => {
   await b.click({ force: true }).catch(() => {});
   await wait(500);
   const pr = await profile();
-  check(pr.coins === 25 && pr.loginDay === 1 && pr.loginLast === today, `one gift, day 1 (coins ${pr.coins}, day ${pr.loginDay})`);
+  check(pr.coins === 15 && pr.loginDay === 1 && pr.loginLast === today, `one gift, day 1 (coins ${pr.coins}, day ${pr.loginDay})`);
   await page.goto(BASE);
   await wait(1500);
   check(!(await see('Cadeau du jour')), 'no second gift the same day');

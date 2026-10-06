@@ -4,10 +4,11 @@ import { persist, type PersistStorage } from 'zustand/middleware';
 
 import { ACHIEVEMENTS, EMPTY_STATS, newlyUnlocked, type Stats } from '@/game/achievements';
 import { packGoods, PRODUCT_PREFIX, type ThemeId } from '@/game/catalog';
+import { rollChest, type ChestKind, type ChestReward } from '@/game/chests';
 import type { GiftReward } from '@/game/codes';
 import { currentStreak, dayKey, nextStreakWithSaves } from '@/game/dates';
 import { addActivity, canClaimLogin, LOGIN_REWARDS, MAX_STREAK_SAVES, type StarCount } from '@/game/progress';
-import { adventureIds, REWARDS } from '@/game/rules';
+import { adventureIds, DOUBLE_LEVELS, REWARDS } from '@/game/rules';
 import type { Difficulty, Lang, Mode, RunSave } from '@/game/types';
 
 import { sanitizeProfile } from './sanitize';
@@ -31,6 +32,10 @@ export interface ProfileState {
   shields: number;
   skips: number;
   doubles: number;
+  /** Levels left with coins ×2 (a coin doubler lasts DOUBLE_LEVELS levels). */
+  doubleLevels: number;
+  /** Chests won and not opened yet. */
+  chests: Record<ChestKind, number>;
   theme: ThemeId;
   style: string;
   ownedThemes: ThemeId[];
@@ -99,6 +104,11 @@ interface ProfileActions {
   addItem: (item: Item, n: number) => void;
   /** Uses one item if available; returns false otherwise. */
   useItem: (item: Item) => boolean;
+  /** Starts a coin doubler (one item): coins ×2 for the next DOUBLE_LEVELS levels. */
+  startDouble: () => boolean;
+  addChest: (kind: ChestKind, n?: number) => void;
+  /** Opens one chest of this kind: draws and gives its rewards; null when there is none. */
+  openChest: (kind: ChestKind, rng?: () => number) => ChestReward[] | null;
   bumpStats: (
     patch: Partial<Omit<Stats, 'cat' | 'catTries'>> & { cat?: Partial<Stats['cat']>; catTries?: Partial<Stats['catTries']> },
     mode?: 'add' | 'max'
@@ -137,6 +147,8 @@ const INITIAL: ProfileState = {
   shields: 0,
   skips: 0,
   doubles: 0,
+  doubleLevels: 0,
+  chests: { wood: 0, gold: 0, legend: 0 },
   theme: 'popcorn',
   style: '🍿',
   ownedThemes: ['popcorn'],
@@ -228,6 +240,30 @@ export const useProfile = create<ProfileState & ProfileActions>()(
         set((s) => ({ [item]: s[item] - 1 }) as Partial<ProfileState>);
         return true;
       },
+      startDouble: () => {
+        if (!get().useItem('doubles')) return false;
+        set((s) => ({ doubleLevels: s.doubleLevels + DOUBLE_LEVELS }));
+        return true;
+      },
+      addChest: (kind, n = 1) => set((s) => ({ chests: { ...s.chests, [kind]: s.chests[kind] + n } })),
+      openChest: (kind, rng) => {
+        const s = get();
+        if (s.chests[kind] <= 0) return null;
+        const rewards = rollChest(
+          kind,
+          { themes: s.ownedThemes, styles: s.ownedStyles, avatars: s.ownedAvatars, streakSaves: s.streakSaves, maxStreakSaves: MAX_STREAK_SAVES },
+          rng,
+        );
+        set({ chests: { ...s.chests, [kind]: s.chests[kind] - 1 } });
+        for (const r of rewards) {
+          if (r.kind === 'coins') get().addCoins(r.amount);
+          else if (r.kind === 'item') get().addItem(r.item, r.amount);
+          else if (r.kind === 'theme') set((x) => ({ ownedThemes: [...new Set([...x.ownedThemes, r.id])] }));
+          else if (r.kind === 'style') set((x) => ({ ownedStyles: [...new Set([...x.ownedStyles, r.id])] }));
+          else set((x) => ({ ownedAvatars: [...new Set([...x.ownedAvatars, r.id])] }));
+        }
+        return rewards;
+      },
       bumpStats: (patch, mode = 'add') =>
         set((s) => {
           const stats = { ...s.stats, cat: { ...s.stats.cat }, catTries: { ...s.stats.catTries } };
@@ -269,7 +305,9 @@ export const useProfile = create<ProfileState & ProfileActions>()(
           dailyBestStreak: Math.max(s.dailyBestStreak, streak),
           hints: s.hints + REWARDS.daily.hints,
         });
-        get().addCoins(REWARDS.daily.coins + (chest ? 300 : 0));
+        get().addCoins(REWARDS.daily.coins);
+        // 7 days in a row: a gold chest.
+        if (chest) get().addChest('gold');
         get().bumpStats({ daily: 1 });
         return { rewarded: true, chest, saved: used };
       },
@@ -303,6 +341,7 @@ export const useProfile = create<ProfileState & ProfileActions>()(
         if (reward.shields) get().addItem('shields', reward.shields);
         if (reward.skips) get().addItem('skips', reward.skips);
         if (reward.streakSaves) get().addItem('streakSaves', reward.streakSaves);
+        if (reward.chest) get().addChest(reward.chest);
         return { reward, day };
       },
       adsLeft: () => {

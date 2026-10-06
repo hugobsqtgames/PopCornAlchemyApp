@@ -184,6 +184,37 @@ await flow('found after a miss', async () => {
   check((await profile()).stars?.[first.id] < 3, 'a miss costs a star');
 });
 
+await flow('chests: open one of each kind', async () => {
+  await start({ chests: { wood: 2, gold: 1, legend: 1 }, coins: 0 }, '/coffres');
+  check(await see('Coffre en bois'), 'the chests screen opens on the wooden chest');
+  check((await page.locator('canvas').count()) > 0 || (await page.locator('img').count()) > 0, 'the 3D view is there (or its picture fallback)');
+  for (const [kind, name] of [['wood', 'Coffre en bois'], ['gold', 'Coffre en or'], ['legend', 'Coffre légendaire']]) {
+    if (kind !== 'wood') {
+      await page.getByRole('button', { name: new RegExp(name) }).first().click();
+      await page.waitForTimeout(900);
+    }
+    const before = (await profile()).chests?.[kind] ?? 0;
+    const coins = (await profile()).coins;
+    await page.getByText(/ouvrir le coffre/i).last().click();
+    await page.waitForTimeout(3200);
+    check(await see('Dans ton coffre'.toUpperCase(), false) || (await see('Dans ton coffre', false)), `${kind}: the rewards are shown`);
+    const after = await profile();
+    check((after.chests?.[kind] ?? 0) === before - 1, `${kind}: one chest used`);
+    check(after.coins > coins, `${kind}: coins given (${coins} → ${after.coins})`);
+    if (kind === 'legend') check(after.ownedThemes.length > 1, 'legendary: a new theme is owned');
+    await shot(`chest-${kind}-open`);
+    await page.getByText(/super/i).last().click();
+    await page.waitForTimeout(900);
+  }
+  check(!(await see('Ouvrir le coffre'.toUpperCase(), false)) || (await profile()).chests.wood > 0, 'no open button without a chest');
+});
+
+await flow('home: the chests row', async () => {
+  await start({ chests: { wood: 0, gold: 0, legend: 0 } }, '/');
+  check(await see('Coffres'), 'the home screen shows the chests row');
+  check(await see('Gagne-les en jouant', false), 'with no chest, it says how to get some');
+});
+
 await flow('pause sheet', async () => {
   await start({}, '/jeu?mode=classic&diff=1&fresh=1');
   await page.getByRole('button', { name: /pause/i }).filter({ visible: true }).first().click();

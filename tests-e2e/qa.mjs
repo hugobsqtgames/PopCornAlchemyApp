@@ -188,9 +188,9 @@ await step('first launch', async () => {
   await shot('calendrier');
   const c0 = (await profile()).coins;
   await tap('🎁 Collect');
-  check(await see('You get 25 💰'), 'day 1 gift is 25 coins');
+  check(await see('You get 15 💰'), 'day 1 gift is 15 coins');
   const g = await profile();
-  check(g.coins === c0 + 25 && g.loginDay === 1 && g.loginLast === dayKey(), `day 1 collected (coins +${g.coins - c0}, day ${g.loginDay})`);
+  check(g.coins === c0 + 15 && g.loginDay === 1 && g.loginLast === dayKey(), `day 1 collected (coins +${g.coins - c0}, day ${g.loginDay})`);
   await shot('calendrier-recu');
   await tap('Great!');
   check(!(await see("Today's gift")), 'the calendar closes');
@@ -257,7 +257,7 @@ await step('shop', async () => {
   await page.waitForTimeout(250);
   const pr = await profile();
   check(pr.hints === 8 && pr.shields === 2 && pr.skips === 1 && pr.doubles === 1, `boosts bought (hints ${pr.hints}, shields ${pr.shields}, skips ${pr.skips}, doubles ${pr.doubles})`);
-  check(pr.coins === 20000 - 100 - 150 - 200 - 250 - 150, `coins debited correctly (${pr.coins})`);
+  check(pr.coins === 20000 - 100 - 150 - 200 - 100 - 150, `coins debited correctly (${pr.coins})`);
   check((await sounds()).filter((s) => s === 'buy').length === 5, 'purchase sound on every buy');
   await shot('boutique-bonus');
   // Streak freeze: 2 at most.
@@ -362,11 +362,12 @@ await step('classic run', async () => {
   // Double then solve.
   await page.getByRole('button', { name: /^Pièces ×2/ }).filter({ visible: true }).click();
   await page.waitForTimeout(300);
-  check(await see('✨ 💰×2', false), 'double coins badge shown');
+  check(await see('✨ 💰×2 · 25', false), 'double coins badge shown, 25 levels left');
   const coinsBefore = (await profile()).coins;
   await solve();
   const gained = (await profile()).coins - coinsBefore;
-  check(gained >= 10 && gained % 2 === 0, `doubled coins (${gained})`);
+  check(gained >= 4 && gained % 2 === 0, `doubled coins (${gained})`);
+  check((await profile()).doubleLevels === 24, 'the doubler counts down one level');
 
   // Skip.
   const lvlBefore = await currentLevel();
@@ -722,9 +723,9 @@ await step('streak freeze & day 7', async () => {
   check(await see('Cadeau du jour'), 'calendar opens again the next day');
   const c0 = (await profile()).coins;
   await tap('🎁 Récupérer');
-  check(await see('Tu reçois 200 💰 · 1 🧊'), 'day 7 is the big gift');
+  check(await see('Tu reçois 1 🧊 · 1 🧰'), 'day 7 is a chest');
   const g = await profile();
-  check(g.coins === c0 + 200 && g.streakSaves === 1 && g.loginDay === 0, `day 7 collected, calendar starts over (coins +${g.coins - c0}, day ${g.loginDay})`);
+  check(g.chests?.wood === 1 && g.streakSaves === 1 && g.loginDay === 0, `day 7 collected: a wooden chest, calendar starts over (chests ${g.chests?.wood}, day ${g.loginDay})`);
   await shot('calendrier-jour-7');
   await tap('Super !');
 });

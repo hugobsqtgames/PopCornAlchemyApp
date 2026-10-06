@@ -7,7 +7,7 @@
 import { EMPTY_STATS, type Stats } from '@/game/achievements';
 import { AVATARS, STYLES, THEMES, type ThemeId } from '@/game/catalog';
 import { MAX_STREAK_SAVES } from '@/game/progress';
-import { adventureIds, levelById } from '@/game/rules';
+import { adventureIds, DOUBLE_LEVELS, levelById } from '@/game/rules';
 import type { Lang, Mode, RunSave } from '@/game/types';
 
 import type { ProfileState, ReceivedChallenge } from './profile';
@@ -84,6 +84,7 @@ export function sanitizeProfile(saved: unknown, defaults: ProfileState): Profile
   const best: ProfileState['best'] = {};
   if (isObj(p.best)) for (const m of MODES) if (typeof p.best[m] === 'number') best[m] = count(p.best[m], 0);
   const adv = isObj(p.adventure) ? p.adventure : {};
+  const chests = isObj(p.chests) ? p.chests : {};
   const stars: ProfileState['stars'] = {};
   if (isObj(p.stars)) {
     for (const [k, v] of Object.entries(p.stars)) if (levelById(Number(k)) && (v === 1 || v === 2 || v === 3)) stars[k] = v;
@@ -103,6 +104,12 @@ export function sanitizeProfile(saved: unknown, defaults: ProfileState): Profile
     shields: count(p.shields, d.shields),
     skips: count(p.skips, d.skips),
     doubles: count(p.doubles, d.doubles),
+    doubleLevels: count(p.doubleLevels, 0, 10 * DOUBLE_LEVELS),
+    chests: {
+      wood: count(chests.wood, 0, 999),
+      gold: count(chests.gold, 0, 999),
+      legend: count(chests.legend, 0, 999),
+    },
     theme: themes.includes(p.theme as ThemeId) ? (p.theme as ThemeId) : 'popcorn',
     style: typeof p.style === 'string' && styles.includes(p.style) ? p.style : '🍿',
     ownedThemes: themes,

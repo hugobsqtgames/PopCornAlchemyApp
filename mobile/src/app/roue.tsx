@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Easing, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
@@ -5,7 +6,7 @@ import Svg, { Path } from 'react-native-svg';
 import { AdIcon } from '@/components/icons';
 import { Btn, Card, Emoji, Header, Screen, Txt } from '@/components/ui';
 import { dayKey } from '@/game/dates';
-import { openGift, pickSlice, SLICE_DEG, spinRotation, tickTimes, WHEEL, type Prize } from '@/game/wheel';
+import { pickSlice, SLICE_DEG, spinRotation, tickTimes, WHEEL, type Prize } from '@/game/wheel';
 import { useLayout, useNow, usePalette, useReduceMotion, useT } from '@/hooks/use-app';
 import { checkAchievements } from '@/services/achievements';
 import { buzz, play } from '@/services/feedback';
@@ -32,7 +33,7 @@ export default function Roue() {
   const bonusLeft = s.wheelBonusLast !== today;
   const still = useReduceMotion();
   const [spinning, setSpinning] = useState(false);
-  const [won, setWon] = useState<{ prize: Prize; icon: string; gift: boolean } | null>(null);
+  const [won, setWon] = useState<{ prize: Prize; icon: string } | null>(null);
   const rot = useState(() => new Animated.Value(0))[0];
   const total = useRef(0);
   const ticks = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -46,6 +47,7 @@ export default function Roue() {
     if (prize.kind === 'coins') st.addCoins(prize.amount);
     if (prize.kind === 'hints') st.addItem('hints', prize.amount);
     if (prize.kind === 'shield') st.addItem('shields', 1);
+    if (prize.kind === 'chest') st.addChest('wood');
   };
 
   // The spin state updates on the next render: a ref also blocks a second tap in between.
@@ -75,10 +77,8 @@ export default function Roue() {
     play('spin');
     Animated.timing(rot, { toValue: total.current, duration, easing: Easing.out(Easing.cubic), useNativeDriver: true }).start(() => {
       const slice = WHEEL[i];
-      const gift = slice.prize.kind === 'gift';
-      const prize = gift ? openGift() : slice.prize;
-      give(prize);
-      setWon({ prize, icon: gift ? '🎁' : slice.icon, gift });
+      give(slice.prize);
+      setWon({ prize: slice.prize, icon: slice.icon });
       setSpinning(false);
       turning.current = false;
       play('win');
@@ -92,7 +92,9 @@ export default function Roue() {
       ? t('prize_coins', { n: prize.amount })
       : prize.kind === 'hints'
         ? t('prize_hints', { n: prize.amount })
-        : t('prize_shield');
+        : prize.kind === 'chest'
+          ? t('prize_chest')
+          : t('prize_shield');
 
   const rotate = rot.interpolate({ inputRange: [0, 360], outputRange: ['0deg', '360deg'] });
 
@@ -139,7 +141,7 @@ export default function Roue() {
             <Card tint={p.goldTint} style={{ paddingVertical: 12, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
               <Emoji size={24}>{won.icon}</Emoji>
               <Txt size={16} weight="heavy" style={{ flexShrink: 1 }}>
-                {won.gift ? `${t('gift_title')} ` : `${t('you_won')} `}
+                {`${t('you_won')} `}
                 {prizeText(won.prize)}
               </Txt>
             </Card>
@@ -151,6 +153,7 @@ export default function Roue() {
         </View>
       </View>
       <View style={{ paddingHorizontal: 16, paddingBottom: insets.bottom + 16, gap: 6 }}>
+        {won?.prize.kind === 'chest' && <Btn variant="gold" label={t('chest_open')} onPress={() => router.push({ pathname: '/coffres', params: { open: 'wood' } })} />}
         {freeLeft ? (
           <Btn label={t('spin')} disabled={spinning} onPress={() => spin(false)} />
         ) : !MONEY_READY ? null : (

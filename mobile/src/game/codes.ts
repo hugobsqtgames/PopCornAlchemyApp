@@ -2,6 +2,8 @@
  * Gift codes to share in videos. To add one: add a line below and publish an update.
  * Codes are case-insensitive, work once per device, and stop working after `until` (optional).
  */
+import type { ChestKind } from './chests';
+
 export interface GiftReward {
   coins?: number;
   hints?: number;
@@ -9,6 +11,8 @@ export interface GiftReward {
   skips?: number;
   /** Streak protections for the daily challenge. */
   streakSaves?: number;
+  /** A chest to open (the 7th day of the gift calendar). */
+  chest?: ChestKind;
 }
 
 export const GIFT_CODES: { code: string; reward: GiftReward; until?: string }[] = [
@@ -41,6 +45,7 @@ export function rewardText(r: GiftReward): string {
     r.shields && `${r.shields} 🛡️`,
     r.skips && `${r.skips} ⏭️`,
     r.streakSaves && `${r.streakSaves} 🧊`,
+    r.chest && '1 🧰',
   ]
     .filter(Boolean)
     .join(' · ');

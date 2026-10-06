@@ -79,12 +79,41 @@ describe('daily challenge', () => {
     expect(state().coins).toBe(REWARDS.daily.coins);
   });
 
-  it('opens the chest every 7 days', () => {
+  it('gives a gold chest every 7 days', () => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     state().set({ dailyLast: dayKey(yesterday), dailyStreak: 6 });
     expect(state().finishDaily().chest).toBe(true);
-    expect(state().coins).toBe(REWARDS.daily.coins + 300);
+    expect(state().coins).toBe(REWARDS.daily.coins);
+    expect(state().chests.gold).toBe(1);
+  });
+});
+
+describe('chests and the coin doubler', () => {
+  it('opens a chest once: rewards given, chest gone', () => {
+    state().addChest('wood', 2);
+    const coins = state().coins;
+    const got = state().openChest('wood');
+    expect(got?.[0]).toMatchObject({ kind: 'coins' });
+    expect(state().coins).toBe(coins + (got?.[0] as { amount: number }).amount);
+    expect(state().chests.wood).toBe(1);
+    expect(state().openChest('gold')).toBeNull();
+  });
+
+  it('a legendary chest unlocks a theme the player did not have', () => {
+    state().addChest('legend');
+    const got = state().openChest('legend') ?? [];
+    const theme = got.find((r) => r.kind === 'theme');
+    expect(theme).toBeDefined();
+    expect(state().ownedThemes).toContain((theme as { id: string }).id);
+  });
+
+  it('a doubler lasts 25 levels', () => {
+    state().addItem('doubles', 1);
+    expect(state().startDouble()).toBe(true);
+    expect(state().doubleLevels).toBe(25);
+    expect(state().doubles).toBe(0);
+    expect(state().startDouble()).toBe(false);
   });
 });
 
@@ -182,11 +211,13 @@ describe('Pop-Cornédex, calendar and streak protection', () => {
     state().set({ loginDay: 0, loginLast: null });
     const first = state().claimLogin();
     expect(first?.day).toBe(0);
-    expect(state().coins).toBe(25);
+    expect(state().coins).toBe(15);
     expect(state().claimLogin()).toBeNull();
     state().set({ loginDay: 6, loginLast: '2000-01-01' });
     state().claimLogin();
     expect(state().streakSaves).toBe(1);
+    // The 7th day: a wooden chest.
+    expect(state().chests.wood).toBe(1);
     expect(state().loginDay).toBe(0);
   });
 

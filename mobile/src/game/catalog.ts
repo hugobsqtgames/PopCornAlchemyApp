@@ -3,7 +3,7 @@
 export const STYLES = ['🍿', '🍦', '🍕', '🌮', '🍩', '🍔', '🍣', '🍫', '🍪', '🍰', '🧁', '🥧', '🥨', '🥞', '🧇', '🥓'];
 
 export function stylePrice(index: number): number {
-  return index * 150;
+  return index * 300;
 }
 
 /** +5 % score per style rank. */
@@ -17,11 +17,11 @@ export type ThemeId = 'popcorn' | 'mint' | 'lavender' | 'midnight' | 'cinema' | 
 
 export const THEMES: { id: ThemeId; price: number }[] = [
   { id: 'popcorn', price: 0 },
-  { id: 'mint', price: 400 },
-  { id: 'lavender', price: 600 },
-  { id: 'midnight', price: 800 },
-  { id: 'cinema', price: 1200 },
-  { id: 'retro', price: 2000 },
+  { id: 'mint', price: 600 },
+  { id: 'lavender', price: 1000 },
+  { id: 'midnight', price: 1500 },
+  { id: 'cinema', price: 2200 },
+  { id: 'retro', price: 3500 },
 ];
 
 /** Real-money packs. Ids must match the products created in App Store Connect. */
