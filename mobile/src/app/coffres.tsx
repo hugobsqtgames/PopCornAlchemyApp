@@ -18,15 +18,35 @@ import { useProfile } from '@/store/profile';
 import { paletteFor } from '@/theme/palettes';
 
 const INK = '#1F1B2D';
-const NAME: Record<ChestKind, StringKey> = { wood: 'chest_wood', gold: 'chest_gold', legend: 'chest_legend' };
-const HOW: Record<ChestKind, StringKey> = { wood: 'chest_how_wood', gold: 'chest_how_gold', legend: 'chest_how_legend' };
-const ITEM_ICON = { hints: '💡', shields: '🛡️', skips: '⏭️', doubles: '✨', streakSaves: '🧊' } as const;
-const ITEM_NAME = { hints: 'bonus_hints', shields: 'bonus_shield', skips: 'bonus_skip', doubles: 'bonus_double', streakSaves: 'bonus_streak' } as const;
+const NAME: Record<ChestKind, StringKey> = {
+  wood: 'chest_wood',
+  gold: 'chest_gold',
+  legend: 'chest_legend',
+};
+const HOW: Record<ChestKind, StringKey> = {
+  wood: 'chest_how_wood',
+  gold: 'chest_how_gold',
+  legend: 'chest_how_legend',
+};
+const ITEM_ICON = {
+  hints: '💡',
+  shields: '🛡️',
+  skips: '⏭️',
+  doubles: '✨',
+  streakSaves: '🧊',
+} as const;
+const ITEM_NAME = {
+  hints: 'bonus_hints',
+  shields: 'bonus_shield',
+  skips: 'bonus_skip',
+  doubles: 'bonus_double',
+  streakSaves: 'bonus_streak',
+} as const;
 
 /** Chests: pick one, open it (3D show), see what was inside. */
 export default function Coffres() {
   const t = useT();
-  const { insets, width, height } = useLayout();
+  const { insets, width, height, tablet } = useLayout();
   const chests = useProfile((s) => s.chests);
   const still = useReduceMotion();
   const asked = one(useLocalSearchParams<{ open?: string }>().open) as ChestKind | undefined;
@@ -70,7 +90,12 @@ export default function Coffres() {
   const flash = useState(() => new Animated.Value(0))[0];
   const onBurst = () => {
     flash.setValue(still ? 0.35 : 0.85);
-    Animated.timing(flash, { toValue: 0, duration: 650, easing: Easing.out(Easing.quad), useNativeDriver: true }).start();
+    Animated.timing(flash, {
+      toValue: 0,
+      duration: 650,
+      easing: Easing.out(Easing.quad),
+      useNativeDriver: true,
+    }).start();
     play(kind === 'wood' ? 'win' : 'victory');
     playLater('coin', 180);
     playLater('sparkle', 420);
@@ -95,87 +120,165 @@ export default function Coffres() {
         <Rect x={0} y={0} width={width} height={height} fill="url(#g)" />
       </Svg>
 
-      <View style={{ paddingTop: insets.top + 8, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        <IconBtn label={t('back')} onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}>
-          <BackIcon color={INK} />
-        </IconBtn>
-        <Txt size={20} weight="heavy" color="#FFFFFF" style={{ flex: 1 }}>
-          {t('chests')}
-        </Txt>
-      </View>
+      <View
+        style={{
+          flex: 1,
+          width: '100%',
+          maxWidth: tablet ? 640 : undefined,
+          alignSelf: 'center',
+        }}>
+        <View
+          style={{
+            paddingTop: insets.top + 8,
+            paddingHorizontal: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 12,
+          }}>
+          <IconBtn label={t('back')} onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}>
+            <BackIcon color={INK} />
+          </IconBtn>
+          <Txt size={20} weight="heavy" color="#FFFFFF" style={{ flex: 1 }}>
+            {t('chests')}
+          </Txt>
+        </View>
 
-      {/* The three kinds, with how many of each. */}
-      <View style={{ flexDirection: 'row', gap: 8, paddingHorizontal: 16, paddingTop: 14, opacity: opening ? 0.35 : 1 }}>
-        {CHEST_KINDS.map((k) => {
-          const on = k === kind;
-          return (
-            <Pressable
-              key={k}
-              disabled={opening}
-              onPress={() => {
-                if (k === kind) return;
-                buzz('select');
-                play('click');
-                setKind(k);
-                setPhase('appear');
-              }}
-              accessibilityRole="button"
-              accessibilityState={{ selected: on }}
-              accessibilityLabel={`${t(NAME[k])}, ${chests[k]}`}
-              style={{ flex: 1, alignItems: 'center', paddingVertical: 8, borderRadius: 16, backgroundColor: on ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.05)', borderWidth: 2, borderColor: on ? CHEST_GLOW[k] : 'transparent' }}>
-              <Image source={CHEST_IMAGES[k]} style={{ width: 54, height: 54, opacity: chests[k] > 0 ? 1 : 0.45 }} resizeMode="contain" />
-              <Txt size={12} weight="heavy" color="#FFFFFF" center lines={2}>
-                {t(NAME[k])}
-              </Txt>
-              <View style={{ marginTop: 4, minWidth: 30, paddingHorizontal: 8, height: 22, borderRadius: 11, alignItems: 'center', justifyContent: 'center', backgroundColor: chests[k] > 0 ? CHEST_GLOW[k] : 'rgba(255,255,255,0.12)' }}>
-                <Txt size={12} weight="heavy" color={chests[k] > 0 ? INK : '#FFFFFF'}>
-                  ×{chests[k]}
+        {/* The three kinds, with how many of each. */}
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 8,
+            paddingHorizontal: 16,
+            paddingTop: 14,
+            opacity: opening ? 0.35 : 1,
+          }}>
+          {CHEST_KINDS.map((k) => {
+            const on = k === kind;
+            return (
+              <Pressable
+                key={k}
+                disabled={opening}
+                onPress={() => {
+                  if (k === kind) return;
+                  buzz('select');
+                  play('click');
+                  setKind(k);
+                  setPhase('appear');
+                }}
+                accessibilityRole="button"
+                accessibilityState={{ selected: on }}
+                accessibilityLabel={`${t(NAME[k])}, ${chests[k]}`}
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  paddingVertical: 8,
+                  borderRadius: 16,
+                  backgroundColor: on ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.05)',
+                  borderWidth: 2,
+                  borderColor: on ? CHEST_GLOW[k] : 'transparent',
+                }}>
+                <Image
+                  source={CHEST_IMAGES[k]}
+                  style={{
+                    width: 54,
+                    height: 54,
+                    opacity: chests[k] > 0 ? 1 : 0.45,
+                  }}
+                  resizeMode="contain"
+                />
+                <Txt size={12} weight="heavy" color="#FFFFFF" center lines={2}>
+                  {t(NAME[k])}
                 </Txt>
+                <View
+                  style={{
+                    marginTop: 4,
+                    minWidth: 30,
+                    paddingHorizontal: 8,
+                    height: 22,
+                    borderRadius: 11,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: chests[k] > 0 ? CHEST_GLOW[k] : 'rgba(255,255,255,0.12)',
+                  }}>
+                  <Txt size={12} weight="heavy" color={chests[k] > 0 ? INK : '#FFFFFF'}>
+                    ×{chests[k]}
+                  </Txt>
+                </View>
+              </Pressable>
+            );
+          })}
+        </View>
+
+        {/* The stage keeps its size and is cropped (centred) when the screen is short. */}
+        <View style={{ flex: 1, justifyContent: 'center', overflow: 'hidden' }}>
+          <ChestStage
+            key={`${kind}-${round}`}
+            kind={kind}
+            openKey={openKey}
+            reduceMotion={still}
+            onKnock={onKnock}
+            onBurst={onBurst}
+            onPhase={setPhase}
+            style={{ height: stageH }}
+          />
+        </View>
+
+        <Animated.View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: glow,
+            opacity: flash,
+          }}
+        />
+
+        <View
+          style={{
+            paddingHorizontal: 16,
+            paddingBottom: insets.bottom + 16,
+            gap: 12,
+            minHeight: 190,
+            justifyContent: 'flex-end',
+          }}>
+          {showRewards && rewards ? (
+            <Rewards rewards={rewards} onDone={next} />
+          ) : opening ? null : (
+            <>
+              <View style={{ alignItems: 'center', gap: 4 }}>
+                <Txt size={22} weight="heavy" color="#FFFFFF" center>
+                  {t(NAME[kind])}
+                </Txt>
+                <Txt size={14} color="rgba(255,255,255,0.75)" center>
+                  {t('chest_coins_range', {
+                    a: CHEST_COINS[kind][0],
+                    b: CHEST_COINS[kind][1],
+                  })}
+                </Txt>
+                {kind === 'legend' && (
+                  <Txt size={13} weight="bold" color={CHEST_GLOW.legend} center>
+                    {t('chest_legend_extra')}
+                  </Txt>
+                )}
               </View>
-            </Pressable>
-          );
-        })}
-      </View>
-
-      {/* The stage keeps its size and is cropped (centred) when the screen is short. */}
-      <View style={{ flex: 1, justifyContent: 'center', overflow: 'hidden' }}>
-        <ChestStage key={`${kind}-${round}`} kind={kind} openKey={openKey} reduceMotion={still} onKnock={onKnock} onBurst={onBurst} onPhase={setPhase} style={{ height: stageH }} />
-      </View>
-
-      <Animated.View pointerEvents="none" style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0, backgroundColor: glow, opacity: flash }} />
-
-      <View style={{ paddingHorizontal: 16, paddingBottom: insets.bottom + 16, gap: 12, minHeight: 190, justifyContent: 'flex-end' }}>
-        {showRewards && rewards ? (
-          <Rewards rewards={rewards} onDone={next} />
-        ) : opening ? null : (
-          <>
-            <View style={{ alignItems: 'center', gap: 4 }}>
-              <Txt size={22} weight="heavy" color="#FFFFFF" center>
-                {t(NAME[kind])}
-              </Txt>
-              <Txt size={14} color="rgba(255,255,255,0.75)" center>
-                {t('chest_coins_range', { a: CHEST_COINS[kind][0], b: CHEST_COINS[kind][1] })}
-              </Txt>
-              {kind === 'legend' && (
-                <Txt size={13} weight="bold" color={CHEST_GLOW.legend} center>
-                  {t('chest_legend_extra')}
-                </Txt>
+              {chests[kind] > 0 ? (
+                <Btn variant="gold" label={t('chest_open')} height={60} size={17} onPress={open} />
+              ) : (
+                <View style={{ alignItems: 'center', gap: 4, paddingVertical: 8 }}>
+                  <Txt size={15} weight="heavy" color="#FFFFFF" center>
+                    {t('chest_none')}
+                  </Txt>
+                  <Txt size={13} color="rgba(255,255,255,0.7)" center>
+                    {t(HOW[kind])}
+                  </Txt>
+                </View>
               )}
-            </View>
-            {chests[kind] > 0 ? (
-              <Btn variant="gold" label={t('chest_open')} height={60} size={17} onPress={open} />
-            ) : (
-              <View style={{ alignItems: 'center', gap: 4, paddingVertical: 8 }}>
-                <Txt size={15} weight="heavy" color="#FFFFFF" center>
-                  {t('chest_none')}
-                </Txt>
-                <Txt size={13} color="rgba(255,255,255,0.7)" center>
-                  {t(HOW[kind])}
-                </Txt>
-              </View>
-            )}
-          </>
-        )}
+            </>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -191,15 +294,30 @@ function Rewards({ rewards, onDone }: { rewards: ChestReward[]; onDone: () => vo
 
   useEffect(() => {
     if (still) return;
-    const steps = anims.map((a, i) =>
-      Animated.sequence([Animated.delay(i === 0 ? 0 : 230), Animated.spring(a, { toValue: 1, friction: 5, tension: 140, useNativeDriver: true })]),
+    // The cards arrive one after the other without waiting for the previous one to settle.
+    const steps = Animated.stagger(
+      260,
+      anims.map((a) => Animated.spring(a, { toValue: 1, friction: 5, tension: 140, useNativeDriver: true })),
     );
-    const timers = rewards.map((r, i) => setTimeout(() => {
-      const special = r.kind === 'theme' || r.kind === 'style' || r.kind === 'avatar';
-      play(special ? 'fever' : r.kind === 'coins' ? 'coin' : 'pop');
-      buzz(special ? 'success' : 'tap');
-    }, i * 330 + 80));
-    Animated.sequence([...steps, Animated.timing(done, { toValue: 1, duration: 250, easing: Easing.out(Easing.cubic), useNativeDriver: true })]).start(() => setReady(true));
+    const timers = rewards.map((r, i) =>
+      setTimeout(
+        () => {
+          const special = r.kind === 'theme' || r.kind === 'style' || r.kind === 'avatar';
+          play(special ? 'fever' : r.kind === 'coins' ? 'coin' : 'pop');
+          buzz(special ? 'success' : 'tap');
+        },
+        i * 260 + 80,
+      ),
+    );
+    Animated.sequence([
+      steps,
+      Animated.timing(done, {
+        toValue: 1,
+        duration: 250,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+    ]).start(() => setReady(true));
     return () => timers.forEach(clearTimeout);
     // Played once for these rewards.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -210,13 +328,35 @@ function Rewards({ rewards, onDone }: { rewards: ChestReward[]; onDone: () => vo
       <Txt size={13} weight="heavy" color="rgba(255,255,255,0.7)" center style={{ letterSpacing: 1.2 }}>
         {t('chest_inside').toUpperCase()}
       </Txt>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 8 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: 8,
+        }}>
         {rewards.map((r, i) => {
           const a = anims[i];
           return (
             <Animated.View
               key={i}
-              style={{ opacity: a, transform: [{ translateY: a.interpolate({ inputRange: [0, 1], outputRange: [30, 0] }) }, { scale: a.interpolate({ inputRange: [0, 1], outputRange: [0.6, 1] }) }] }}>
+              style={{
+                opacity: a,
+                transform: [
+                  {
+                    translateY: a.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [30, 0],
+                    }),
+                  },
+                  {
+                    scale: a.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.6, 1],
+                    }),
+                  },
+                ],
+              }}>
               <RewardCard reward={r} />
             </Animated.View>
           );
@@ -265,17 +405,38 @@ function RewardCard({ reward: r }: { reward: ChestReward }) {
         borderColor: special ? '#FFE9A8' : 'rgba(255,255,255,0.16)',
       }}>
       {special && (
-        <View style={{ position: 'absolute', top: -10, paddingHorizontal: 8, height: 20, borderRadius: 10, backgroundColor: '#D93A3A', justifyContent: 'center' }}>
+        <View
+          style={{
+            position: 'absolute',
+            top: -10,
+            paddingHorizontal: 8,
+            height: 20,
+            borderRadius: 10,
+            backgroundColor: '#D93A3A',
+            justifyContent: 'center',
+          }}>
           <Txt size={10} weight="heavy" color="#FFFFFF" style={{ letterSpacing: 0.8 }}>
             {t('chest_new')}
           </Txt>
         </View>
       )}
-      {swatch ? <View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: swatch, borderWidth: 3, borderColor: '#FFFFFF' }} /> : <Emoji size={24}>{icon}</Emoji>}
+      {swatch ? (
+        <View
+          style={{
+            width: 30,
+            height: 30,
+            borderRadius: 15,
+            backgroundColor: swatch,
+            borderWidth: 3,
+            borderColor: '#FFFFFF',
+          }}
+        />
+      ) : (
+        <Emoji size={24}>{icon}</Emoji>
+      )}
       <Txt size={13} weight="heavy" color={special ? INK : '#FFFFFF'} center lines={2}>
         {label}
       </Txt>
     </View>
   );
 }
-

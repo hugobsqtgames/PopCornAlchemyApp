@@ -721,11 +721,11 @@ await step('streak freeze & day 7', async () => {
   await tap('Accueil');
   await patchProfile({ loginLast: daysAgo(1), loginDay: 6 });
   check(await see('Cadeau du jour'), 'calendar opens again the next day');
-  const c0 = (await profile()).coins;
+  const w0 = (await profile()).chests?.wood ?? 0;
   await tap('🎁 Récupérer');
   check(await see('Tu reçois 1 🧊 · 1 🧰'), 'day 7 is a chest');
   const g = await profile();
-  check(g.chests?.wood === 1 && g.streakSaves === 1 && g.loginDay === 0, `day 7 collected: a wooden chest, calendar starts over (chests ${g.chests?.wood}, day ${g.loginDay})`);
+  check(g.chests?.wood === w0 + 1 && g.streakSaves === 1 && g.loginDay === 0, `day 7 collected: a wooden chest, calendar starts over (chests ${w0} → ${g.chests?.wood}, day ${g.loginDay})`);
   await shot('calendrier-jour-7');
   await tap('Super !');
 });

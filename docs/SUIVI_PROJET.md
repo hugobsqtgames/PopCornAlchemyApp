@@ -137,18 +137,39 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 - **Sécurité, hors app** : l'ancien site web contient le mot de passe admin « popcorn7 » en clair
   dans un dépôt public. Hugo doit le changer si ce site est encore en ligne.
 
+## Version 1.1 (prête sur la branche, à construire après la sortie de la 1.0)
+
+- **Coffres 3D** (jamais vendus, seulement gagnés) : bois à chaque palier de 20 niveaux, or tous les
+  5 paliers et pour 7 jours de défi, légendaire à la fin d'une aventure (toujours un thème, un
+  style ou un avatar inédit), bois le 7ᵉ jour du calendrier et sur la roue. Contenus dans
+  `mobile/src/game/chests.ts`.
+- **Vrais coffres en 3D** (`mobile/src/components/chest/`, expo-gl + three.js 0.162, dessinés par
+  le code) : chute avec rebond, flottement, 3 coups de plus en plus forts, serrure qui chauffe,
+  couvercle qui s'ouvre avec rayons de lumière, étincelles et pièces 3D. Si un appareil ne peut
+  pas afficher la 3D, la même animation joue avec des images des coffres
+  (`store/outils/coffres/vignettes.mjs` les refait depuis le modèle 3D).
+- **Économie revue** : 2 à 7 pièces par niveau (avant 5 à 15), boutique plus chère (thèmes
+  600 → 3 500, styles 300 × rang, avatars 400), Pièces ×2 = 25 niveaux pour 100 pièces, roue et
+  calendrier en pièces plus petites. Simulation : le 1ᵉʳ thème vers le jour 4 (avant : jour 1),
+  tous les thèmes vers le jour 35 (avant : 10) pour 30 niveaux par jour.
+- Les joueurs de la 1.0 gardent leurs pièces et leurs achats.
+- **À tester sur iPhone** (pas possible ici) : la 3D des coffres (fluidité, rendu). Elle marche dans
+  Expo Go : `npx expo start`, puis Réglages → Code cadeau → **COFFRE** (un coffre légendaire),
+  puis l'accueil → « Coffres ».
+- Texte « Nouveautés » 1.1 en 13 langues : fin de `store/FICHE_APP_STORE.md`.
+
 ## La suite
 
-1. Compte Apple débloqué + expo.dev + `EXPO_TOKEN` → construire l'app avec EAS → TestFlight →
-   test final → remplir la fiche App Store → envoi à Apple.
-2. **Version 1.1** : vrais achats et pubs (code prêt, voir `store/VERSION_1_1.md` pour ce que Hugo
+1. Sortie de la 1.0 (en vérification chez Apple), puis construire la **1.1** avec EAS (même
+   commande), TestFlight, et l'envoyer avec le texte « Nouveautés ».
+2. **Version 1.2** (prévue avant pour la 1.1) : vrais achats et pubs (code prêt, voir `store/VERSION_1_1.md` pour ce que Hugo
    doit créer chez Apple et Google), puis pack de bienvenue à 0,99 €, Game Center, missions du
    jour, énigme impossible du jour.
-3. **Version 1.2** : mode inversé, mode soirée à plusieurs, cadres de profil, animations
+3. **Version 1.3** : mode inversé, mode soirée à plusieurs, cadres de profil, animations
    de Popi plus poussées (clignement des yeux…).
    (Déjà faits en avance : étoiles, Pop-Cornédex, cadeau du jour, protection de série, voix
    d'annonceur, statistiques.)
-4. **Version 1.3** : « Crée ton énigme », parrainage, allemand, italien et portugais.
+4. **Version 1.4** : « Crée ton énigme », parrainage, allemand, italien et portugais.
 5. **Plus tard** : carte de l'aventure, widget, mode Duel en direct, « Ton année Pop-Corn ».
 
 ## Préférences de Hugo

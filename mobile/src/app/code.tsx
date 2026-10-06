@@ -31,6 +31,7 @@ export default function Code() {
     if (hints) s.addItem('hints', hints);
     if (shields) s.addItem('shields', shields);
     if (skips) s.addItem('skips', skips);
+    if (r.reward.chest) s.addChest(r.reward.chest);
     s.set({ redeemedCodes: [...s.redeemedCodes, r.code] });
     play('buy');
     buzz('success');

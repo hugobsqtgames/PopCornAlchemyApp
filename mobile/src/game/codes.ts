@@ -19,6 +19,7 @@ export const GIFT_CODES: { code: string; reward: GiftReward; until?: string }[] 
   { code: 'POPCORN500', reward: { coins: 500 } },
   { code: 'BIENVENUE', reward: { coins: 300, hints: 5 } },
   { code: 'TIKTOK', reward: { hints: 3, skips: 1 } },
+  { code: 'COFFRE', reward: { chest: 'legend' } },
 ];
 
 /** Upper case, no spaces or dashes: "pop corn-500" and "POPCORN500" are the same code. */
