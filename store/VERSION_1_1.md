@@ -1,47 +1,28 @@
-# Version 1.2 (prévue d'abord pour la 1.1) : pubs, achats intégrés et sauvegarde iCloud
+# Version 1.1 : coffres 3D, nouvelle économie, pubs, achats intégrés et sauvegarde iCloud
 
-> **Changement de numéro** : la mise à jour **1.1** est devenue « coffres 3D + nouvelle économie »
-> (voir `docs/SUIVI_PROJET.md`). Ce qui suit (pubs, achats, iCloud) passe donc en **1.2**.
-> Attention : quand les pièces pourront s'acheter avec de l'argent réel, les coffres doivent
-> rester **impossibles à acheter** (ni en pièces, ni en argent). Sinon Apple les considère comme
-> des « loot boxes » : il faudrait afficher les probabilités et répondre « oui » à la question
-> loot boxes de la classification par âge.
+Tout est dans la même mise à jour (demande de Hugo, 06/10/2026).
 
-Le code est prêt mais **éteint** : `MONEY_READY = false` dans `mobile/src/services/store-services.ts`.
-Tant qu'il est éteint, aucun bouton payant ni aucune pub n'apparaît.
+## État
 
-## ⚠️ Les modules de la 1.1 sont mis de côté
-
-La **version 1.0** (avec la carte et Popi) se construit directement depuis la branche : les
-parties natives de la 1.1 en ont été retirées par le commit **`a8fb48e`**, pour que l'app 1.0 ne
-contienne ni le SDK Google ni iCloud (« Données non collectées » sans risque). Tout le reste du
-code de la 1.1 est là, éteint.
-
-**Pour commencer la 1.1**, une fois la 1.0 envoyée à Apple :
-
-```bash
-git revert a8fb48e          # remet expo-iap, AdMob, le suivi Apple, le module iCloud et ses droits
-cd mobile && npm install    # réinstalle les 3 bibliothèques
-```
-
-Le `git revert` va buter sur `mobile/app.json` et `mobile/locales/*.json`, modifiés depuis pour la
-langue automatique de la 1.0. Pour résoudre :
-
-- `mobile/locales/*.json` (13 langues) : garder `CFBundleDisplayName` et ajouter la clé
-  `NSUserTrackingUsageDescription` de la 1.1 dans le bloc `"ios"` (textes fr/en/es dans `git show a8fb48e`,
-  à traduire pour les 10 autres langues).
-- `mobile/app.json` : garder le bloc `locales` et le plugin `expo-localization` avec ses
-  `supportedLocales`, et reprendre de la 1.1 les plugins (expo-iap, AdMob, suivi), les droits iCloud et
-  `CFBundleAllowMixedLocalizations`.
-
-Puis `npx tsc --noEmit`, `npm test` et `bash tests-e2e/run.sh` avant tout build.
+- ✅ Coffres 3D et nouvelle économie (voir `docs/SUIVI_PROJET.md`).
+- ✅ Modules natifs remis (`git revert a8fb48e`) : expo-iap, Google AdMob, suivi Apple (ATT),
+  module iCloud. Texte de la question « Autoriser le suivi ? » dans les 13 langues
+  (`mobile/locales/*.json`), liste SKAdNetwork de Google dans `app.json`.
+- ✅ `MONEY_READY = true` (`mobile/src/services/store-services.ts`).
+- ⏳ **Identifiants AdMob** : ce sont encore ceux **de test de Google** (`app.json` → `iosAppId`, et
+  `mobile/src/services/money-config.ts`). Parfait pour TestFlight, **interdit pour l'App Store** :
+  Hugo doit créer son compte AdMob et me donner les 2 identifiants (voir plus bas).
+- ⏳ **Produits d'achat intégré** à créer par Hugo dans App Store Connect (voir plus bas).
+- La 1.0 envoyée à Apple correspond au commit `2fe6687` : si Apple demande une correction de la
+  1.0, repartir de ce commit (sans les pubs), pas de la branche.
+- Les coffres ne se vendent pas (ni en pièces, ni en argent) : pas de « loot box » au sens d'Apple.
 
 ## Ce que fait le code
 
 | Où | Quoi |
 |---|---|
 | Boutique → Pièces | 4 packs (0,99 € à 9,99 €) et le « Pack sans pub » (3,99 €). Prix affichés dans la monnaie du joueur, venus de l'App Store. |
-| Boutique, roue, game over | Pubs vidéo à récompense (jamais imposées) : +25 💰 (5 par jour), tour de roue bonus, continuer avec 1 vie. |
+| Boutique, roue, game over | Pubs vidéo à récompense (jamais imposées) : +15 💰 (5 par jour), tour de roue bonus, continuer avec 1 vie. |
 | Pack sans pub | Les récompenses des pubs arrivent **sans regarder la pub**, + 1 000 💰. |
 | Réglages | « Supprimer les pubs », « Restaurer mes achats » et, en Europe, « Mes choix pour les pubs ». |
 | Sécurité | Un achat n'est jamais payé deux fois (même si l'app se ferme pendant l'achat). Le pack sans pub survit à « Réinitialiser ». |
@@ -124,10 +105,11 @@ Toujours active dans la 1.1, rien à régler pour le joueur (Réglages → « �
   utilisés pour la publicité de tiers et les statistiques. « Suivi » : oui.
 - **Classification par âge** : répondre « Oui » à « Publicités ».
 - **Notes pour l'examinateur** (App Review Information) : « The App Tracking Transparency prompt
-  appears the first time an ad is watched: Shop → +25 free coins. In-app purchases: Shop → Coins. »
-- **Page de confidentialité** (`docs/confidentialite.html`) : remplacer « Cette version n'a ni publicité
-  ni achat intégré » par un paragraphe sur les pubs Google AdMob (données, consentement, lien vers
-  policies.google.com/privacy) et sur les achats (gérés par Apple, l'app ne voit aucune donnée bancaire).
+  appears the first time an ad is watched: Shop → +15 free coins. In-app purchases: Shop → Coins. »
+- **Page de confidentialité** : la nouvelle version est prête dans `store/confidentialite-1.1.html`
+  (pubs AdMob, consentement, achats, iCloud, en FR/EN/ES). Le jour de l'envoi, la copier à la place
+  de `docs/confidentialite.html` (pas avant : la page en ligne doit correspondre à la version en
+  vente).
 - **Fiche App Store** : Prix « Gratuit » avec achats intégrés, et retirer « sans pub » des textes.
 - **Codes cadeaux** (règle 3.1.1) : maintenant que les pièces se vendent, le risque de refus
   augmente. Si Apple refuse, retirer la ligne « Code cadeau » des réglages.

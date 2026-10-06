@@ -137,7 +137,13 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 - **Sécurité, hors app** : l'ancien site web contient le mot de passe admin « popcorn7 » en clair
   dans un dépôt public. Hugo doit le changer si ce site est encore en ligne.
 
-## Version 1.1 (prête sur la branche, à construire après la sortie de la 1.0)
+## Version 1.1 (sur la branche, à construire après la sortie de la 1.0)
+
+- **Aussi dans la 1.1** : pubs vidéo à récompense, achats intégrés, sauvegarde iCloud (allumés le
+  06/10/2026). Ce qui reste à faire avant l'envoi : `store/VERSION_1_1.md`.
+- **La 1.0 envoyée à Apple = commit `2fe6687`** (si Apple demande une correction de la 1.0).
+- **Sons des coffres** fabriqués par code (`store/outils/sons/coffres.py`) : coup sourd, serrure,
+  grincement, accord magique (plus riche pour le légendaire), pluie de pièces.
 
 - **Coffres 3D** (jamais vendus, seulement gagnés) : bois à chaque palier de 20 niveaux, or tous les
   5 paliers et pour 7 jours de défi, légendaire à la fin d'une aventure (toujours un thème, un
@@ -162,7 +168,7 @@ Testée par Hugo sur son iPhone : tout est OK. Contenu :
 
 1. Sortie de la 1.0 (en vérification chez Apple), puis construire la **1.1** avec EAS (même
    commande), TestFlight, et l'envoyer avec le texte « Nouveautés ».
-2. **Version 1.2** (prévue avant pour la 1.1) : vrais achats et pubs (code prêt, voir `store/VERSION_1_1.md` pour ce que Hugo
+2. ~~Version 1.2~~ → les achats et les pubs sont finalement dans la **1.1** : (code prêt, voir `store/VERSION_1_1.md` pour ce que Hugo
    doit créer chez Apple et Google), puis pack de bienvenue à 0,99 €, Game Center, missions du
    jour, énigme impossible du jour.
 3. **Version 1.3** : mode inversé, mode soirée à plusieurs, cadres de profil, animations

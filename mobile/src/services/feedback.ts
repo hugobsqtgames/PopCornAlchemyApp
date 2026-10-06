@@ -34,6 +34,13 @@ const SOUNDS = {
   voice_unstoppable: { src: require('@/assets/sounds/voice_unstoppable.wav'), voices: 1, volume: 0.9 },
   voice_perfect: { src: require('@/assets/sounds/voice_perfect.wav'), voices: 1, volume: 0.9 },
   voice_amazing: { src: require('@/assets/sounds/voice_amazing.wav'), voices: 1, volume: 0.9 },
+  // Chests (made by store/outils/sons/coffres.py).
+  chest_knock: { src: require('@/assets/sounds/chest_knock.wav'), voices: 3, volume: 0.9 },
+  chest_lock: { src: require('@/assets/sounds/chest_lock.wav'), voices: 1, volume: 0.8 },
+  chest_creak: { src: require('@/assets/sounds/chest_creak.wav'), voices: 1, volume: 0.55 },
+  chest_open: { src: require('@/assets/sounds/chest_open.wav'), voices: 1, volume: 0.85 },
+  chest_open_legend: { src: require('@/assets/sounds/chest_open_legend.wav'), voices: 1, volume: 0.9 },
+  chest_coins: { src: require('@/assets/sounds/chest_coins.wav'), voices: 1, volume: 0.7 },
 };
 
 export type VoiceLine = 'voice_combo' | 'voice_fever' | 'voice_unstoppable' | 'voice_perfect' | 'voice_amazing';

@@ -83,8 +83,15 @@ export default function Coffres() {
   };
 
   const onKnock = (i: number) => {
-    play(i === 2 ? 'powerup' : 'pop');
+    play('chest_knock');
+    // The third knock makes the lock jump.
+    if (i === 2) playLater('chest_lock', 70);
     buzz(i === 2 ? 'heavy' : 'select');
+  };
+  // The chest lands (it drops in on every new chest).
+  const onPhase = (next: ChestPhase) => {
+    if (next === 'appear') playLater('chest_knock', 290);
+    setPhase(next);
   };
   // A flash of the chest's light when it bursts open.
   const flash = useState(() => new Animated.Value(0))[0];
@@ -96,9 +103,9 @@ export default function Coffres() {
       easing: Easing.out(Easing.quad),
       useNativeDriver: true,
     }).start();
-    play(kind === 'wood' ? 'win' : 'victory');
-    playLater('coin', 180);
-    playLater('sparkle', 420);
+    play('chest_creak');
+    play(kind === 'legend' ? 'chest_open_legend' : 'chest_open');
+    playLater('chest_coins', 160);
     buzz('success');
     if (kind !== 'wood') announce('voice_amazing');
   };
@@ -218,7 +225,7 @@ export default function Coffres() {
             reduceMotion={still}
             onKnock={onKnock}
             onBurst={onBurst}
-            onPhase={setPhase}
+            onPhase={onPhase}
             style={{ height: stageH }}
           />
         </View>

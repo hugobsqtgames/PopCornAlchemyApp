@@ -1,5 +1,6 @@
 {
   "ios": {
-    "CFBundleDisplayName": "Pop-Corn Alchemy"
+    "CFBundleDisplayName": "Pop-Corn Alchemy",
+    "NSUserTrackingUsageDescription": "此标识符仅用于向你展示更符合你兴趣的广告。即使拒绝，游戏也完全一样。"
   }
 }

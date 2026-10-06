@@ -1,5 +1,6 @@
 {
   "ios": {
-    "CFBundleDisplayName": "Pop-Corn Alchemy"
+    "CFBundleDisplayName": "Pop-Corn Alchemy",
+    "NSUserTrackingUsageDescription": "Этот идентификатор нужен только для показа рекламы, которая лучше подходит под твои интересы. Если откажешься, игра останется прежней."
   }
 }

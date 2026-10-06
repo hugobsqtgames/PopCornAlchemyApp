@@ -23,11 +23,10 @@ import type { MoneyBackend } from './money-types';
 import { suspendMusic } from './music';
 
 /**
- * Real ads and in-app purchases. While false, every button that would need them is hidden:
- * App Review rejects buttons that do nothing. Turn on for version 1.1 (see store/VERSION_1_1.md)
- * by changing `false` to `true`. EXPO_PUBLIC_TEST_MONEY=1 turns it on for the web tests only.
+ * Real ads and in-app purchases, on since version 1.1. Set to false to hide every button that
+ * needs them (App Review rejects buttons that do nothing), e.g. for a build without the modules.
  */
-export const MONEY_READY = false || process.env.EXPO_PUBLIC_TEST_MONEY === '1';
+export const MONEY_READY = true;
 
 /** A build with the native store and ads modules inside (not Expo Go, not the web). */
 const NATIVE = MONEY_READY && Platform.OS !== 'web' && Constants.executionEnvironment !== ExecutionEnvironment.StoreClient;

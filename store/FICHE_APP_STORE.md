@@ -12,7 +12,7 @@ Les limites de caractères d'Apple sont indiquées entre parenthèses et sont to
 | Langue principale | Français (l'app est en 13 langues, voir plus bas) |
 | Catégorie principale | Jeux → Jeux de mots (*Word*) |
 | Catégorie secondaire | Jeux → Quiz (*Trivia*) |
-| Prix | Gratuit (cette version n'a ni achat intégré ni publicité) |
+| Prix | Gratuit. Version 1.0 : ni achat ni pub. À partir de la 1.1 : achats intégrés (packs de pièces, pack sans pub) et pubs vidéo facultatives |
 | Droits d'auteur | © 2026 Hugo_BSQT |
 | Classification par âge | **9+** : répondre « Rare ou léger » à *Violence de dessin animé ou fantastique* (armes de films et jeux : 🔫 ⚔️) et à *Horreur / peur* (zombies, Dracula, Scream), « Aucun » partout ailleurs, y compris *Jeux de hasard simulés* (la roue n'est pas un casino) et *Armes* (simples emojis). Publicités : non (à changer quand elles seront activées) |
 | URL d'assistance | https://hugobsqtgames.github.io/PopCornAlchemyApp/ |

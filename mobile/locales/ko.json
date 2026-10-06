@@ -1,5 +1,6 @@
 {
   "ios": {
-    "CFBundleDisplayName": "Pop-Corn Alchemy"
+    "CFBundleDisplayName": "Pop-Corn Alchemy",
+    "NSUserTrackingUsageDescription": "이 식별자는 관심사에 더 잘 맞는 광고를 보여 주는 데에만 사용돼요. 거부해도 게임은 똑같아요."
   }
 }
