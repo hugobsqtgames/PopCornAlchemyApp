@@ -402,8 +402,8 @@ const fr = {
   chest_gold: "Coffre en or",
   chest_legend: "Coffre légendaire",
   chest_open: "Ouvrir le coffre",
-  chest_how_wood: "À chaque palier de 20 niveaux",
-  chest_how_gold: "Tous les 5 paliers et après 7 jours de défi",
+  chest_how_wood: "Paliers, carte, trophées, roue… et parfois par surprise",
+  chest_how_gold: "Tous les 5 paliers, 7 jours de défi, 50 réponses au Pop-Cornédex",
   chest_how_legend: "À la fin d'une aventure",
   chest_none: "Pas encore de coffre ici.",
   chest_inside: "Dans ton coffre",
@@ -416,6 +416,10 @@ const fr = {
   reward_style: "Style de pop-corn",
   reward_avatar: "Nouvel avatar",
   prize_chest: "un coffre en bois",
+  chest_found: "Coffre trouvé ! 🧰",
+  chest_found_gold: "Coffre en or trouvé ! 🧰",
+  map_chest: "Un coffre t'attend au niveau {n}",
+  map_chest_got: "Coffre du niveau {n} récupéré",
 };
 
 export type StringKey = keyof typeof fr;
@@ -791,8 +795,8 @@ const en: Record<StringKey, string> = {
   chest_gold: "Golden chest",
   chest_legend: "Legendary chest",
   chest_open: "Open the chest",
-  chest_how_wood: "Every tier of 20 levels",
-  chest_how_gold: "Every 5 tiers and after 7 days of daily challenge",
+  chest_how_wood: "Tiers, the map, trophies, the wheel… and sometimes by surprise",
+  chest_how_gold: "Every 5 tiers, 7 days of daily challenge, 50 answers in the Pop-Cornédex",
   chest_how_legend: "At the end of an adventure",
   chest_none: "No chest here yet.",
   chest_inside: "In your chest",
@@ -805,6 +809,10 @@ const en: Record<StringKey, string> = {
   reward_style: "Popcorn style",
   reward_avatar: "New avatar",
   prize_chest: "a wooden chest",
+  chest_found: "Chest found! 🧰",
+  chest_found_gold: "Golden chest found! 🧰",
+  map_chest: "A chest is waiting at level {n}",
+  map_chest_got: "Chest of level {n} collected",
 };
 
 const es: Record<StringKey, string> = {
@@ -1178,8 +1186,8 @@ const es: Record<StringKey, string> = {
   chest_gold: "Cofre de oro",
   chest_legend: "Cofre legendario",
   chest_open: "Abrir el cofre",
-  chest_how_wood: "En cada etapa de 20 niveles",
-  chest_how_gold: "Cada 5 etapas y tras 7 días de reto diario",
+  chest_how_wood: "Etapas, el mapa, trofeos, la ruleta… y a veces por sorpresa",
+  chest_how_gold: "Cada 5 etapas, 7 días de reto, 50 respuestas en el Pop-Cornédex",
   chest_how_legend: "Al final de una aventura",
   chest_none: "Aún no hay cofre aquí.",
   chest_inside: "En tu cofre",
@@ -1192,6 +1200,10 @@ const es: Record<StringKey, string> = {
   reward_style: "Estilo de palomitas",
   reward_avatar: "Nuevo avatar",
   prize_chest: "un cofre de madera",
+  chest_found: "¡Cofre encontrado! 🧰",
+  chest_found_gold: "¡Cofre de oro encontrado! 🧰",
+  map_chest: "Un cofre te espera en el nivel {n}",
+  map_chest_got: "Cofre del nivel {n} recogido",
 };
 
 /**

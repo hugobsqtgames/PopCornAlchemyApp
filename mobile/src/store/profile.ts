@@ -289,6 +289,8 @@ export const useProfile = create<ProfileState & ProfileActions>()(
           s.achievements
         );
         if (fresh.length) set({ achievements: [...s.achievements, ...fresh] });
+        // Every trophy comes with a wooden chest.
+        if (fresh.length) get().addChest('wood', fresh.length);
         return fresh;
       },
       finishDaily: () => {

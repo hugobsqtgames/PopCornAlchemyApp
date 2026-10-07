@@ -368,8 +368,8 @@
   "chest_gold": "Forziere d'oro",
   "chest_legend": "Forziere leggendario",
   "chest_open": "Apri il forziere",
-  "chest_how_wood": "A ogni tappa di 20 livelli",
-  "chest_how_gold": "Ogni 5 tappe e dopo 7 giorni di sfida",
+  "chest_how_wood": "Tappe, mappa, trofei, ruota… e a volte a sorpresa",
+  "chest_how_gold": "Ogni 5 tappe, 7 giorni di sfida, 50 risposte nel Pop-Cornédex",
   "chest_how_legend": "Alla fine di un'avventura",
   "chest_none": "Ancora nessun forziere qui.",
   "chest_inside": "Nel tuo forziere",
@@ -381,7 +381,11 @@
   "reward_theme": "Tema {name}",
   "reward_style": "Stile popcorn",
   "reward_avatar": "Nuovo avatar",
-  "prize_chest": "un forziere di legno"
+  "prize_chest": "un forziere di legno",
+  "chest_found": "Forziere trovato! 🧰",
+  "chest_found_gold": "Forziere d'oro trovato! 🧰",
+  "map_chest": "Un forziere ti aspetta al livello {n}",
+  "map_chest_got": "Forziere del livello {n} raccolto"
  },
  "levels": {
   "1": "Titanic",

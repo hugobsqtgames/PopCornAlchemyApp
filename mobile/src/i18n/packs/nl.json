@@ -368,8 +368,8 @@
   "chest_gold": "Gouden kist",
   "chest_legend": "Legendarische kist",
   "chest_open": "Kist openen",
-  "chest_how_wood": "Bij elke etappe van 20 levels",
-  "chest_how_gold": "Elke 5 etappes en na 7 dagen dagelijkse uitdaging",
+  "chest_how_wood": "Etappes, de kaart, trofeeën, het rad… en soms als verrassing",
+  "chest_how_gold": "Elke 5 etappes, 7 dagen uitdaging, 50 antwoorden in de Pop-Cornédex",
   "chest_how_legend": "Aan het einde van een avontuur",
   "chest_none": "Nog geen kist hier.",
   "chest_inside": "In je kist",
@@ -381,7 +381,11 @@
   "reward_theme": "Thema {name}",
   "reward_style": "Popcornstijl",
   "reward_avatar": "Nieuwe avatar",
-  "prize_chest": "een houten kist"
+  "prize_chest": "een houten kist",
+  "chest_found": "Kist gevonden! 🧰",
+  "chest_found_gold": "Gouden kist gevonden! 🧰",
+  "map_chest": "Er wacht een kist bij level {n}",
+  "map_chest_got": "Kist van level {n} opgehaald"
  },
  "levels": {
   "1": "Titanic",

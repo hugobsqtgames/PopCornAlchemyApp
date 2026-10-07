@@ -26,6 +26,6 @@ export function checkAchievements() {
   play('win');
   for (const id of fresh) {
     const a = ACHIEVEMENTS.find((x) => x.id === id);
-    useUi.getState().toast(a?.icon ?? '🏆', STRINGS[lang].trophy_toast, achievementText(id, lang).title);
+    useUi.getState().toast(a?.icon ?? '🏆', STRINGS[lang].trophy_toast, `${achievementText(id, lang).title} · +1 🧰`);
   }
 }

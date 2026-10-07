@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import { AVATARS, STYLES, THEMES } from '../catalog';
-import { CHEST_COINS, rollChest, tierChest, type ChestReward, type Owned } from '../chests';
+import { CHEST_COINS, isMapChest, rollChest, surpriseChest, tierChest, type ChestReward, type Owned } from '../chests';
 
 const fresh: Owned = { themes: ['popcorn'], styles: ['🍿'], avatars: ['🍿'], streakSaves: 0, maxStreakSaves: 2 };
 const rng = (seed: number) => () => {
@@ -50,6 +50,12 @@ describe('chests', () => {
     const rich = rollChest('legend', all, rng(5));
     expect(rich.every((x) => x.kind === 'coins' || x.kind === 'item')).toBe(true);
     expect(coinsOf(rich)).toBeGreaterThanOrEqual(CHEST_COINS.legend[0] + 400);
+  });
+
+  it('a chest in the middle of each world of the map, and rare surprises', () => {
+    expect([0, 8, 9, 10, 19, 29, 49].map(isMapChest)).toEqual([false, false, true, false, false, true, true]);
+    expect(surpriseChest(() => 0.01)).toBe(true);
+    expect(surpriseChest(() => 0.5)).toBe(false);
   });
 
   it('a gold chest every 5 tiers, wood otherwise', () => {

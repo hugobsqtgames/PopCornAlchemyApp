@@ -1,12 +1,14 @@
 import { Redirect, router, useLocalSearchParams } from 'expo-router';
 import { useMemo, useRef, useState } from 'react';
-import { Modal, Pressable, ScrollView, View, type LayoutChangeEvent, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { Image, Modal, Pressable, ScrollView, View, type LayoutChangeEvent, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 
+import { CHEST_IMAGES } from '@/components/chest/fallback';
 import { AnswerEmojis, Stars } from '@/components/game/board';
 import { PlayIcon } from '@/components/icons';
 import { Popi } from '@/components/mascot';
 import { Btn, Header, Screen, Tap, Txt } from '@/components/ui';
 import { buildScene, SceneStrip, STRIP } from '@/components/world-scene';
+import { isMapChest } from '@/game/chests';
 import { one } from '@/game/links';
 import { adventureIds, levelById, TIER_SIZE } from '@/game/rules';
 import type { Difficulty } from '@/game/types';
@@ -295,6 +297,31 @@ export default function Aventure() {
                     </Txt>
                   </Pressable>
                   {isPassed && n > 0 && <Stars n={n} size={12} />}
+                </View>
+              );
+            })}
+
+            {/* A chest in the middle of each world: bright until the player gets there, then faded. */}
+            {map.pos.map(({ x, y }, i) => {
+              if (!isMapChest(i)) return null;
+              const got = i < passed;
+              const right = x < width / 2;
+              return (
+                <View
+                  key={`chest-${i}`}
+                  pointerEvents="none"
+                  accessible
+                  accessibilityLabel={got ? t('map_chest_got', { n: i + 1 }) : t('map_chest', { n: i + 1 })}
+                  style={{ position: 'absolute', left: right ? x + 34 : x - 34 - 60, top: y - 34, width: 60, height: 60, alignItems: 'center', justifyContent: 'center', opacity: got ? 0.45 : 1 }}>
+                  {!got && <View style={{ position: 'absolute', width: 60, height: 60, borderRadius: 30, backgroundColor: p.gold, opacity: 0.55, borderWidth: 3, borderColor: '#FFFFFF' }} />}
+                  <Image source={CHEST_IMAGES.wood} style={{ width: 54, height: 54 }} resizeMode="contain" />
+                  {got && (
+                    <View style={{ position: 'absolute', right: 0, bottom: 2, width: 18, height: 18, borderRadius: 9, backgroundColor: p.green, alignItems: 'center', justifyContent: 'center' }}>
+                      <Txt size={11} weight="heavy" color="#FFFFFF">
+                        ✓
+                      </Txt>
+                    </View>
+                  )}
                 </View>
               );
             })}

@@ -368,8 +368,8 @@
   "chest_gold": "金の宝箱",
   "chest_legend": "伝説の宝箱",
   "chest_open": "宝箱を開ける",
-  "chest_how_wood": "20レベルのステージごとに",
-  "chest_how_gold": "5ステージごと、またはデイリー7日連続で",
+  "chest_how_wood": "ステージ、マップ、トロフィー、ルーレット…ときどきサプライズも",
+  "chest_how_gold": "5ステージごと、デイリー7日連続、Pop-Cornédexで50個の答え",
   "chest_how_legend": "冒険をクリアすると",
   "chest_none": "まだ宝箱はありません",
   "chest_inside": "宝箱の中身",
@@ -381,7 +381,11 @@
   "reward_theme": "テーマ「{name}」",
   "reward_style": "ポップコーンのスタイル",
   "reward_avatar": "新しいアバター",
-  "prize_chest": "木の宝箱"
+  "prize_chest": "木の宝箱",
+  "chest_found": "宝箱を見つけた！🧰",
+  "chest_found_gold": "金の宝箱を見つけた！🧰",
+  "map_chest": "レベル{n}に宝箱があるよ",
+  "map_chest_got": "レベル{n}の宝箱を入手済み"
  },
  "levels": {
   "1": "タイタニック",

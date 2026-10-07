@@ -63,6 +63,8 @@ describe('stats and records', () => {
     state().bumpStats({ levels: 10 });
     expect(state().checkAchievements()).toEqual(['first_fusion', 'level_10']);
     expect(state().checkAchievements()).toEqual([]);
+    // One wooden chest per trophy.
+    expect(state().chests.wood).toBe(2);
   });
 });
 

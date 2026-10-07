@@ -368,8 +368,8 @@
   "chest_gold": "Altın sandık",
   "chest_legend": "Efsanevi sandık",
   "chest_open": "Sandığı aç",
-  "chest_how_wood": "20 seviyelik her etapta",
-  "chest_how_gold": "Her 5 etapta ve 7 günlük meydan okumadan sonra",
+  "chest_how_wood": "Etaplar, harita, kupalar, çark… ve bazen sürpriz olarak",
+  "chest_how_gold": "Her 5 etapta, 7 gün meydan okumada, Pop-Cornédex'te 50 cevapta",
   "chest_how_legend": "Bir maceranın sonunda",
   "chest_none": "Burada henüz sandık yok.",
   "chest_inside": "Sandığında",
@@ -381,7 +381,11 @@
   "reward_theme": "{name} teması",
   "reward_style": "Patlamış mısır stili",
   "reward_avatar": "Yeni avatar",
-  "prize_chest": "bir ahşap sandık"
+  "prize_chest": "bir ahşap sandık",
+  "chest_found": "Sandık bulundu! 🧰",
+  "chest_found_gold": "Altın sandık bulundu! 🧰",
+  "map_chest": "{n}. seviyede bir sandık seni bekliyor",
+  "map_chest_got": "{n}. seviyenin sandığı alındı"
  },
  "levels": {
   "1": "Titanic",

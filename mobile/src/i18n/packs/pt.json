@@ -368,8 +368,8 @@
   "chest_gold": "Baú de ouro",
   "chest_legend": "Baú lendário",
   "chest_open": "Abrir o baú",
-  "chest_how_wood": "A cada etapa de 20 níveis",
-  "chest_how_gold": "A cada 5 etapas e após 7 dias de desafio",
+  "chest_how_wood": "Etapas, mapa, troféus, roleta… e às vezes de surpresa",
+  "chest_how_gold": "A cada 5 etapas, 7 dias de desafio, 50 respostas no Pop-Cornédex",
   "chest_how_legend": "No fim de uma aventura",
   "chest_none": "Ainda não há baú aqui.",
   "chest_inside": "No seu baú",
@@ -381,7 +381,11 @@
   "reward_theme": "Tema {name}",
   "reward_style": "Estilo de pipoca",
   "reward_avatar": "Novo avatar",
-  "prize_chest": "um baú de madeira"
+  "prize_chest": "um baú de madeira",
+  "chest_found": "Baú encontrado! 🧰",
+  "chest_found_gold": "Baú de ouro encontrado! 🧰",
+  "map_chest": "Um baú espera por você no nível {n}",
+  "map_chest_got": "Baú do nível {n} coletado"
  },
  "levels": {
   "1": "Titanic",

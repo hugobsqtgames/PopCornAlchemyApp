@@ -368,8 +368,8 @@
   "chest_gold": "황금 상자",
   "chest_legend": "전설의 상자",
   "chest_open": "상자 열기",
-  "chest_how_wood": "20레벨 스테이지마다",
-  "chest_how_gold": "5스테이지마다, 그리고 오늘의 도전 7일 연속",
+  "chest_how_wood": "스테이지, 지도, 트로피, 룰렛… 가끔은 깜짝 선물로",
+  "chest_how_gold": "5스테이지마다, 7일 연속 도전, Pop-Cornédex 정답 50개",
   "chest_how_legend": "모험을 끝내면",
   "chest_none": "아직 상자가 없어요",
   "chest_inside": "상자 속 보상",
@@ -381,7 +381,11 @@
   "reward_theme": "{name} 테마",
   "reward_style": "팝콘 스타일",
   "reward_avatar": "새 아바타",
-  "prize_chest": "나무 상자"
+  "prize_chest": "나무 상자",
+  "chest_found": "상자 발견! 🧰",
+  "chest_found_gold": "황금 상자 발견! 🧰",
+  "map_chest": "{n}레벨에서 상자가 기다려요",
+  "map_chest_got": "{n}레벨 상자 획득 완료"
  },
  "levels": {
   "1": "타이타닉",

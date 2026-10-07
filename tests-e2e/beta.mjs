@@ -209,6 +209,16 @@ await flow('chests: open one of each kind', async () => {
   check(!(await see('Ouvrir le coffre'.toUpperCase(), false)) || (await profile()).chests.wood > 0, 'no open button without a chest');
 });
 
+await flow('the chest of the map, found while playing', async () => {
+  await start({ adventure: { 1: 9, 2: 0, 3: 0 }, chests: { wood: 0, gold: 0, legend: 0 } }, '/aventure?diff=1');
+  check(await page.getByLabel('Un coffre t\'attend au niveau 10').count() > 0, 'the map shows a chest at level 10');
+  await page.getByText(/jouer le niveau 10/i).last().click();
+  await page.waitForTimeout(1200);
+  await solve();
+  check(((await profile()).chests?.wood ?? 0) >= 1, 'solving level 10 gives the chest of the map');
+  await shot('map-chest-found');
+});
+
 await flow('home: the chests row', async () => {
   await start({ chests: { wood: 0, gold: 0, legend: 0 } }, '/');
   check(await see('Coffres'), 'the home screen shows the chests row');

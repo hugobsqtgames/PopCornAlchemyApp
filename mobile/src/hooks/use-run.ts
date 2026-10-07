@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, AppState, Easing } from 'react-native';
 
 import { styleBonus } from '@/game/catalog';
-import { tierChest, type ChestKind } from '@/game/chests';
+import { DEX_CHEST_EVERY, isMapChest, surpriseChest, tierChest, type ChestKind } from '@/game/chests';
 import {
   bonusTimeMs,
   buildGrid,
@@ -367,6 +367,24 @@ export function useRun(config: RunConfig, resume?: { index: number; lives: numbe
       const coins = practice ? 0 : coinsFor({ timeLeft, combo: nextCombo, mode: config.mode, double: s.doubleLevels > 0 });
       const stars = starsFor({ clueUsed: hintUsed || removed.length > 0, mistakes: tierStats.mistakesThisLevel, timeLeft });
       const first = config.mode !== 'tutorial' && s.recordSolve(level.id, stars);
+      // Chests found while playing: the one in the middle of each world on the map (first time
+      // only), a golden one every 50 answers in the Pop-Cornédex, and sometimes a surprise.
+      let found: ChestKind | null = null;
+      if (counted) {
+        const d = config.adventure ? config.difficulty : undefined;
+        if (d && isMapChest(index) && index >= s.adventure[d]) found = 'wood';
+        else if (first && profile.getState().found.length % DEX_CHEST_EVERY === 0) found = 'gold';
+        else if (surpriseChest()) found = 'wood';
+      }
+      if (found) {
+        s.addChest(found);
+        const kind = found;
+        later(() => {
+          flash(kind === 'gold' ? 'chest_found_gold' : 'chest_found');
+          play('chest_knock');
+          buzz('heavy');
+        }, 450);
+      }
       const nextScore = score + points;
       const clearedNow = [...cleared, { id: level.id, points }];
       if (coins) s.addCoins(coins);

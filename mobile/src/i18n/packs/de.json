@@ -368,8 +368,8 @@
   "chest_gold": "Goldtruhe",
   "chest_legend": "Legendäre Truhe",
   "chest_open": "Truhe öffnen",
-  "chest_how_wood": "Bei jeder Etappe von 20 Levels",
-  "chest_how_gold": "Alle 5 Etappen und nach 7 Tagen Tages-Challenge",
+  "chest_how_wood": "Etappen, Karte, Trophäen, Glücksrad … und manchmal als Überraschung",
+  "chest_how_gold": "Alle 5 Etappen, 7 Tage Challenge, 50 Antworten im Pop-Cornédex",
   "chest_how_legend": "Am Ende eines Abenteuers",
   "chest_none": "Hier ist noch keine Truhe.",
   "chest_inside": "In deiner Truhe",
@@ -381,7 +381,11 @@
   "reward_theme": "Design {name}",
   "reward_style": "Popcorn-Stil",
   "reward_avatar": "Neuer Avatar",
-  "prize_chest": "eine Holztruhe"
+  "prize_chest": "eine Holztruhe",
+  "chest_found": "Truhe gefunden! 🧰",
+  "chest_found_gold": "Goldtruhe gefunden! 🧰",
+  "map_chest": "Eine Truhe wartet bei Level {n}",
+  "map_chest_got": "Truhe von Level {n} eingesammelt"
  },
  "levels": {
   "1": "Titanic",

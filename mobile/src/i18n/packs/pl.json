@@ -376,8 +376,8 @@
   "chest_gold": "Złota skrzynia",
   "chest_legend": "Legendarna skrzynia",
   "chest_open": "Otwórz skrzynię",
-  "chest_how_wood": "Za każdy etap 20 poziomów",
-  "chest_how_gold": "Co 5 etapów i po 7 dniach wyzwań",
+  "chest_how_wood": "Etapy, mapa, trofea, koło… a czasem niespodzianka",
+  "chest_how_gold": "Co 5 etapów, 7 dni wyzwań, 50 odpowiedzi w Pop-Cornédexie",
   "chest_how_legend": "Na końcu przygody",
   "chest_none": "Jeszcze nie ma tu skrzyni.",
   "chest_inside": "W twojej skrzyni",
@@ -389,7 +389,11 @@
   "reward_theme": "Motyw {name}",
   "reward_style": "Styl popcornu",
   "reward_avatar": "Nowy awatar",
-  "prize_chest": "drewnianą skrzynię"
+  "prize_chest": "drewnianą skrzynię",
+  "chest_found": "Skrzynia znaleziona! 🧰",
+  "chest_found_gold": "Złota skrzynia znaleziona! 🧰",
+  "map_chest": "Na poziomie {n} czeka skrzynia",
+  "map_chest_got": "Skrzynia z poziomu {n} zebrana"
  },
  "levels": {
   "1": "Titanic",

@@ -368,8 +368,8 @@
   "chest_gold": "金宝箱",
   "chest_legend": "传说宝箱",
   "chest_open": "打开宝箱",
-  "chest_how_wood": "每完成一个20关的阶段",
-  "chest_how_gold": "每5个阶段，或连续7天完成每日挑战",
+  "chest_how_wood": "阶段、地图、奖杯、转盘……有时还会突然出现",
+  "chest_how_gold": "每5个阶段、连续7天挑战、Pop-Cornédex收集50个答案",
   "chest_how_legend": "完成一次冒险时",
   "chest_none": "这里还没有宝箱",
   "chest_inside": "宝箱里有",
@@ -381,7 +381,11 @@
   "reward_theme": "{name}主题",
   "reward_style": "爆米花样式",
   "reward_avatar": "新头像",
-  "prize_chest": "一个木宝箱"
+  "prize_chest": "一个木宝箱",
+  "chest_found": "发现宝箱！🧰",
+  "chest_found_gold": "发现金宝箱！🧰",
+  "map_chest": "第{n}关有宝箱等着你",
+  "map_chest_got": "已领取第{n}关的宝箱"
  },
  "levels": {
   "1": "泰坦尼克号",

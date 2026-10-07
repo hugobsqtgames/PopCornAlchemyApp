@@ -90,6 +90,18 @@ export function rollChest(kind: ChestKind, owned: Owned, rng: () => number = Mat
   return out;
 }
 
+/** On the adventure map, a chest waits in the middle of every world (its 10th level). */
+export function isMapChest(index: number): boolean {
+  return index % 20 === 9;
+}
+
+/** Chance of a surprise chest after a right answer. */
+export const SURPRISE_CHANCE = 0.03;
+export const surpriseChest = (rng: () => number = Math.random) => rng() < SURPRISE_CHANCE;
+
+/** A golden chest every this many answers in the Pop-Cornédex. */
+export const DEX_CHEST_EVERY = 50;
+
 /** The chest given at the end of tier `tier` (1 = the first 20 levels). */
 export function tierChest(tier: number): ChestKind {
   return tier % 5 === 0 ? 'gold' : 'wood';
